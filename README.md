@@ -1,3 +1,8 @@
+Okay updating project file structure:
+- Entrypoint: main.py
+    - It will 
+
+---
 ## Summary
 
 **Core Components:**
