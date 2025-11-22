@@ -1,0 +1,42 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+PluginManager::Manager: duplicate static plugin StbImageImporter, ignoring
+PluginManager::Manager: duplicate static plugin GltfImporter, ignoring
+PluginManager::Manager: duplicate static plugin BasisImporter, ignoring
+PluginManager::Manager: duplicate static plugin AssimpImporter, ignoring
+PluginManager::Manager: duplicate static plugin AnySceneImporter, ignoring
+PluginManager::Manager: duplicate static plugin AnyImageImporter, ignoring
+
+============================================================
+HABITAT NAVIGATION TRAINING - IMPROVED VERSION
+============================================================
+Traceback (most recent call last):
+  File "/home/pinaka/RBE/CS551/FinalProject/WPI_DS551_G10_Final-master/src/train_nav_improved.py", line 269, in <module>
+    model, env = train_agent()
+  File "/home/pinaka/RBE/CS551/FinalProject/WPI_DS551_G10_Final-master/src/train_nav_improved.py", line 123, in train_agent
+    env = DummyVecEnv([make_env])
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/stable_baselines3/common/vec_env/dummy_vec_env.py", line 31, in __init__
+    self.envs = [_patch_env(fn()) for fn in env_fns]
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/stable_baselines3/common/vec_env/dummy_vec_env.py", line 31, in <listcomp>
+    self.envs = [_patch_env(fn()) for fn in env_fns]
+  File "/home/pinaka/RBE/CS551/FinalProject/WPI_DS551_G10_Final-master/src/train_nav_improved.py", line 107, in make_env
+    config.habitat.dataset.data_path = "data/datasets/pointnav/habitat-test-scenes/v1/{split}/{split}.json.gz"
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 338, in __setattr__
+    self._format_and_raise(key=key, value=value, cause=e)
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+    format_and_raise(
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+    _raise(ex, cause)
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/_utils.py", line 797, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 334, in __setattr__
+    self.__set_impl(key, value)
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 318, in __set_impl
+    self._set_item_impl(key, value)
+  File "/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/omegaconf/basecontainer.py", line 552, in _set_item_impl
+    raise ReadonlyConfigError("Cannot change read-only config container")
+omegaconf.errors.ReadonlyConfigError: Cannot change read-only config container
+    full_key: habitat.dataset.data_path
+    reference_type=DatasetConfig
+    object_type=DatasetConfig
