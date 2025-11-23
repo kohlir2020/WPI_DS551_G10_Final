@@ -30,12 +30,12 @@ for ep in range(20):
         obs, reward, done, truncated, info = env.step(action)
         
         if done:
-            print(f"Ep {ep+1:2d}: ✓ SUCCESS in {step:3d} steps (started {start_dist:.2f}m away)")
+            print(f"Ep {ep+1:2d}: SUCCESS in {step:3d} steps (started {start_dist:.2f}m away)")
             successes += 1
             steps_to_goal.append(step)
             break
         if truncated:
-            print(f"Ep {ep+1:2d}: ✗ TIMEOUT (still {info['distance']:.2f}m away)")
+            print(f"Ep {ep+1:2d}:TIMEOUT (still {info['distance']:.2f}m away)")
             break
 
 success_rate = successes / 20 * 100
