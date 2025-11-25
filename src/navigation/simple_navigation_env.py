@@ -22,7 +22,7 @@ class SimpleNavigationEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self,
-                 scene_path="/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb",
+                 scene_path="habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb",
                  min_goal_dist=2.0,
                  max_goal_dist=8.0):
 
