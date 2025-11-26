@@ -3,3 +3,4 @@
 .DS_Store
 habitat-lab
 habitat-sim
+__pycache__
