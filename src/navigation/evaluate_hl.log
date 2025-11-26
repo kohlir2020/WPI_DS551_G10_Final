@@ -1,0 +1,222 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 804: forward compatibility was attempted on non supported HW (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:109.)
+  return torch._C._cuda_getDeviceCount() > 0
+[14:18:51:996657]:[Warning]:[Metadata] SceneDatasetAttributes.cpp(107)::addNewSceneInstanceToDataset : Dataset : 'default' : Lighting Layout Attributes 'no_lights' specified in Scene Attributes but does not exist in dataset, so creating default.
+[14:18:51:996765]:[Warning]:[Scene] SemanticScene.h(331)::checkFileExists : ::loadSemanticSceneDescriptor: File `/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` does not exist.  Aborting load.
+[14:18:51:996775]:[Warning]:[Scene] SemanticScene.cpp(123)::loadSemanticSceneDescriptor : SSD File Naming Issue! Neither SemanticAttributes-provided name : `/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` nor constructed filename : `/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/info_semantic.json` exist on disk.
+[14:18:51:996783]:[Error]:[Scene] SemanticScene.cpp(139)::loadSemanticSceneDescriptor : SSD Load Failure! File with SemanticAttributes-provided name `/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` exists but failed to load.
+[14:18:52:033477]:[Warning]:[Sim] Simulator.cpp(595)::instanceStageForSceneAttributes : The active scene does not contain semantic annotations : activeSemanticSceneID_ = 0
+✓ Loaded low-level skill: models/highlevel_manager_final
+✓ Habitat simulator initialized.
+
+==============================
+   HRL HIGH-LEVEL EVALUATION  
+==============================
+
+Start Position : [-1.3731883   0.08431792  8.606928  ]
+Main Goal      : [-4.119079    0.02749625 24.009708  ]
+
+
+HL Step 1:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 2:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 3:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 4:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 5:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 6:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 7:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 8:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 9:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 10:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 11:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 12:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 13:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 14:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 15:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 16:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 17:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 18:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 19:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+HL Step 20:
+  Action (direction index): 6
+  New Obs        : [15.645728  -2.9651735]
+  Reward         : -0.020
+  Distance to Goal: 15.646
+HL Obs: [15.645728  -2.9651735]
+Chosen Action: 6
+Reward: -0.020
+Main Dist: 15.646
+
+Evaluation complete.

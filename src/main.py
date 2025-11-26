@@ -1,161 +1,57 @@
-#!/usr/bin/env python3
-"""
-Multi-task RL robot controller with VLM-based planning.
+# this is our main entry point into the code
+from skillTask import SkillTask
 
-This program demonstrates:
-1. Parse natural language robot command
-2. VLM decomposes command into subtasks (pick, place, navigate)
-3. Each trained RL model executes its subtask
-4. Visual simulation shows task execution
-5. Metrics and results displayed
-
-Usage:
-    python src/main.py --command "pick up the cup and place it on the table"
-    python src/main.py --interactive
-"""
-
-import argparse
-import os
-from typing import Optional
-
-from habitat.core.logging import logger
-
-from environment import Environment
-from executor import Executor
-from vlm_planner import VLMPlanner
-from tasks import TaskRegistry
-
-
-def main(
-    user_command: Optional[str] = None,
-    config_path: str = "benchmark/rearrange/play/play.yaml",
-    interactive: bool = False,
-    render: bool = True,
-    save_video: bool = False,
-) -> None:
+def make_global_env():
     """
-    Main program flow.
-
-    Args:
-        user_command: Natural language command (if not interactive)
-        config_path: Habitat environment config
-        interactive: Whether to prompt user for command
-        render: Whether to visualize execution
-        save_video: Whether to save execution video
+    This function will initialize the environment/simulator from Habitat
+    It sets up the observation space, the total action space (not all tasks will take all actions, 
+    but all tasks will be limited to actions from this set), and a definition for done.
     """
-    logger.info("=" * 60)
-    logger.info("Multi-Task RL Robot Controller with VLM Planning")
-    logger.info("=" * 60)
+    pass
 
-    # Initialize environment
-    logger.info("\n[1] Initializing Habitat Environment...")
-    with Environment(config_path=config_path) as env:
-        # Get available tasks
-        available_tasks = TaskRegistry.get_available_tasks()
-        logger.info(f"Available tasks: {available_tasks}")
+def load_all_skills() -> dict[tuple, SkillTask]:
+    """
+    This function will initialize all the trained skills (with pre-trained models)
+    Each skill has a description of how its executed for the planning agent to use as context.
+    """
+    pass
 
-        # Initialize VLM planner
-        logger.info("\n[2] Initializing VLM Planner...")
-        try:
-            vlm_planner = VLMPlanner(
-                available_tasks=available_tasks,
-                model="gpt-3.5-turbo",  # Use cheaper model for faster response
-            )
-            logger.info("VLM Planner ready (using OpenAI API)")
-        except Exception as e:
-            logger.error(f"Failed to initialize VLM: {e}")
-            logger.info("Falling back to heuristic planning")
-            vlm_planner = VLMPlanner(
-                available_tasks=available_tasks,
-                model="fallback",
-            )
+def extract_state():
+    pass
 
-        # Get user command
-        logger.info("\n[3] Getting Robot Command...")
-        if interactive:
-            user_command = input("Enter robot command: ").strip()
-        elif user_command is None:
-            user_command = "pick up the cube"
-            logger.info(f"Using default command: {user_command}")
+def get_planner(planner_type):
+    """
+    Sets up the planner agent (VLM)
+    """
+    return None
 
-        logger.info(f"User command: '{user_command}'")
+def check_global_goal(Env, goal_spec, obs, info) -> bool:
+    """
+    Checks if the goal is completed
+    """
+    pass
 
-        # Plan task sequence using VLM
-        logger.info("\n[4] Planning Task Sequence with VLM...")
-        plan = vlm_planner.plan(user_command)
-        logger.info(f"Generated plan with {len(plan)} tasks:")
-        for i, task in enumerate(plan):
-            logger.info(f"  {i+1}. {task['task']}: {task.get('description', '')}")
+def main(goal_spec, planner_type):
+    env = make_global_env()         # Habitat kitchen with Fetch+fridge
+    obs, info = env.reset()
 
-        # Execute planned tasks
-        logger.info("\n[5] Executing Task Plan...")
-        executor = Executor(env=env, render=render, save_video=save_video)
-        results = executor.execute(plan)
+    # Load all skill policies (maybe multiple algos per skill)
+    skills = load_all_skills()
 
-        # Display results
-        logger.info("\n[6] Execution Complete!")
-        logger.info("=" * 60)
-        logger.info("Results:")
-        logger.info(f"  Total Reward: {results['total_reward']:.3f}")
-        logger.info(f"  Total Steps: {results['total_steps']}")
-        logger.info(f"  Plan Length: {results['plan_length']}")
-        logger.info(
-            f"  Execution Success: {'Yes' if results['execution_success'] else 'No'}"
-        )
-        logger.info(f"  Avg Reward per Task: {results['avg_reward_per_task']:.3f}")
-        logger.info("\nTask Breakdown:")
-        for task in results["task_history"]:
-            logger.info(
-                f"  {task['task']}: reward={task['reward']:.3f}, "
-                f"steps={task['steps']}, success={task['success']}"
-            )
-        logger.info("=" * 60)
+    planner = get_planner(planner_type)
 
+    done = False
+    while not done:
+        state_repr = extract_state(env, obs, info)
+        plan_or_call = planner(state_repr, goal_spec, skills)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Multi-task RL robot controller with VLM planning"
-    )
-    parser.add_argument(
-        "--command",
-        type=str,
-        default=None,
-        help="Natural language robot command (e.g., 'pick up the cup')",
-    )
-    parser.add_argument(
-        "--interactive",
-        action="store_true",
-        help="Prompt user for command instead of using default",
-    )
-    parser.add_argument(
-        "--config",
-        type=str,
-        default="benchmark/rearrange/play/play.yaml",
-        help="Habitat environment config file",
-    )
-    parser.add_argument(
-        "--no-render",
-        action="store_true",
-        help="Disable visual rendering",
-    )
-    parser.add_argument(
-        "--save-video",
-        action="store_true",
-        help="Save execution video to file",
-    )
-    parser.add_argument(
-        "--video-path",
-        type=str,
-        default="./robot_execution.mp4",
-        help="Path to save video",
-    )
+        # easiest: planner returns *one* next skill call:
+        skill_name, algo_name, args = plan_or_call
+        skill = skills[(skill_name, algo_name)]
 
-    args = parser.parse_args()
+        skill.reset_runtime(env, goal=args)
+        skill_done = False
+        while not skill_done:
+            skill_done, (obs, info) = skill.step_runtime(env)
 
-    main(
-        user_command=args.command,
-        config_path=args.config,
-        interactive=args.interactive,
-        render=not args.no_render,
-        save_video=args.save_video,
-    )
+        done = check_global_goal(env, goal_spec, obs, info)
