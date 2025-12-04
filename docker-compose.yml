@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # GPU-enabled training container
+  hrl-training:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hrl-training:latest
+    container_name: hrl-training
+    
+    # GPU support
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    
+    # Volume mounts
+    volumes:
+      - .:/workspace
+      - /tmp/cache:/home/user/.cache
+      - ./data:/workspace/data
+      - ./src:/workspace/src
+      - ./models:/workspace/models
+      - ./logs:/workspace/logs
+    
+    # Port for TensorBoard
+    ports:
+      - "6006:6006"
+      - "8888:8888"  # Jupyter
+    
+    # Keep container running
+    stdin_open: true
+    tty: true
+    
+    # Auto-restart policy
+    restart: unless-stopped
+    
+    # Resource limits (optional)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # Optional: Development container with interactive tools
+  hrl-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hrl-training:latest
+    container_name: hrl-dev
+    
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - JUPYTER_ENABLE_LAB=yes
+    
+    volumes:
+      - .:/workspace
+      - ./data:/workspace/data
+      - ./src:/workspace/src
+      - ./models:/workspace/models
+      - ./logs:/workspace/logs
+    
+    ports:
+      - "6007:6006"  # TensorBoard
+      - "8889:8888"  # Jupyter
+    
+    stdin_open: true
+    tty: true
+    command: jupyter lab --ip=0.0.0.0 --allow-root

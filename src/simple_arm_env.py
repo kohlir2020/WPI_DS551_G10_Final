@@ -1,3 +1,4 @@
+# ./data/robots/franka_panda/panda_arm.urdf
 import gymnasium as gym
 import numpy as np
 import habitat_sim
@@ -5,9 +6,9 @@ import os
 import quaternion  # numpy-quaternion
 
 
-class SimpleNavigationEnv(gym.Env):
+class SimpleArmEnv(gym.Env):
     """
-    Habitat-Sim low-level navigation environment for PPO.
+    Habitat-Sim low-level arm environment for PPO.
 
     Observation:
         [ distance_to_goal , relative_angle_to_goal ]
@@ -22,19 +23,12 @@ class SimpleNavigationEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self,
-                 scene_path=None,
+                 scene_path="/home/pinaka/habitat-lab/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb",
                  min_goal_dist=2.0,
                  max_goal_dist=8.0):
 
         super().__init__()
 
-        if scene_path is None:
-            scene_path = os.path.join(
-                os.path.dirname(__file__),
-                "../data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
-            )
-        
-        scene_path = os.path.abspath(scene_path)
         if not os.path.exists(scene_path):
             raise FileNotFoundError(f"Scene not found: {scene_path}")
 
