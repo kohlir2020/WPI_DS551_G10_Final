@@ -31,7 +31,8 @@ class HRLNavigationSkill:
         self.success_distance = 0.6  # meters
         
         # Setup HRL environment wrapper (using existing implementation)
-        from hrl_highlevel_env import HRLHighLevelEnvImproved
+        from navigation.hrl_highlevel_env import HRLHighLevelEnvImproved
+        # from navigation.hrl_hac_env import HRLHACEnv  # DQN-based (not trained)
         self.hrl_env = HRLHighLevelEnvImproved(
             low_level_model_path=low_model_path,
             subgoal_distance=5.0,
@@ -142,7 +143,7 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
             success = True
         
         # Visualization
-        if visualizer and step % 5 == 0:  # Every 5 steps
+        if visualizer and step % 1 == 0:  # Every 5 steps
             visualizer.render_frame(skill.name, step, obs)
         
         # Print progress with position
@@ -362,6 +363,10 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
 
 def demo_skill_executor():
     """Demo: Execute navigation then fetch in sequence"""
+
+    from navigation.simple_navigation_env import SimpleNavigationEnv
+    from navigation.hrl_highlevel_env import HRLHighLevelEnvImproved
+    from arm.fetch_navigation_env import FetchNavigationEnv
     
     print("\n" + "="*70)
     print("SKILL COMBINATION DEMO")

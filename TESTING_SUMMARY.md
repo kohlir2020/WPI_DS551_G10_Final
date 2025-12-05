@@ -60,6 +60,7 @@ Task 1: Navigate to drawer [10.0, 0.0, 5.0]
 - **Models Used**: 
   - Low-level: `lowlevel_curriculum_250k.zip`
   - High-level: `highlevel_manager_final.zip`
+** NOTE: We can switch out the HRL for the HAC with affordances by just commenting out the line in skill_executor (line 35)
 
 ### 3. Skill Executor ✅
 - **File**: `src/skill_executor.py` (execute_skill function)
@@ -72,10 +73,10 @@ Task 1: Navigate to drawer [10.0, 0.0, 5.0]
 - **Test**: Loads scene, models, executes plan, provides summary
 - **Features**: RGB visualization support, video saving with `--save-video`
 
-### 5. Task Planner ⚠️
+### 5. Task Planner
 - **File**: `src/planner/llm_planner.py`
 - **Status**: Hard-coded plan working, LLM blocked by dependency issue
-- **Issue**: `litellm` compatibility issue with `dspy`
+- **Issue**: `litellm` compatibility issue with `dspy` => switched to `OPENAI`
 - **Workaround**: Using hard-coded plans (sufficient for testing)
 
 ### 6. Arm Reaching Skill ⏸️
@@ -91,18 +92,7 @@ Task 1: Navigate to drawer [10.0, 0.0, 5.0]
 **Impact**: Low (normal for partially-trained agents)
 **Solution**: Requires additional training or physics tuning (out of scope)
 
-### 2. DSPY/LiteLLM Compatibility ⚠️
-**Symptom**: `ImportError: cannot import name 'ModelResponseStream' from 'litellm'`
-**Root Cause**: Version mismatch between dspy and litellm
-**Impact**: Medium (blocks LLM planning, but hard-coded works)
-**Solution**: 
-```bash
-# Option 1: Use hard-coded plans (current)
-# Option 2: Update dependencies
-pip install --upgrade dspy-ai litellm
-```
-
-### 3. Semantic Scene Warnings (Cosmetic)
+### 2. Semantic Scene Warnings (Cosmetic)
 **Symptom**: Warnings about missing `.scn` files
 **Impact**: None (scene loads correctly)
 **Solution**: Can be ignored
@@ -169,11 +159,6 @@ python src/main.py --use-llm
 2. **Physics Tuning**: Adjust collision margins, friction, mass properties
 3. **Better Goals**: Use `pathfinder.get_random_navigable_point()` for guaranteed reachable goals
 4. **Recovery Behaviors**: Add stuck detection and recovery actions
-
-### To Enable LLM Planning:
-1. Fix litellm dependency: `pip install --upgrade dspy-ai litellm`
-2. Uncomment LLM code in `src/main.py` (lines 16, 163-167)
-3. Verify `.env` has valid `OPENAI_API_KEY`
 
 ### To Add Arm Tasks:
 1. Train arm reaching model:

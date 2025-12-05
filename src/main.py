@@ -9,6 +9,8 @@ import numpy as np
 import cv2
 from pathlib import Path
 from datetime import datetime
+import habitat_sim
+import magnum
 
 # Add src to path
 sys.path.insert(0, os.path.dirname(__file__))
@@ -19,7 +21,7 @@ from skill_executor import HRLNavigationSkill, execute_skill
 
 # Test goals (simple coordinates)
 GOALS = {
-    "drawer": [10.0, 0.0, 5.0],
+    "drawer": [19.0, 0.0, 2.0],
     "table": [15.0, 0.0, 8.0],
     "shelf": [8.0, 0.0, 12.0]
 }
@@ -138,7 +140,7 @@ def main():
     print("✓ Scene ready (Skokloster Castle + Fetch robot + physics)")
     
     # Set random start position
-    start_pos = pathfinder.get_random_navigable_point()
+    start_pos = [-16.0, 0.2, 5.0] #pathfinder.get_random_navigable_point() # this is currently a position in a table
     agent_state = agent.get_state()
     agent_state.position = start_pos
     agent.set_state(agent_state)
@@ -163,10 +165,35 @@ def main():
     
     # Get task plan
     print("\nGenerating plan...")
+    
+    # Check if goal is navigable
     goal_pos = GOALS[args.goal]
+    start_pos = np.array(agent.get_state().position)
+    
+    # Verify goal is on navmesh
+    snapped_goal = pathfinder.snap_point(goal_pos)
+    if np.isnan(snapped_goal).any():
+        print(f"⚠ Goal {goal_pos} not on navmesh, using random navigable point")
+        goal_pos = pathfinder.get_random_navigable_point() # THIS ALWAYS GIVES [-3.960728168487549, 0.20991861820220947, 13.5126953125]
+        print(f"  New goal: {goal_pos}")
+    else:
+        goal_pos = snapped_goal
+        print(f"✓ Goal is navigable: {goal_pos}")
+    
+    # Check if path exists
+    path = habitat_sim.ShortestPath()
+    path.requested_start = start_pos
+    path.requested_end = goal_pos
+    found = pathfinder.find_path(path)
+    if found:
+        print(f"✓ Path exists: {path.geodesic_distance:.2f}m geodesic distance")
+    else:
+        print(f"✗ WARNING: No valid path found to goal!")
     
     # USE HARD-CODED PLAN FOR NOW:
     plan = get_hardcoded_plan()
+    # Update plan with validated goal
+    plan[0]["params"]["target"] = list(goal_pos)
     
     # TO USE LLM (requires OPENAI_API_KEY):
     # if args.use_llm:
