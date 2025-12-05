@@ -8,11 +8,13 @@ No gripper training - only arm reaching
 import gymnasium as gym
 import numpy as np
 import habitat_sim
-from habitat.articulated_agents.robots.fetch_robot import FetchRobot
+#from habitat.articulated_agents.robots.fetch_robot import FetchRobot
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(__file__))
+# Add parent to path for shared imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from shared.scene_manager import create_fetch_scene
 
 
 class FetchArmReachingEnv(gym.Env):
@@ -35,28 +37,38 @@ class FetchArmReachingEnv(gym.Env):
                  max_steps=200):
         """
         Args:
-            scene_path: Path to scene (uses local data if None)
+            scene_path: Path to scene (defaults to Skokloster Castle)
             goal_height: Height of goal (drawer/fridge handle) in meters
             success_distance: Distance threshold for gripper trigger (meters)
             max_steps: Maximum steps per episode
         """
         super().__init__()
         
-        if scene_path is None:
-            scene_path = os.path.join(
-                os.path.dirname(__file__),
-                "../../data/scene_datasets/habitat-test-scenes/apartment_1.glb"
-            )
+        # Use scene manager for consistent setup
+        self.sim, self.agent, self.pathfinder = create_fetch_scene(
+            scene_path=scene_path,
+            enable_physics=True,
+            add_rgb_sensor=False
+        )
         
-        scene_path = os.path.abspath(scene_path)
-        if not os.path.exists(scene_path):
-            raise FileNotFoundError(f"Scene not found: {scene_path}")
+        # OLD CODE (custom scene setup):
+        # if scene_path is None:
+        #     scene_path = os.path.join(
+        #         os.path.dirname(__file__),
+        #         "../../data/scene_datasets/habitat-test-scenes/apartment_1.glb"
+        #     )
+        # scene_path = os.path.abspath(scene_path)
+        # if not os.path.exists(scene_path):
+        #     raise FileNotFoundError(f"Scene not found: {scene_path}")
+        # print(f"Using scene: {scene_path}")
+        # self.sim = self._create_sim(scene_path)
         
-        print(f"Using scene: {scene_path}")
+        print("✓ Simulator initialized with Fetch robot")
         
-        # Initialize simulator
-        self.sim = self._create_sim(scene_path)
-        print("✓ Simulator initialized")
+        # Get Fetch robot instance for arm control
+        self.robot = None
+        # TODO: Get articulated agent from sim once Fetch integration is complete
+        # self.robot = self.sim.get_articulated_agent(0)
         
         # Goal parameters
         self.goal_height = goal_height
@@ -97,19 +109,18 @@ class FetchArmReachingEnv(gym.Env):
         print(f"  - Success distance: {success_distance}m")
         print(f"  - Max steps: {max_steps}")
     
-    def _create_sim(self, scene_path):
-        """Create simulator with Fetch robot"""
-        backend_cfg = habitat_sim.SimulatorConfiguration()
-        backend_cfg.scene_id = scene_path
-        backend_cfg.enable_physics = True
-        backend_cfg.gpu_device_id = -1
-        
-        agent_cfg = habitat.articulated_agents.agent.AgentConfiguration()
-        agent_cfg.sensor_specifications = []
-        
-        cfg = habitat_sim.Configuration(backend_cfg, [agent_cfg])
-        sim = habitat_sim.Simulator(cfg)
-        return sim
+    # OLD CODE (_create_sim now handled by scene_manager):
+    # def _create_sim(self, scene_path):
+    #     """Create simulator with Fetch robot"""
+    #     backend_cfg = habitat_sim.SimulatorConfiguration()
+    #     backend_cfg.scene_id = scene_path
+    #     backend_cfg.enable_physics = True
+    #     backend_cfg.gpu_device_id = -1
+    #     agent_cfg = habitat.articulated_agents.agent.AgentConfiguration()
+    #     agent_cfg.sensor_specifications = []
+    #     cfg = habitat_sim.Configuration(backend_cfg, [agent_cfg])
+    #     sim = habitat_sim.Simulator(cfg)
+    #     return sim
     
     def reset(self, seed=None, options=None):
         """Reset environment"""
@@ -131,7 +142,6 @@ class FetchArmReachingEnv(gym.Env):
     def _reset_arm_to_default(self):
         """Reset arm to default neutral position"""
         # Fetch default arm configuration (7 joints)
-        # Values from Fetch documentation
         default_pose = np.array([
             0.0,      # shoulder_pan_joint
             1.3,      # shoulder_lift_joint  
@@ -142,12 +152,15 @@ class FetchArmReachingEnv(gym.Env):
             0.0       # wrist_roll_joint
         ], dtype=np.float32)
         
-        # TODO: Apply to arm in simulator
         self.arm_angles = default_pose
+        
+        # Apply to robot in simulator
+        if self.robot is not None:
+            self.robot.arm_joint_pos = default_pose
+        # else: placeholder mode, just track angles in memory
     
     def step(self, action):
         """Execute arm action"""
-        # action: continuous velocities for 7 arm joints
         action = np.clip(action, self.action_space.low, self.action_space.high)
         
         # Update arm angles (simple integration)
@@ -158,6 +171,10 @@ class FetchArmReachingEnv(gym.Env):
             np.pi
         )
         
+        # Apply to robot in simulator
+        if self.robot is not None:
+            self.robot.arm_joint_pos = self.arm_angles
+        
         self.current_step += 1
         
         # Get observation
@@ -166,7 +183,7 @@ class FetchArmReachingEnv(gym.Env):
         
         # Check success: gripper within 15cm of goal
         success = distance < self.success_distance
-        reward = 1.0 if success else -0.01 * distance  # Reward proximity
+        reward = 1.0 if success else -0.01 * distance
         
         done = success
         truncated = self.current_step >= self.max_steps
@@ -183,8 +200,19 @@ class FetchArmReachingEnv(gym.Env):
     def _get_obs(self):
         """Get observation: [distance_to_goal, arm_angles]"""
         # Get gripper position (end effector)
-        # TODO: Get actual gripper position from simulator
-        gripper_pos = np.array([0.0, 0.0, 1.5], dtype=np.float32)  # Placeholder
+        if self.robot is not None:
+            # Get actual gripper position from robot
+            gripper_transform = self.robot.ee_transform()
+            gripper_pos = gripper_transform.translation
+        else:
+            # Placeholder: simple forward kinematics approximation
+            base_height = 1.0
+            arm_reach = 0.7  # approximate reach
+            gripper_pos = np.array([
+                arm_reach * np.cos(self.arm_angles[0]),
+                base_height + arm_reach * np.sin(self.arm_angles[1]),
+                arm_reach * np.sin(self.arm_angles[0])
+            ], dtype=np.float32)
         
         # Distance to goal
         to_goal = self.goal_position - gripper_pos

@@ -2,7 +2,12 @@ import gymnasium as gym
 import numpy as np
 import habitat_sim
 import os
+import sys
 import quaternion  # numpy-quaternion
+
+# Add parent directory to path for shared imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from shared.scene_manager import create_fetch_scene
 
 
 class SimpleNavigationEnv(gym.Env):
@@ -42,41 +47,38 @@ class SimpleNavigationEnv(gym.Env):
         self.max_goal_dist = max_goal_dist
 
         # ----------------------------------------------------
-        # Habitat simulator setup
+        # Habitat simulator setup with Fetch robot + physics
         # ----------------------------------------------------
-        backend_cfg = habitat_sim.SimulatorConfiguration()
-        backend_cfg.scene_id = scene_path
-        backend_cfg.enable_physics = False
-        backend_cfg.gpu_device_id = -1   # CPU rendering only
-
-        agent_cfg = habitat_sim.agent.AgentConfiguration()
-
-        # --- NO SENSORS AT ALL (OLD Habitat builds require this) ---
-        agent_cfg.sensor_specifications = []
-
-        # --- BASIC BODY PARAMETERS ---
-        agent_cfg.height = 1.5
-        agent_cfg.radius = 0.1
-
-        # --- MOVEMENT ACTIONS ---
-        agent_cfg.action_space = {
-            "move_forward": habitat_sim.agent.ActionSpec(
-                "move_forward", habitat_sim.agent.ActuationSpec(amount=0.5)
-            ),
-            "turn_left": habitat_sim.agent.ActionSpec(
-                "turn_left", habitat_sim.agent.ActuationSpec(amount=10.0)
-            ),
-            "turn_right": habitat_sim.agent.ActionSpec(
-                "turn_right", habitat_sim.agent.ActuationSpec(amount=10.0)
-            ),
-        }
-
-
-
-        cfg = habitat_sim.Configuration(backend_cfg, [agent_cfg])
-        self.sim = habitat_sim.Simulator(cfg)
-        self.agent = self.sim.get_agent(0)
-        self.pathfinder = self.sim.pathfinder
+        self.sim, self.agent, self.pathfinder = create_fetch_scene(
+            scene_path=scene_path,
+            enable_physics=True,
+            add_rgb_sensor=False
+        )
+        
+        # OLD CODE (basic agent, no physics):
+        # backend_cfg = habitat_sim.SimulatorConfiguration()
+        # backend_cfg.scene_id = scene_path
+        # backend_cfg.enable_physics = False
+        # backend_cfg.gpu_device_id = -1
+        # agent_cfg = habitat_sim.agent.AgentConfiguration()
+        # agent_cfg.sensor_specifications = []
+        # agent_cfg.height = 1.5
+        # agent_cfg.radius = 0.1
+        # agent_cfg.action_space = {
+        #     "move_forward": habitat_sim.agent.ActionSpec(
+        #         "move_forward", habitat_sim.agent.ActuationSpec(amount=0.5)
+        #     ),
+        #     "turn_left": habitat_sim.agent.ActionSpec(
+        #         "turn_left", habitat_sim.agent.ActuationSpec(amount=10.0)
+        #     ),
+        #     "turn_right": habitat_sim.agent.ActionSpec(
+        #         "turn_right", habitat_sim.agent.ActuationSpec(amount=10.0)
+        #     ),
+        # }
+        # cfg = habitat_sim.Configuration(backend_cfg, [agent_cfg])
+        # self.sim = habitat_sim.Simulator(cfg)
+        # self.agent = self.sim.get_agent(0)
+        # self.pathfinder = self.sim.pathfinder
 
         print("✓ Habitat simulator initialized.")
 

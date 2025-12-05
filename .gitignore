@@ -4,3 +4,4 @@
 habitat-lab
 habitat-sim
 __pycache__
+.env
