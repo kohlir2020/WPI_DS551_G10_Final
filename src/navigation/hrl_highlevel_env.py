@@ -2,10 +2,15 @@
 
 import gymnasium as gym
 import numpy as np
-from simple_navigation_env import SimpleNavigationEnv
+import os
+import sys
 from stable_baselines3 import PPO
 import habitat_sim
 import quaternion
+
+# Add parent directory to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from simple_navigation_env import SimpleNavigationEnv
 
 
 class HRLHighLevelEnvImproved(gym.Env):
