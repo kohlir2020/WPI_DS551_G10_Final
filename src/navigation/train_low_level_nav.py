@@ -1,8 +1,11 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
-from stable_baselines3.common.env_checker import check_env
 from simple_navigation_env import SimpleNavigationEnv
-import os
 
 # ==========================================
 # 1. Setup folders
@@ -15,9 +18,6 @@ os.makedirs("logs_lowlevel", exist_ok=True)
 # ==========================================
 env = SimpleNavigationEnv()
 eval_env = SimpleNavigationEnv()
-
-print("Checking env with SB3...")
-check_env(env, warn=True)
 
 # ==========================================
 # 3. PPO hyperparameters (tuned for local nav)
@@ -33,7 +33,6 @@ model = PPO(
     clip_range=0.2,
     ent_coef=0.005,      # a bit more exploration
     n_epochs=4,
-    tensorboard_log="./logs_lowlevel/",
     verbose=1,
     device="cpu",
 )
