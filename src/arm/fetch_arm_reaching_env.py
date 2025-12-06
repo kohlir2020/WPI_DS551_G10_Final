@@ -8,7 +8,7 @@ No gripper training - only arm reaching
 import gymnasium as gym
 import numpy as np
 import habitat_sim
-from habitat.articulated_agents.robots.fetch_robot import FetchRobot
+# from habitat.articulated_agents.robots.fetch_robot import FetchRobot
 import os
 import sys
 
@@ -45,7 +45,7 @@ class FetchArmReachingEnv(gym.Env):
         if scene_path is None:
             scene_path = os.path.join(
                 os.path.dirname(__file__),
-                "../../data/scene_datasets/habitat-test-scenes/apartment_1.glb"
+                "../../habitat-lab/data/scene_datasets/habitat-test-scenes/apartment_1.glb"
             )
         
         scene_path = os.path.abspath(scene_path)
@@ -104,12 +104,63 @@ class FetchArmReachingEnv(gym.Env):
         backend_cfg.enable_physics = True
         backend_cfg.gpu_device_id = -1
         
-        agent_cfg = habitat.articulated_agents.agent.AgentConfiguration()
+        agent_cfg = habitat_sim.agent.AgentConfiguration()
         agent_cfg.sensor_specifications = []
         
         cfg = habitat_sim.Configuration(backend_cfg, [agent_cfg])
         sim = habitat_sim.Simulator(cfg)
+        
+        # Load Fetch Robot
+        ao_mgr = sim.get_articulated_object_manager()
+        urdf_path = "habitat-lab/data/robots/hab_fetch/robots/hab_fetch.urdf"
+        urdf_path = os.path.abspath(urdf_path)
+        if not os.path.exists(urdf_path):
+             # Try relative path if absolute fails or assume it's correct
+             pass
+             
+        self.robot = ao_mgr.add_articulated_object_from_urdf(urdf_path, fixed_base=True)
+        self.robot.translation = np.array([0.0, 0.0, 0.0])
+        
         return sim
+
+    def check_collision(self, arm_joint_angles):
+        """
+        Check if the robot is in collision at the given arm joint angles.
+        Args:
+            arm_joint_angles: np.array of shape (7,)
+        Returns:
+            bool: True if in collision, False otherwise
+        """
+        # Save current state
+        current_joint_pos = self.robot.joint_positions
+        
+        # Create new state
+        new_joint_pos = current_joint_pos.copy()
+        # Arm joints are indices 5 to 11 (inclusive)
+        # Ensure arm_joint_angles is correct shape
+        if len(arm_joint_angles) != 7:
+            raise ValueError(f"Expected 7 arm joint angles, got {len(arm_joint_angles)}")
+            
+        new_joint_pos[5:12] = arm_joint_angles
+        
+        # Set new state
+        self.robot.joint_positions = new_joint_pos
+        
+        # Update collision world
+        self.sim.perform_discrete_collision_detection()
+        
+        # Check contacts
+        contacts = self.sim.get_physics_contact_points()
+        
+        # Restore state
+        self.robot.joint_positions = current_joint_pos
+        
+        # Filter contacts to see if robot is involved
+        # If contacts is not empty, there is a collision in the scene.
+        # Since the scene is static (except robot), any contact implies robot collision 
+        # (either self-collision or collision with environment).
+        
+        return len(contacts) > 0
     
     def reset(self, seed=None, options=None):
         """Reset environment"""
@@ -142,8 +193,13 @@ class FetchArmReachingEnv(gym.Env):
             0.0       # wrist_roll_joint
         ], dtype=np.float32)
         
-        # TODO: Apply to arm in simulator
         self.arm_angles = default_pose
+        
+        # Apply to robot in simulator
+        current_joint_pos = self.robot.joint_positions
+        # Arm joints are indices 5 to 11
+        current_joint_pos[5:12] = default_pose
+        self.robot.joint_positions = current_joint_pos
     
     def step(self, action):
         """Execute arm action"""
@@ -157,6 +213,11 @@ class FetchArmReachingEnv(gym.Env):
             -np.pi,
             np.pi
         )
+        
+        # Apply to robot in simulator
+        current_joint_pos = self.robot.joint_positions
+        current_joint_pos[5:12] = self.arm_angles
+        self.robot.joint_positions = current_joint_pos
         
         self.current_step += 1
         
@@ -183,8 +244,13 @@ class FetchArmReachingEnv(gym.Env):
     def _get_obs(self):
         """Get observation: [distance_to_goal, arm_angles]"""
         # Get gripper position (end effector)
-        # TODO: Get actual gripper position from simulator
-        gripper_pos = np.array([0.0, 0.0, 1.5], dtype=np.float32)  # Placeholder
+        # Gripper link is index 22 (gripper_link)
+        # We need to get the link ID from the robot
+        link_ids = self.robot.get_link_ids()
+        # Assuming index 22 corresponds to gripper_link as verified in inspection
+        gripper_link_id = link_ids[22]
+        
+        gripper_pos = self.robot.get_link_scene_node(gripper_link_id).translation
         
         # Distance to goal
         to_goal = self.goal_position - gripper_pos
