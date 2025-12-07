@@ -6,38 +6,29 @@ from hrl_highlevel_env import HRLHighLevelEnvImproved as HRLHighLevelEnv
 from stable_baselines3 import PPO
 import numpy as np
 
-# ============================================================
 # CRITICAL FIX: Load correct models
-# ============================================================
-LOW_LEVEL_MODEL_PATH = "models/lowlevel_curriculum_250k"  # ✓ Correct!
-HIGH_LEVEL_MODEL_PATH = "models/hl_improved/highlevel_improved_final"  # ✓ Correct!
+LOW_LEVEL_MODEL_PATH = "models/lowlevel_curriculum_1M"
+HIGH_LEVEL_MODEL_PATH = "models/hl_improved_2M/highlevel_improved_final_2M"
 
 print("=" * 70)
 print("HRL HIGH-LEVEL EVALUATION (CORRECTED)")
 print("=" * 70)
 
-# ============================================================
 # Create environment with CORRECT low-level model
-# ============================================================
 print("\nCreating environment...")
 env = HRLHighLevelEnv(
-    low_level_model_path=LOW_LEVEL_MODEL_PATH,  # ✓ Use trained low-level skill
+    low_level_model_path=LOW_LEVEL_MODEL_PATH,
     subgoal_distance=6.0,
     option_horizon=40,
     debug=True  # Enable debugging output
 )
-print("✓ Environment created")
-
-# ============================================================
+print("Environment created")
 # Load HIGH-level policy
-# ============================================================
 print(f"\nLoading high-level policy from: {HIGH_LEVEL_MODEL_PATH}")
 model = PPO.load(HIGH_LEVEL_MODEL_PATH)
-print("✓ High-level policy loaded")
+print("High-level policy loaded")
 
-# ============================================================
 # Run evaluation
-# ============================================================
 n_episodes = 20
 successes = 0
 total_steps = []
@@ -68,8 +59,8 @@ for ep in range(n_episodes):
         action, _ = model.predict(obs, deterministic=True)
         
         print(f"HL Step {step+1}:")
-        print(f"  Observation: dist={obs[0]:.2f}m, angle={obs[1]:.2f}rad")
-        print(f"  Action (direction): {action}")
+        print(f"Observation: dist={obs[0]:.2f}m, angle={obs[1]:.2f}rad")
+        print(f"Action (direction): {action}")
         
         # Execute
         agent_pos_before = env.ll_env.agent.get_state().position
@@ -83,7 +74,7 @@ for ep in range(n_episodes):
         print(f"  Reward: {reward:.3f}")
         
         if done:
-            print(f"\n✓✓✓ MAIN GOAL REACHED in {step_count} steps! ✓✓✓")
+            print(f"\nMAIN GOAL REACHED in {step_count} steps!")
             successes += 1
             total_steps.append(step_count)
             final_distances.append(info['main_distance'])
@@ -91,23 +82,20 @@ for ep in range(n_episodes):
             break
             
         if truncated:
-            print(f"\n✗ MAX HL STEPS REACHED (still {info['main_distance']:.2f}m away)")
+            print(f"\nMAX HL STEPS REACHED (still {info['main_distance']:.2f}m away)")
             final_distances.append(info['main_distance'])
             episode_done = True
             break
     
     if not episode_done:
-        print(f"\n✗ Episode timeout at {info['main_distance']:.2f}m from goal")
+        print(f"\nEpisode timeout at {info['main_distance']:.2f}m from goal")
         final_distances.append(info['main_distance'])
 
 env.close()
 
-# ============================================================
 # Results
-# ============================================================
-print("\n" + "=" * 70)
 print("EVALUATION RESULTS")
-print("=" * 70)
+print("="*50)
 
 success_rate = (successes / n_episodes) * 100
 avg_steps = np.mean(total_steps) if total_steps else 0
@@ -118,13 +106,6 @@ print(f"Average Steps   : {avg_steps:.1f}")
 print(f"Avg Final Dist  : {avg_final_dist:.2f}m")
 
 if success_rate == 0:
-    print("\n⚠️  WARNING: 0% success rate!")
-    print("   Possible issues:")
-    print("   1. High-level policy didn't learn (needs retraining)")
-    print("   2. Subgoal generation is broken")
-    print("   3. Low-level skill not executing properly")
-    print("   4. Action space collapsed (always same action)")
+    print("\Warning 0% success rate!")
 else:
-    print(f"\n✓ System is working! {successes}/{n_episodes} episodes successful")
-
-print("=" * 70)
+    print(f"\nSystem is working! {successes}/{n_episodes} episodes successful")

@@ -10,10 +10,10 @@ env = SimpleNavigationEnv()
 # ============================================================
 model_path = None
 
-if os.path.exists("models/lowlevel_curriculum_250k.zip"):
-    model_path = "models/lowlevel_curriculum_250k"
-elif os.path.exists("models/lowlevel_curriculum_250k.zip"):
-    model_path = "models/lowlevel_curriculum_250k.zip"
+if os.path.exists("models/lowlevel_curriculum_1M.zip"):
+    model_path = "models/lowlevel_curriculum_1M"
+elif os.path.exists("models/lowlevel_curriculum_1M.zip"):
+    model_path = "models/lowlevel_curriculum_1M.zip"
 else:
     best = max(glob.glob("models/checkpoints/*.zip"), key=os.path.getctime)
     model_path = best
