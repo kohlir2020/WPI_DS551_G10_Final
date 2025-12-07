@@ -10,9 +10,8 @@ import numpy as np
 LOW_LEVEL_MODEL_PATH = "models/lowlevel_curriculum_1M"
 HIGH_LEVEL_MODEL_PATH = "models/hl_improved_2M/highlevel_improved_final_2M"
 
-print("=" * 70)
 print("HRL HIGH-LEVEL EVALUATION (CORRECTED)")
-print("=" * 70)
+print("=====================================")
 
 # Create environment with CORRECT low-level model
 print("\nCreating environment...")
@@ -35,18 +34,17 @@ total_steps = []
 final_distances = []
 
 print(f"\nEvaluating for {n_episodes} episodes...\n")
-print("=" * 70)
-
+print("==============================")
 for ep in range(n_episodes):
     obs, _ = env.reset()
     main_goal = env.main_goal
     agent_start = env.ll_env.agent.get_state().position
     start_distance = np.linalg.norm(agent_start - main_goal)
-    
+
     print(f"\nEPISODE {ep + 1}/{n_episodes}")
     print("-" * 70)
     print(f"Start Position : {agent_start}")
-    print(f"Main Goal      : {main_goal}")
+    print(f"Main Goal : {main_goal}")
     print(f"Start Distance : {start_distance:.2f}m\n")
     
     episode_done = False
@@ -69,9 +67,9 @@ for ep in range(n_episodes):
         
         movement = np.linalg.norm(agent_pos_after - agent_pos_before)
         
-        print(f"  Movement: {movement:.3f}m")
-        print(f"  Distance to goal: {info['main_distance']:.2f}m")
-        print(f"  Reward: {reward:.3f}")
+        print(f"Movement: {movement:.3f}m")
+        print(f"Distance to goal: {info['main_distance']:.2f}m")
+        print(f"Reward: {reward:.3f}")
         
         if done:
             print(f"\nMAIN GOAL REACHED in {step_count} steps!")
@@ -95,7 +93,7 @@ env.close()
 
 # Results
 print("EVALUATION RESULTS")
-print("="*50)
+print("===============")
 
 success_rate = (successes / n_episodes) * 100
 avg_steps = np.mean(total_steps) if total_steps else 0
