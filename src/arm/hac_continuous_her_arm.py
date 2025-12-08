@@ -386,6 +386,9 @@ class HighLevelTD3HERTrainer:
         self.episode_critic_losses = []
         self.episode_subgoal_successes = []  # How many subgoals reached
         self.episode_exploration_noise = []  # Noise level per episode
+        
+        # successful episodes for video recording
+        self.successful_episodes = []
 
     # ---- HL state construction ----
 
@@ -404,9 +407,22 @@ class HighLevelTD3HERTrainer:
         agent_pos = self.get_ee_pos(self.env.arm_angles)
         return self._get_hl_state_for_goal(agent_pos, self.main_goal)
 
-    def _sample_main_goal(self, agent_pos):
-        # Sample random goal in 3D space, similar to env init
-        return np.random.randn(3).astype(np.float32) * 0.5
+    def _sample_main_goal(self, agent_pos, current_episode: int = 0):
+        """Sample goal with optional curriculum learning."""
+        if self.args.use_curriculum:
+            # Progressive difficulty: start with nearby goals, increase distance
+            progress = min(1.0, current_episode / float(self.args.curriculum_episodes))
+            goal_dist = (self.args.curriculum_start_dist + 
+                        progress * (self.args.curriculum_end_dist - self.args.curriculum_start_dist))
+            # Sample on sphere at curriculum distance
+            direction = np.random.randn(3)
+            direction = direction / np.linalg.norm(direction)
+            goal = direction * goal_dist
+        else:
+            # Standard sampling in workspace
+            goal = np.random.randn(3).astype(np.float32) * 0.5
+        
+        return goal.astype(np.float32)
     
     def _low_level_policy(self, obs, goal):
         # Use SAC to generate actions toward the subgoal
@@ -451,7 +467,7 @@ class HighLevelTD3HERTrainer:
             obs_ll, _ = self.env.reset()
             a_pos = self.get_ee_pos(self.env.arm_angles)
 
-            self.main_goal = self._sample_main_goal(a_pos)
+            self.main_goal = self._sample_main_goal(a_pos, current_episode=ep)
             self.env.goal_position = np.array(self.main_goal, dtype=np.float32)
 
             ep_reward = 0.0
@@ -539,9 +555,9 @@ class HighLevelTD3HERTrainer:
                 if done_h:
                     break
 
-            # HER: Future Strategy (k=4)
+            # HER: Future Strategy (increased k for better hindsight)
             # For each transition, sample k goals from the future of the trajectory
-            k_future = 4
+            k_future = self.args.her_k_future  # Now configurable, default 8
             if len(her_steps) > 0:
                 for t, step in enumerate(her_steps):
                     # Sample future indices (including current step to end)
@@ -587,6 +603,15 @@ class HighLevelTD3HERTrainer:
             self.episode_subgoal_successes.append(ep_subgoal_successes)
             self.episode_exploration_noise.append(self.agent._noise_std())
             success_window.append(1 if ep_success else 0)
+            
+            # Track successful episodes for later video recording
+            if ep_success:
+                self.successful_episodes.append({
+                    'episode': ep,
+                    'reward': ep_reward,
+                    'final_dist': final_main_dist,
+                    'subgoals': ep_subgoal_successes
+                })
 
             avg_succ = np.mean(success_window) if len(success_window) > 0 else 0.0
             avg_loss = np.mean(ep_losses) if ep_losses else 0.0
@@ -856,11 +881,26 @@ def parse_args():
     p.add_argument("--hl_updates_per_step", type=int, default=2)
 
     # HL reward shaping
-    p.add_argument("--hl_progress_scale", type=float, default=20.0,
-                   help="Scale for progress reward (doubled for better signal)")
-    p.add_argument("--hl_time_penalty", type=float, default=0.02,
-                   help="Time penalty per step (reduced to encourage exploration)")
-    p.add_argument("--hl_success_bonus", type=float, default=50.0)
+    p.add_argument("--hl_progress_scale", type=float, default=25.0,
+                   help="Scale for progress reward (increased for better signal)")
+    p.add_argument("--hl_time_penalty", type=float, default=0.01,
+                   help="Time penalty per step (reduced to encourage longer horizons)")
+    p.add_argument("--hl_success_bonus", type=float, default=100.0,
+                   help="Success bonus (doubled to strongly reward goal achievement)")
+    
+    # HER improvements
+    p.add_argument("--her_k_future", type=int, default=8,
+                   help="Number of future goals to sample per transition (increased from 4)")
+    
+    # Curriculum learning
+    p.add_argument("--use_curriculum", action="store_true", default=False,
+                   help="Use curriculum learning with progressive goal distances")
+    p.add_argument("--curriculum_start_dist", type=float, default=0.5,
+                   help="Starting goal distance for curriculum (easy = close goals)")
+    p.add_argument("--curriculum_end_dist", type=float, default=2.0,
+                   help="End goal distance for curriculum (hard = far goals)")
+    p.add_argument("--curriculum_episodes", type=int, default=150,
+                   help="Number of episodes over which to progress curriculum")
 
     p.add_argument("--eval_episodes", type=int, default=10)
 
