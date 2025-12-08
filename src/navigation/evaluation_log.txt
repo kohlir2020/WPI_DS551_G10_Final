@@ -1,26 +1,26 @@
-Ep 01: SUCCESS in 17 steps | start=2.09m | final=0.45m
-Ep 02: TIMEOUT | start=6.43m | final=2.75m
-Ep 03: SUCCESS in 39 steps | start=3.86m | final=0.35m
-Ep 04: SUCCESS in 32 steps | start=3.54m | final=0.19m
-Ep 05: SUCCESS in 90 steps | start=7.84m | final=0.49m
-Ep 06: TIMEOUT | start=5.71m | final=3.92m
-Ep 07: TIMEOUT | start=6.37m | final=2.92m
-Ep 08: SUCCESS in 13 steps | start=3.05m | final=0.27m
-Ep 09: SUCCESS in 56 steps | start=5.96m | final=0.49m
-Ep 10: SUCCESS in 56 steps | start=5.02m | final=0.46m
-Ep 11: TIMEOUT | start=7.34m | final=5.31m
-Ep 12: SUCCESS in 65 steps | start=5.51m | final=0.27m
-Ep 13: SUCCESS in 30 steps | start=2.56m | final=0.44m
-Ep 14: SUCCESS in 15 steps | start=2.91m | final=0.22m
-Ep 15: SUCCESS in 30 steps | start=2.13m | final=0.29m
-Ep 16: SUCCESS in 85 steps | start=7.83m | final=0.48m
-Ep 17: SUCCESS in 73 steps | start=7.84m | final=0.45m
-Ep 18: SUCCESS in 17 steps | start=3.06m | final=0.45m
-Ep 19: SUCCESS in 42 steps | start=3.96m | final=0.33m
-Ep 20: TIMEOUT | start=7.19m | final=5.44m
+Ep 01: SUCCESS in 10 steps | start=2.09m | final=0.27m
+Ep 02: SUCCESS in 27 steps | start=6.43m | final=0.48m
+Ep 03: SUCCESS in 15 steps | start=3.86m | final=0.43m
+Ep 04: SUCCESS in 23 steps | start=3.54m | final=0.48m
+Ep 05: TIMEOUT | start=7.84m | final=5.32m
+Ep 06: SUCCESS in 31 steps | start=5.71m | final=0.20m
+Ep 07: SUCCESS in 20 steps | start=6.37m | final=0.41m
+Ep 08: SUCCESS in 9 steps | start=3.05m | final=0.27m
+Ep 09: SUCCESS in 21 steps | start=5.96m | final=0.50m
+Ep 10: SUCCESS in 28 steps | start=5.02m | final=0.39m
+Ep 11: SUCCESS in 28 steps | start=7.34m | final=0.42m
+Ep 12: SUCCESS in 29 steps | start=5.51m | final=0.45m
+Ep 13: SUCCESS in 24 steps | start=2.56m | final=0.34m
+Ep 14: SUCCESS in 10 steps | start=2.91m | final=0.17m
+Ep 15: SUCCESS in 23 steps | start=2.13m | final=0.32m
+Ep 16: SUCCESS in 29 steps | start=7.83m | final=0.16m
+Ep 17: TIMEOUT | start=7.84m | final=5.00m
+Ep 18: SUCCESS in 12 steps | start=3.06m | final=0.44m
+Ep 19: SUCCESS in 31 steps | start=3.96m | final=0.49m
+Ep 20: SUCCESS in 29 steps | start=7.19m | final=0.32m
 
-====================== RESULTS ======================
-Success Rate: 75.0%  (15/20)
-Average Steps to Goal: 44.0
-=====================================================
+RESULTS 
+Success Rate: 90.0%  (18/20)
+Average Steps to Goal: 22.2
+===================================
 
