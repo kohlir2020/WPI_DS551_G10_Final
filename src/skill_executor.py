@@ -73,27 +73,57 @@ class HRLNavigationSkill:
 class ArmReachingSkill:
     """Arm reaching skill - move arm to target"""
     
-    def __init__(self, model_path, sim):
+    def __init__(self, model_path, sim, algorithm='PPO'):
         """
         Args:
-            model_path: Path to trained arm reaching PPO model
+            model_path: Path to trained arm reaching model
             sim: Shared Habitat simulator instance
+            algorithm: 'PPO', 'A2C', or 'SAC'
         """
         self.name = "arm_reaching"
-        self.model = PPO.load(model_path)
+        
+        # Load model based on algorithm
+        if algorithm == 'PPO':
+            self.model = PPO.load(model_path)
+        elif algorithm == 'A2C':
+            from stable_baselines3 import A2C
+            self.model = A2C.load(model_path)
+        elif algorithm == 'SAC':
+            from stable_baselines3 import SAC
+            self.model = SAC.load(model_path)
+        else:
+            raise ValueError(f"Unknown algorithm: {algorithm}")
+            
         self.sim = sim
         self.success_distance = 0.15  # meters (gripper trigger distance)
         
+        # Setup arm environment
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'arm'))
+        from habitat_arm_reaching_env import HabitatArmReachingEnv
+        self.env = HabitatArmReachingEnv(
+            max_steps=200,
+            use_habitat=False  # Use realistic simulation fallback
+        )
+        
     def reset_with_goal(self, goal_params):
         """Reset skill with target position"""
-        # TODO: Setup arm environment with goal
-        pass
+        # Reset environment
+        obs, _ = self.env.reset()
+        
+        # Set goal height if provided
+        if "target_height" in goal_params:
+            target_height = goal_params["target_height"]
+            self.env.goal_position = np.array([0.3, 0.2, target_height], dtype=np.float32)
+        
+        obs = self.env._get_observation()
+        return obs
     
     def step(self, obs):
         """Execute one arm control step"""
         action, _ = self.model.predict(obs, deterministic=True)
-        # TODO: Step arm environment
-        return obs, 0.0, False, {}
+        obs, reward, terminated, truncated, info = self.env.step(action)
+        done = terminated or truncated
+        return obs, reward, done, info
     
     def is_complete(self, obs):
         """Check if arm goal reached"""
@@ -101,7 +131,7 @@ class ArmReachingSkill:
         return distance < self.success_distance
 
 
-def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
+def execute_skill(skill, goal_params, max_steps=500, visualizer=None, demo_mode=False, demo_pause=2.0):
     """
     Execute a skill until complete or timeout
     
@@ -110,12 +140,32 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
         goal_params: Goal parameters (e.g., {"target": [x, y, z]})
         max_steps: Maximum steps before timeout
         visualizer: Optional visualizer for RGB rendering
+        demo_mode: If True, pause and show detailed info at each step
+        demo_pause: Seconds to pause in demo mode
         
     Returns:
         (success, info): Whether skill succeeded and final info dict
     """
+    import time
+    
     print(f"\n▶ Executing skill: {skill.name}")
     print(f"  Goal: {goal_params}")
+    
+    if demo_mode:
+        print(f"\n{'='*70}")
+        print(f"🎬 DEMO MODE: {skill.name.upper()}")
+        print(f"{'='*70}")
+        if skill.name == "hrl_navigation":
+            print("  This skill uses Hierarchical Reinforcement Learning (HRL):")
+            print("  - High-level policy: Selects subgoals")
+            print("  - Low-level policy: Executes primitive actions to reach subgoals")
+            print("  - Each HIGH-LEVEL step runs up to 50 LOW-LEVEL steps")
+        elif skill.name == "arm_reaching":
+            print(f"  This skill uses {skill.model.__class__.__name__} for arm control")
+            print("  - Trained in realistic simulation (not Skokloster Castle)")
+            print("  - Each step outputs 3D Cartesian target for end-effector")
+        print(f"{'='*70}")
+        time.sleep(demo_pause * 1.5)
     
     # Reset skill with goal
     if skill.name == "hrl_navigation":
@@ -130,8 +180,20 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
     step = 0
     total_reward = 0.0
     done = False
+    hl_step = 0  # Track high-level steps for HRL
     
     while not done and step < max_steps:
+        # Demo mode: Show what's happening
+        if demo_mode and step % 10 == 0:
+            if skill.name == "hrl_navigation":
+                hl_step = step // 50  # Approximate high-level step
+                print(f"\n  🔄 HIGH-LEVEL STEP {hl_step} (low-level steps {step}-{min(step+50, max_steps)})")
+                print(f"     Model: High-level PPO selects next subgoal")
+            else:
+                print(f"\n  🔄 STEP {step}")
+                print(f"     Model: {skill.model.__class__.__name__} policy")
+            time.sleep(demo_pause)
+        
         # Execute step
         obs, reward, done, info = skill.step(obs)
         total_reward += reward
@@ -143,14 +205,16 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
             success = True
         
         # Visualization
-        if visualizer and step % 1 == 0:  # Every 5 steps
+        if visualizer and step % 1 == 0:
             visualizer.render_frame(skill.name, step, obs)
         
-        # Print progress with position
+        # Print progress
         if skill.name == "hrl_navigation" and step % 10 == 0:
             agent_pos = skill.agent.get_state().position
-            print(f"  Step {step}/{max_steps}: pos=[{agent_pos[0]:.1f}, {agent_pos[1]:.1f}, {agent_pos[2]:.1f}], "
-                  f"dist={obs[0]:.2f}m, reward={total_reward:.2f}")
+            log_msg = f"  Step {step}/{max_steps}: pos=[{agent_pos[0]:.1f}, {agent_pos[1]:.1f}, {agent_pos[2]:.1f}], dist={obs[0]:.2f}m"
+            if demo_mode:
+                log_msg += f" (HL step {hl_step})"
+            print(log_msg)
         elif step % 10 == 0:
             print(f"  Step {step}/{max_steps}: dist={obs[0]:.2f}m, reward={total_reward:.2f}")
     
@@ -162,8 +226,15 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None):
         "total_reward": total_reward
     }
     
-    print(f"  {'✓ SUCCESS' if success else '✗ FAILED'} after {step} steps")
-    print(f"  Final distance: {obs[0]:.2f}m")
+    if demo_mode:
+        print(f"\n{'='*70}")
+        print(f"  {'✓ SUCCESS' if success else '✗ FAILED'} after {step} steps")
+        print(f"  Final distance: {obs[0]:.2f}m")
+        print(f"{'='*70}")
+        time.sleep(demo_pause)
+    else:
+        print(f"  {'✓ SUCCESS' if success else '✗ FAILED'} after {step} steps")
+        print(f"  Final distance: {obs[0]:.2f}m")
     
     return success, final_info
 

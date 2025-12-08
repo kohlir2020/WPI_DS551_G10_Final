@@ -114,7 +114,7 @@ class HabitatArmReachingEnv(gym.Env):
         config.defrost()
         
         # Set scene path
-        scene_path = f"/home/adityapat/RL_final/habitat-lab/data/versioned_data/replica_cad_dataset/stages/{scene}.glb"
+        scene_path = "habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
         if os.path.exists(scene_path):
             config.SIMULATOR.SCENE = scene_path
         

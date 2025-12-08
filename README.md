@@ -1,3 +1,8 @@
+# HOW TO RUN - & WHAT TO CLEAN UP
+    - The main entry-point is src/main.py - read through it to understand how this code is supposed to work and stuff!
+    - TODO: Please fix the prompt for the LLM in src/planner/llm_planner.py
+    - Please add in the HRL for arm models and 
+
 ### Set up
 We will likely want to move src into the habitat directory from github.
 

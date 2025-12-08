@@ -26,7 +26,7 @@ class SimpleNavigationEnv(gym.Env):
     def __init__(self,scene_path=None,min_goal_dist=2.0,max_goal_dist=8.0):
         super().__init__()
         if scene_path is None:
-            scene_path ="/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
+            scene_path ="habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
         
         scene_path = os.path.abspath(scene_path)
         if not os.path.exists(scene_path):

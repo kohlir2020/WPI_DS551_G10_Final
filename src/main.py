@@ -15,30 +15,8 @@ import magnum
 # Add src to path
 sys.path.insert(0, os.path.dirname(__file__))
 from shared.scene_manager import create_fetch_scene
-from planner.llm_planner import get_hardcoded_plan  # , TaskPlanner for LLM
-from skill_executor import HRLNavigationSkill, execute_skill
-
-
-# Test goals (simple coordinates)
-GOALS = {
-    "drawer": [19.0, 0.0, 2.0],
-    "table": [15.0, 0.0, 8.0],
-    "shelf": [8.0, 0.0, 12.0]
-}
-
-
-def get_hardcoded_plan():
-    """Hard-coded plan for testing (no LLM dependency)"""
-    return [
-        {
-            "skill": "navigate",
-            "params": {"target": [10.0, 0.0, 5.0]}  # drawer
-        },
-        {
-            "skill": "navigate", 
-            "params": {"target": [15.0, 0.0, 8.0]}  # table
-        }
-    ]
+from planner.llm_planner import get_hardcoded_plan, TaskPlanner 
+from skill_executor import HRLNavigationSkill, ArmReachingSkill, execute_skill
 
 
 class TaskVisualizer:
@@ -107,8 +85,8 @@ class TaskVisualizer:
 
 def main():
     parser = argparse.ArgumentParser(description="Multi-task robot execution with LLM planning")
-    parser.add_argument("--goal", type=str, default="drawer", choices=list(GOALS.keys()),
-                       help="Goal location to navigate to")
+    parser.add_argument("--goal", type=str, default="navigate to kitchen",
+                       help="Natural language goal description")
     parser.add_argument("--save-video", action="store_true",
                        help="Save video of execution")
     parser.add_argument("--low-level-model", type=str, 
@@ -117,18 +95,29 @@ def main():
     parser.add_argument("--high-level-model", type=str,
                        default="src/navigation/models/hl_improved/highlevel_improved_final.zip",
                        help="Path to high-level navigation model")
-    # parser.add_argument("--arm-model", type=str,
-    #                    default="models/arm_reaching.zip",
-    #                    help="Path to arm reaching model")
-    # parser.add_argument("--use-llm", action="store_true",
-    #                    help="Use LLM planner instead of hard-coded plan")
+    parser.add_argument("--arm-model", type=str,
+                       default="logs/simple_arm/cartesian_ppo_20251207_011850/final_ppo.zip",
+                       help="Path to arm reaching model")
+    parser.add_argument("--arm-algorithm", type=str, default="PPO",
+                       choices=["PPO", "A2C", "SAC"],
+                       help="Algorithm for arm model")
+    parser.add_argument("--use-llm", action="store_true",
+                       help="Use LLM planner instead of hard-coded plan")
+    parser.add_argument("--demo-mode", action="store_true",
+                       help="Pause execution between steps for demonstration")
+    parser.add_argument("--demo-pause", type=float, default=2.0,
+                       help="Seconds to pause in demo mode (default: 2.0)")
     
     args = parser.parse_args()
     
     print("="*70)
     print("MULTI-TASK ROBOT EXECUTION")
     print("="*70)
-    print(f"Goal: {args.goal} -> {GOALS[args.goal]}")
+    print(f"Goal: {args.goal}")
+    print(f"LLM Planning: {'Enabled' if args.use_llm else 'Disabled (hardcoded)'}")
+    print(f"Demo Mode: {'Enabled' if args.demo_mode else 'Disabled'}")
+    if args.demo_mode:
+        print(f"  Pause duration: {args.demo_pause}s between steps")
     print()
     
     # Create scene with physics + RGB sensor
@@ -156,51 +145,44 @@ def main():
         )
         print("✓ HRL navigation skill loaded")
     except FileNotFoundError as e:
-        print(f"✗ Failed to load models: {e}")
+        print(f"✗ Failed to load navigation models: {e}")
         print("Train navigation models first:")
         print("  python src/navigation/train_low_level_nav.py")
         print("  python src/navigation/train_high_level_improved.py")
         sim.close()
         return
     
+    # Load arm reaching skill
+    try:
+        arm_skill = ArmReachingSkill(
+            model_path=args.arm_model,
+            sim=sim,
+            algorithm=args.arm_algorithm
+        )
+        print(f"✓ Arm reaching skill loaded ({args.arm_algorithm})")
+    except FileNotFoundError as e:
+        print(f"⚠️  Failed to load arm model: {e}")
+        print("   Arm tasks will be skipped")
+        arm_skill = None
+    
     # Get task plan
     print("\nGenerating plan...")
+    start_pos = agent.get_state().position
     
-    # Check if goal is navigable
-    goal_pos = GOALS[args.goal]
-    start_pos = np.array(agent.get_state().position)
-    
-    # Verify goal is on navmesh
-    snapped_goal = pathfinder.snap_point(goal_pos)
-    if np.isnan(snapped_goal).any():
-        print(f"⚠ Goal {goal_pos} not on navmesh, using random navigable point")
-        goal_pos = pathfinder.get_random_navigable_point() # THIS ALWAYS GIVES [-3.960728168487549, 0.20991861820220947, 13.5126953125]
-        print(f"  New goal: {goal_pos}")
+    if args.use_llm:
+        try:
+            planner = TaskPlanner()
+            plan = planner.plan_from_goal(args.goal, list(start_pos))
+            if plan is None:
+                # Fallback to hardcoded
+                plan = get_hardcoded_plan("navigate_only")
+        except Exception as e:
+            print(f"⚠️  LLM planning error: {e}")
+            print("   Using hardcoded plan")
+            plan = get_hardcoded_plan("navigate_only")
     else:
-        goal_pos = snapped_goal
-        print(f"✓ Goal is navigable: {goal_pos}")
-    
-    # Check if path exists
-    path = habitat_sim.ShortestPath()
-    path.requested_start = start_pos
-    path.requested_end = goal_pos
-    found = pathfinder.find_path(path)
-    if found:
-        print(f"✓ Path exists: {path.geodesic_distance:.2f}m geodesic distance")
-    else:
-        print(f"✗ WARNING: No valid path found to goal!")
-    
-    # USE HARD-CODED PLAN FOR NOW:
-    plan = get_hardcoded_plan()
-    # Update plan with validated goal
-    plan[0]["params"]["target"] = list(goal_pos)
-    
-    # TO USE LLM (requires OPENAI_API_KEY):
-    # if args.use_llm:
-    #     planner = TaskPlanner()
-    #     plan = planner.plan(start_pos, goal_pos)
-    # else:
-    #     plan = get_hardcoded_plan()
+        # Hardcoded plan
+        plan = get_hardcoded_plan("navigate_and_reach")
     
     print(f"✓ Plan: {len(plan)} tasks")
     for i, task in enumerate(plan):
@@ -217,12 +199,22 @@ def main():
     for i, task in enumerate(plan):
         print(f"\n--- Task {i+1}/{len(plan)}: {task['skill']} ---")
         
+        if args.demo_mode:
+            import time
+            print(f"\n{'🎯 EXECUTING TASK ' + str(i+1):=^70}")
+            print(f"Skill: {task['skill']}")
+            print(f"Parameters: {task['params']}")
+            print(f"{'='*70}")
+            time.sleep(args.demo_pause)
+        
         if task["skill"] == "navigate":
             success, info = execute_skill(
                 nav_skill,
                 task["params"],
                 max_steps=500,
-                visualizer=visualizer
+                visualizer=visualizer,
+                demo_mode=args.demo_mode,
+                demo_pause=args.demo_pause
             )
             results.append({"task": task["skill"], "success": success, "info": info})
             
@@ -231,9 +223,22 @@ def main():
                 break
         
         elif task["skill"] == "reach_arm":
-            print("⚠ Arm reaching not implemented yet (skipping)")
-            # arm_success, arm_info = execute_skill(arm_skill, task["params"], max_steps=200)
-            # results.append({"task": task["skill"], "success": arm_success, "info": arm_info})
+            if arm_skill is None:
+                print("⚠ Arm skill not loaded (skipping)")
+                continue
+            
+            success, info = execute_skill(
+                arm_skill,
+                task["params"],
+                max_steps=200,
+                visualizer=None,  # No visualization for arm yet
+                demo_mode=args.demo_mode,
+                demo_pause=args.demo_pause
+            )
+            results.append({"task": task["skill"], "success": success, "info": info})
+            
+            if not success:
+                print(f"⚠️  Arm reaching failed, continuing with remaining tasks")
     
     # Summary
     print("\n" + "="*70)
@@ -251,7 +256,8 @@ def main():
     # Save video if requested
     if args.save_video:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        video_name = f"videos/main_execution_{args.goal}_{timestamp}.mp4"
+        goal_slug = args.goal.replace(" ", "_")[:20]
+        video_name = f"videos/main_execution_{goal_slug}_{timestamp}.mp4"
         visualizer.save_video(video_name)
     
     # Cleanup
