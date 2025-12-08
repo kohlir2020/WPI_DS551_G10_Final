@@ -789,8 +789,8 @@ def parse_args():
     p.add_argument("--low_best_dir", type=str,
                    default="./models/lowlevel_best/")
     p.add_argument("--low_model_type", type=str, default="SAC")
-    p.add_argument("--low_action_scale", type=float, default=0.3,
-                   help="Scale for low-level actions (0.3m per action step)")
+    p.add_argument("--low_action_scale", type=float, default=0.5,
+                   help="Scale for low-level actions (0.5m per action step - faster movement)")
 
     # main goal
     p.add_argument("--main_goal_min_dist", type=float, default=0.3,
@@ -803,8 +803,10 @@ def parse_args():
     # subgoals
     p.add_argument("--subgoal_base_step", type=float, default=0.5,
                    help="Base subgoal step (0.5m for arm)")
-    p.add_argument("--subgoal_offset_scale", type=float, default=2.0)
-    p.add_argument("--subgoal_success_radius", type=float, default=0.15) # used
+    p.add_argument("--subgoal_offset_scale", type=float, default=1.0,
+                   help="HL action scale for subgoal generation")
+    p.add_argument("--subgoal_success_radius", type=float, default=0.3,
+                   help="Subgoal success threshold (arm EE)")
     p.add_argument("--min_subgoal_movement", type=float, default=1.0)
 
     # horizons
@@ -814,8 +816,10 @@ def parse_args():
     p.add_argument("--low_horizon_eval", type=int, default=50)
 
     # HL TD3 hyperparams
-    p.add_argument("--hl_actor_lr", type=float, default=1e-3)
-    p.add_argument("--hl_critic_lr", type=float, default=1e-3)
+    p.add_argument("--hl_actor_lr", type=float, default=2e-3,
+                   help="High-level actor learning rate")
+    p.add_argument("--hl_critic_lr", type=float, default=2e-3,
+                   help="High-level critic learning rate")
     p.add_argument("--hl_gamma", type=float, default=0.99)
     p.add_argument("--hl_tau", type=float, default=0.005)
     p.add_argument("--hl_buffer", type=int, default=100_000)
@@ -826,8 +830,10 @@ def parse_args():
     p.add_argument("--hl_updates_per_step", type=int, default=2)
 
     # HL reward shaping
-    p.add_argument("--hl_progress_scale", type=float, default=10.0)
-    p.add_argument("--hl_time_penalty", type=float, default=0.05)
+    p.add_argument("--hl_progress_scale", type=float, default=20.0,
+                   help="Scale for progress reward (doubled for better signal)")
+    p.add_argument("--hl_time_penalty", type=float, default=0.02,
+                   help="Time penalty per step (reduced to encourage exploration)")
     p.add_argument("--hl_success_bonus", type=float, default=50.0)
 
     p.add_argument("--eval_episodes", type=int, default=10)
