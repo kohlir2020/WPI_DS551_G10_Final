@@ -28,12 +28,14 @@ import gymnasium as gym
 
 from habitat_arm_reaching_env import HabitatArmReachingEnv
 
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, SAC, A2C
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import datetime
+
 
 import sys
 # Map the new 'numpy._core' to the old 'numpy.core' so the model loads
@@ -114,8 +116,9 @@ class ReplayBuffer:
 # ============================================================
 
 class Actor(nn.Module):
-    def __init__(self, state_dim: int, action_dim: int, hidden_dim: int = 256):
+    def __init__(self, state_dim: int, action_dim: int, max_action: float, hidden_dim: int = 256):
         super().__init__()
+        self.max_action = max_action
         self.net = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
             nn.ReLU(),
@@ -126,7 +129,7 @@ class Actor(nn.Module):
         )
 
     def forward(self, x):
-        return self.net(x) * 1.0
+        return self.net(x) * self.max_action
 
 
 class Critic(nn.Module):
@@ -161,6 +164,7 @@ class TD3Agent:
         buffer_capacity: int,
         batch_size: int,
         device: torch.device,
+        max_action: float = 1.0,
         init_noise_std: float = 0.3,
         min_noise_std: float = 0.05,
         noise_decay_episodes: int = 500,
@@ -172,12 +176,14 @@ class TD3Agent:
         self.tau = tau
         self.batch_size = batch_size
         self.policy_delay = 2
-        self.subgoal_stepsize = 1.0
+        self.max_action = max_action
+        # Scale noise clip by max_action to allow sufficient exploration
+        self.noise_clip = max_action * 0.5
 
-        self.actor = Actor(state_dim, action_dim).to(device)
+        self.actor = Actor(state_dim, action_dim, max_action).to(device)
         self.critic_1 = Critic(state_dim, action_dim).to(device)
         self.critic_2 = Critic(state_dim, action_dim).to(device)
-        self.target_actor = Actor(state_dim, action_dim).to(device)
+        self.target_actor = Actor(state_dim, action_dim, max_action).to(device)
         self.target_critic_1 = Critic(state_dim, action_dim).to(device)
         self.target_critic_2 = Critic(state_dim, action_dim).to(device)
 
@@ -211,16 +217,17 @@ class TD3Agent:
             a = self.actor(state_t)
             if not greedy:
                 noise = torch.randn_like(a) * self._noise_std()
-                a = a + torch.clamp(noise, -0.1, 0.1)
-            a = torch.clamp(a, -self.subgoal_stepsize, self.subgoal_stepsize)
+                # Clamp noise to allow exploration but prevent instability
+                a = a + torch.clamp(noise, -self.noise_clip, self.noise_clip)
+            a = torch.clamp(a, -self.max_action, self.max_action)
         return a.cpu().numpy()[0]
 
     def select_target_action(self, state: torch.Tensor) -> torch.Tensor:
         with torch.no_grad():
             a = self.target_actor(state)
             noise = torch.randn_like(a) * self._noise_std()
-            a = a + torch.clamp(noise, -0.1, 0.1)
-            a = torch.clamp(a, -self.subgoal_stepsize, self.subgoal_stepsize)
+            a = a + torch.clamp(noise, -self.noise_clip, self.noise_clip)
+            a = torch.clamp(a, -self.max_action, self.max_action)
         return a
 
     def store(self, state, action, reward, next_state, done):
@@ -753,16 +760,17 @@ def parse_args():
                    default="./models/lowlevel_checkpoints/")
     p.add_argument("--low_best_dir", type=str,
                    default="./models/lowlevel_best/")
+    p.add_argument("--low_model_type", type=str, default="PPO")
 
     # main goal
     p.add_argument("--main_goal_min_dist", type=float, default=8.0)
     p.add_argument("--main_goal_max_dist", type=float, default=20.0)
-    p.add_argument("--main_goal_success_radius", type=float, default=0.15)
+    p.add_argument("--main_goal_success_radius", type=float, default=0.15) # used
 
     # subgoals
     p.add_argument("--subgoal_base_step", type=float, default=3.0)
-    p.add_argument("--subgoal_offset_scale", type=float, default=1.0)
-    p.add_argument("--subgoal_success_radius", type=float, default=0.15)
+    p.add_argument("--subgoal_offset_scale", type=float, default=2.0)
+    p.add_argument("--subgoal_success_radius", type=float, default=0.15) # used
     p.add_argument("--min_subgoal_movement", type=float, default=1.0)
 
     # horizons
@@ -777,10 +785,10 @@ def parse_args():
     p.add_argument("--hl_gamma", type=float, default=0.99)
     p.add_argument("--hl_tau", type=float, default=0.005)
     p.add_argument("--hl_buffer", type=int, default=100_000)
-    p.add_argument("--hl_batch", type=int, default=128)
+    p.add_argument("--hl_batch", type=int, default=256)
     p.add_argument("--hl_init_noise_std", type=float, default=0.3)
     p.add_argument("--hl_min_noise_std", type=float, default=0.05)
-    p.add_argument("--hl_noise_decay_episodes", type=int, default=500)
+    p.add_argument("--hl_noise_decay_episodes", type=int, default=5000)
     p.add_argument("--hl_updates_per_step", type=int, default=1)
 
     # HL reward shaping
@@ -828,12 +836,20 @@ def main():
         buffer_capacity=args.hl_buffer,
         batch_size=args.hl_batch,
         device=device,
+        max_action=1.0,
         init_noise_std=args.hl_init_noise_std,
         min_noise_std=args.hl_min_noise_std,
         noise_decay_episodes=args.hl_noise_decay_episodes,
     )
 
-    ll_agent = PPO.load(args.low_model_path, device=device)
+    if args.low_model_type == "PPO":
+        ll_agent = PPO.load(args.low_model_path, device=device)
+    elif args.low_model_type == "SAC":
+        ll_agent = SAC.load(args.low_model_path, device=device)
+    elif args.low_model_type == "A2C":
+        ll_agent = A2C.load(args.low_model_path, device=device)
+    else:
+        raise ValueError(f"Unsupported low_model_type: {args.low_model_type}")
 
     trainer = HighLevelTD3HERTrainer(
         env=env,
@@ -845,9 +861,12 @@ def main():
     trainer.train()
 
     # save HL weights
-    hl_actor_path = os.path.join(args.save_dir, "hl_actor.pth")
-    hl_critic_1_path = os.path.join(args.save_dir, "hl_critic_1.pth")
-    hl_critic_2_path = os.path.join(args.save_dir, "hl_critic_2.pth")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    save_dir = os.path.join(args.save_dir, timestamp+"_"+args.low_model_type)
+    os.makedirs(save_dir, exist_ok=True)
+    hl_actor_path = os.path.join(save_dir, "hl_actor.pth")
+    hl_critic_1_path = os.path.join(save_dir, "hl_critic_1.pth")
+    hl_critic_2_path = os.path.join(save_dir, "hl_critic_2.pth")
     torch.save(hl_agent.actor.state_dict(), hl_actor_path)
     torch.save(hl_agent.critic_1.state_dict(), hl_critic_1_path)
     torch.save(hl_agent.critic_2.state_dict(), hl_critic_2_path)
@@ -855,14 +874,14 @@ def main():
     print(f"Saved HL critic_1 to {hl_critic_1_path}")
     print(f"Saved HL critic_2 to {hl_critic_2_path}")
 
-    trainer.plot_training_curves(args.save_dir)
-    debug_prefix = os.path.join(args.save_dir, "hl_debug")
+    trainer.plot_training_curves(save_dir)
+    debug_prefix = os.path.join(save_dir, "hl_debug")
     trainer.debug_episode_trajectory(save_prefix=debug_prefix)
 
     trainer.evaluate(args.eval_episodes)
 
     env.close()
-    print("Done. Outputs saved in:", args.save_dir)
+    print("Done. Outputs saved in:", save_dir)
 
 
 if __name__ == "__main__":
