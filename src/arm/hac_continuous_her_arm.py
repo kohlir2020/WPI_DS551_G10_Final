@@ -69,10 +69,58 @@ def set_seed(seed: int):
 # 2. Replay buffer for continuous high-level agent
 # ============================================================
 
-class ReplayBuffer:
-    def __init__(self, capacity: int, state_dim: int, action_dim: int, device: torch.device):
+class SumTree:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.tree = np.zeros(2 * capacity - 1)
+        self.write = 0
+        self.n_entries = 0
+
+    def _propagate(self, idx, change):
+        parent = (idx - 1) // 2
+        self.tree[parent] += change
+        if parent != 0:
+            self._propagate(parent, change)
+
+    def _retrieve(self, idx, s):
+        left = 2 * idx + 1
+        right = left + 1
+
+        if left >= len(self.tree):
+            return idx
+
+        if s <= self.tree[left]:
+            return self._retrieve(left, s)
+        else:
+            return self._retrieve(right, s - self.tree[left])
+
+    def total(self):
+        return self.tree[0]
+
+    def add(self, p):
+        idx = self.write + self.capacity - 1
+        self.update(idx, p)
+        self.write = (self.write + 1) % self.capacity
+        if self.n_entries < self.capacity:
+            self.n_entries += 1
+
+    def update(self, idx, p):
+        change = p - self.tree[idx]
+        self.tree[idx] = p
+        self._propagate(idx, change)
+
+    def get(self, s):
+        idx = self._retrieve(0, s)
+        dataIdx = idx - self.capacity + 1
+        return (idx, self.tree[idx], dataIdx)
+
+
+class PrioritizedReplayBuffer:
+    def __init__(self, capacity: int, state_dim: int, action_dim: int, device: torch.device, alpha: float = 0.6):
         self.capacity = capacity
         self.device = device
+        self.alpha = alpha
+        self.tree = SumTree(capacity)
 
         self.states = np.zeros((capacity, state_dim), dtype=np.float32)
         self.actions = np.zeros((capacity, action_dim), dtype=np.float32)
@@ -80,35 +128,55 @@ class ReplayBuffer:
         self.next_states = np.zeros((capacity, state_dim), dtype=np.float32)
         self.dones = np.zeros((capacity, 1), dtype=np.float32)
 
-        self.idx = 0
-        self.full = False
+        self.max_priority = 1.0
 
     def __len__(self):
-        return self.capacity if self.full else self.idx
+        return self.tree.n_entries
 
     def push(self, state, action, reward, next_state, done):
-        i = self.idx
-        self.states[i] = state
-        self.actions[i] = action
-        self.rewards[i, 0] = reward
-        self.next_states[i] = next_state
-        self.dones[i, 0] = float(done)
+        idx = self.tree.write
+        self.states[idx] = state
+        self.actions[idx] = action
+        self.rewards[idx] = reward
+        self.next_states[idx] = next_state
+        self.dones[idx] = float(done)
 
-        self.idx = (self.idx + 1) % self.capacity
-        if self.idx == 0:
-            self.full = True
+        self.tree.add(self.max_priority ** self.alpha)
 
-    def sample(self, batch_size: int):
-        assert len(self) >= batch_size
-        idxs = np.random.randint(0, len(self), size=batch_size)
-
+    def sample(self, batch_size: int, beta: float = 0.4):
+        idxs = []
+        priorities = []
+        indices = []
+        
+        segment = self.tree.total() / batch_size
+        
+        for i in range(batch_size):
+            a = segment * i
+            b = segment * (i + 1)
+            s = random.uniform(a, b)
+            (idx, p, data_idx) = self.tree.get(s)
+            priorities.append(p)
+            indices.append(idx)
+            idxs.append(data_idx)
+            
+        sampling_probabilities = np.array(priorities) / self.tree.total()
+        is_weights = np.power(self.tree.n_entries * sampling_probabilities, -beta)
+        is_weights /= is_weights.max()
+        
         s = torch.from_numpy(self.states[idxs]).to(self.device)
         a = torch.from_numpy(self.actions[idxs]).to(self.device)
         r = torch.from_numpy(self.rewards[idxs]).to(self.device)
         s2 = torch.from_numpy(self.next_states[idxs]).to(self.device)
         d = torch.from_numpy(self.dones[idxs]).to(self.device)
+        weights = torch.from_numpy(is_weights).float().to(self.device).unsqueeze(1)
+        
+        return s, a, r, s2, d, indices, weights
 
-        return s, a, r, s2, d
+    def update_priorities(self, indices, errors):
+        for idx, error in zip(indices, errors):
+            p = (error + 1e-5) ** self.alpha
+            self.tree.update(idx, p)
+            self.max_priority = max(self.max_priority, error + 1e-5)
 
 
 # ============================================================
@@ -168,6 +236,7 @@ class TD3Agent:
         init_noise_std: float = 0.3,
         min_noise_std: float = 0.05,
         noise_decay_episodes: int = 500,
+        per_alpha: float = 0.6,
     ):
         self.device = device
         self.state_dim = state_dim
@@ -195,7 +264,7 @@ class TD3Agent:
         self.critic_opt_1 = optim.Adam(self.critic_1.parameters(), lr=critic_lr)
         self.critic_opt_2 = optim.Adam(self.critic_2.parameters(), lr=critic_lr)
 
-        self.buffer = ReplayBuffer(buffer_capacity, state_dim, action_dim, device)
+        self.buffer = PrioritizedReplayBuffer(buffer_capacity, state_dim, action_dim, device, alpha=per_alpha)
 
         self.total_updates = 0
 
@@ -237,7 +306,7 @@ class TD3Agent:
         for t_param, s_param in zip(target.parameters(), source.parameters()):
             t_param.data.copy_(self.tau * s_param.data + (1.0 - self.tau) * t_param.data)
 
-    def update(self, updates_per_step: int = 2):
+    def update(self, updates_per_step: int = 2, beta: float = 0.4):
         if len(self.buffer) < self.batch_size:
             return 0.0, 0.0
 
@@ -246,7 +315,7 @@ class TD3Agent:
         actor_updates = 0
 
         for j in range(updates_per_step):
-            s, a, r, s2, d = self.buffer.sample(self.batch_size)
+            s, a, r, s2, d, indices, weights = self.buffer.sample(self.batch_size, beta)
 
             # Critic update
             with torch.no_grad():
@@ -259,8 +328,14 @@ class TD3Agent:
             q1 = self.critic_1(s, a)
             q2 = self.critic_2(s, a)
 
-            critic_1_loss = nn.functional.mse_loss(q1, target_q)
-            critic_2_loss = nn.functional.mse_loss(q2, target_q)
+            # PER update
+            td_error1 = torch.abs(q1 - target_q)
+            td_error2 = torch.abs(q2 - target_q)
+            mean_td_error = (td_error1 + td_error2) / 2.0
+            self.buffer.update_priorities(indices, mean_td_error.cpu().numpy().flatten())
+
+            critic_1_loss = (weights * (q1 - target_q)**2).mean()
+            critic_2_loss = (weights * (q2 - target_q)**2).mean()
             critic_loss = critic_1_loss + critic_2_loss
 
             self.critic_opt_1.zero_grad()
@@ -463,6 +538,9 @@ class HighLevelTD3HERTrainer:
 
         for ep in range(1, self.args.episodes + 1):
             self.agent.set_episode(ep)
+            
+            # Calculate beta for PER
+            beta = min(1.0, self.args.per_beta_start + (ep - 1) * (1.0 - self.args.per_beta_start) / self.args.per_beta_frames)
 
             obs_ll, _ = self.env.reset()
             a_pos = self.get_ee_pos(self.env.arm_angles)
@@ -534,7 +612,7 @@ class HighLevelTD3HERTrainer:
                     ep_success = True
 
                 self.agent.store(s_h, action, reward, s_h_next, done_h)
-                critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step, beta=beta)
                 if critic_loss is not None and critic_loss > 0:
                     ep_losses.append(critic_loss)
                     self.episode_actor_losses.append(actor_loss)
@@ -587,7 +665,7 @@ class HighLevelTD3HERTrainer:
                         # Optional: Update on HER data immediately (can be computationally expensive)
                         # To save time, we can update less frequently or just rely on the main loop updates
                         # But for sample efficiency, we update here.
-                        critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                        critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step, beta=beta)
                         if critic_loss is not None and critic_loss > 0:
                             ep_losses.append(critic_loss)
                             self.episode_actor_losses.append(actor_loss)
@@ -892,6 +970,11 @@ def parse_args():
     p.add_argument("--her_k_future", type=int, default=8,
                    help="Number of future goals to sample per transition (increased from 4)")
     
+    # PER
+    p.add_argument("--per_alpha", type=float, default=0.6)
+    p.add_argument("--per_beta_start", type=float, default=0.4)
+    p.add_argument("--per_beta_frames", type=int, default=500)
+
     # Curriculum learning
     p.add_argument("--use_curriculum", action="store_true", default=False,
                    help="Use curriculum learning with progressive goal distances")
@@ -946,6 +1029,7 @@ def main():
         init_noise_std=args.hl_init_noise_std,
         min_noise_std=args.hl_min_noise_std,
         noise_decay_episodes=args.hl_noise_decay_episodes,
+        per_alpha=args.per_alpha,
     )
 
     if args.low_model_type == "PPO":
