@@ -85,5 +85,10 @@ tail -f /dev/null
 EOFSCRIPT
 RUN chmod +x /entrypoint.sh
 
+# Fix PyTorch to recognize GPU at runtime
+ENV CUDA_HOME=/usr/local/cuda \
+    PATH=/usr/local/cuda/bin:$PATH \
+    LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
 # Set entrypoint (keeps container alive while allowing docker exec)
 ENTRYPOINT ["conda", "run", "-n", "hrl", "/entrypoint.sh"]

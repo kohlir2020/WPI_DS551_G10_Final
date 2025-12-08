@@ -16,11 +16,7 @@ import habitat_sim
 sys.path.insert(0, os.path.dirname(__file__))
 from simple_navigation_env import SimpleNavigationEnv
 
-
-# ============================================================
 # DQN Q-Network
-# ============================================================
-
 class QNetwork(nn.Module):
     def __init__(self, state_dim, action_dim, hidden_dim=128):
         super().__init__()
@@ -35,11 +31,7 @@ class QNetwork(nn.Module):
     def forward(self, x):
         return self.net(x)
 
-
-# ============================================================
 # DQN Agent
-# ============================================================
-
 class DQNAgent:
     """DQN agent for high-level or low-level control"""
     
@@ -93,11 +85,7 @@ class DQNAgent:
     def update_target(self):
         self.target_net.load_state_dict(self.q_net.state_dict())
 
-
-# ============================================================
 # HAC HRL Environment
-# ============================================================
-
 class HRLHACEnv(gym.Env):
     """
     HAC-style hierarchical navigation using DQN agents with affordance subgoals
@@ -142,10 +130,10 @@ class HRLHACEnv(gym.Env):
                 )
                 self.low_level.target_net.load_state_dict(self.low_level.q_net.state_dict())
                 if self.debug:
-                    print(f"✓ Loaded low-level DQN from {low_level_model_path}")
+                    print(f"Loaded low-level DQN from {low_level_model_path}")
             except:
                 if self.debug:
-                    print(f"⚠ Failed to load low-level model, using random initialization")
+                    print(f"Failed to load low-level model, using random initialization")
         
         self.main_goal = None
         self.current_step = 0

@@ -13,31 +13,20 @@ from shared.scene_manager import create_fetch_scene
 class SimpleNavigationEnv(gym.Env):
     """
     Habitat-Sim low-level navigation environment for PPO.
-
     Observation:
         [ distance_to_goal , relative_angle_to_goal ]
-
     Actions:
         0 = NO-OP (do nothing)
         1 = MOVE FORWARD
         2 = TURN LEFT
-        3 = TURN RIGHT
-    """
+        3 = TURN RIGHT"""
 
     metadata = {"render_modes": []}
 
-    def __init__(self,
-                 scene_path="habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb",
-                 min_goal_dist=2.0,
-                 max_goal_dist=8.0):
-
+    def __init__(self,scene_path=None,min_goal_dist=2.0,max_goal_dist=8.0):
         super().__init__()
-
         if scene_path is None:
-            scene_path = os.path.join(
-                os.path.dirname(__file__),
-                "../data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
-            )
+            scene_path ="habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
         
         scene_path = os.path.abspath(scene_path)
         if not os.path.exists(scene_path):
@@ -46,9 +35,7 @@ class SimpleNavigationEnv(gym.Env):
         self.min_goal_dist = min_goal_dist
         self.max_goal_dist = max_goal_dist
 
-        # ----------------------------------------------------
         # Habitat simulator setup with Fetch robot + physics
-        # ----------------------------------------------------
         self.sim, self.agent, self.pathfinder = create_fetch_scene(
             scene_path=scene_path,
             enable_physics=True,
@@ -90,14 +77,12 @@ class SimpleNavigationEnv(gym.Env):
             dtype=np.float32,
         )
 
-        self.max_steps = 150     # with 0.5m forward, 150 steps is plenty
+        self.max_steps = 150 # with 0.5m forward, 150 steps is plenty
         self.current_step = 0
         self.goal_position = None
         self.prev_distance = None
 
-    # --------------------------------------------------------
     # Helper: rotate vector by numpy-quaternion
-    # --------------------------------------------------------
     def _quat_rotate(self, q_hab, v):
         """
         q_hab: habitat quaternion (with .w, .x, .y, .z)
@@ -108,7 +93,6 @@ class SimpleNavigationEnv(gym.Env):
         rq = q * vq * q.inverse()
         return np.array([rq.x, rq.y, rq.z], dtype=np.float32)
 
-    # --------------------------------------------------------
     def reset(self, seed=None, options=None):
         if seed is not None:
             super().reset(seed=seed)
@@ -142,7 +126,6 @@ class SimpleNavigationEnv(gym.Env):
 
         return self._get_obs(), {}
 
-    # --------------------------------------------------------
     def step(self, action):
         # Map discrete action to Habitat actions
         if action == 1:
@@ -158,13 +141,13 @@ class SimpleNavigationEnv(gym.Env):
         obs = self._get_obs()
         distance = float(obs[0])
 
-        # ---------------- Reward shaping ----------------
-        progress = self.prev_distance - distance   # >0 if we moved closer
+        # Reward shaping 
+        progress = self.prev_distance - distance # >0 if we moved closer
 
         # Stronger shaping: reward progress and penalize distance and time
-        reward = 5.0 * progress          # directional progress
-        reward -= 0.001 * distance       # encourage staying close
-        reward -= 0.01                   # time penalty
+        reward = 5.0 * progress # directional progress
+        reward -= 0.001 * distance # encourage staying close
+        reward -= 0.01 # time penalty
 
         done = False
 
@@ -177,7 +160,6 @@ class SimpleNavigationEnv(gym.Env):
 
         return obs, reward, done, truncated, {"distance": distance}
 
-    # --------------------------------------------------------
     def _get_obs(self):
         state = self.agent.get_state()
         agent_pos = state.position
@@ -186,11 +168,10 @@ class SimpleNavigationEnv(gym.Env):
         # Distance to goal
         distance = np.linalg.norm(agent_pos - self.goal_position)
 
-        # ---------- SAFE GUARDS ----------
+        # Safe check
         if distance < 1e-6:
             return np.array([0.0, 0.0], dtype=np.float32)
-        # ---------------------------------
-
+        
         # Agent forward in world frame
         forward = np.array([0.0, 0.0, -1.0], dtype=np.float32)
         forward = self._quat_rotate(quat, forward)
@@ -215,15 +196,11 @@ class SimpleNavigationEnv(gym.Env):
         dot = forward[0] * to_goal[0] + forward[2] * to_goal[2]
         angle = np.arctan2(cross, dot)
 
-        # ---------- FINAL SAFETY ----------
+        # Final safety checks
         if np.isnan(angle):
             angle = 0.0
         if np.isnan(distance):
             distance = 50.0
-        # ----------------------------------
-
         return np.array([distance, angle], dtype=np.float32)
-
-    # --------------------------------------------------------
     def close(self):
         self.sim.close()

@@ -31,7 +31,7 @@ class HRLHighLevelEnvImproved(gym.Env):
 
         # Load low-level skill
         self.low_level = PPO.load(low_level_model_path)
-        print("✓ Loaded low-level skill:", low_level_model_path)
+        print("Loaded low-level skill:", low_level_model_path)
 
         # Create low-level environment
         self.ll_env = SimpleNavigationEnv()
@@ -162,7 +162,7 @@ class HRLHighLevelEnvImproved(gym.Env):
                     if self.pathfinder.find_path(path):
                         if path.geodesic_distance < 999.0:  # Valid path
                             if self.debug:
-                                print(f"  ✓ Valid subgoal: {nav_target} (dist={movement_dist:.1f}m)")
+                                print(f"Valid subgoal: {nav_target} (dist={movement_dist:.1f}m)")
                             self.successful_subgoal_count += 1
                             return nav_target
         
@@ -171,7 +171,7 @@ class HRLHighLevelEnvImproved(gym.Env):
             random_pt = self.pathfinder.get_random_navigable_point()
             if np.linalg.norm(random_pt - agent_pos) > 2.0:
                 if self.debug:
-                    print(f"  → Fallback: random navigable point")
+                    print(f"Fallback: random navigable point")
                 self.failed_subgoal_count += 1
                 return np.array(random_pt, dtype=np.float32)
         
@@ -190,7 +190,7 @@ class HRLHighLevelEnvImproved(gym.Env):
         
         # FALLBACK 3: Stay roughly where we are
         if self.debug:
-            print(f"  ⚠️  All subgoal methods failed, minimal movement")
+            print(f" All subgoal methods failed, minimal movement")
         self.failed_subgoal_count += 1
         return agent_pos + np.array([1.0, 0.0, 0.0], dtype=np.float32)
 
@@ -295,7 +295,7 @@ class HRLHighLevelEnvImproved(gym.Env):
 
         done = False
         if new_dist < 0.6:
-            reward += 50.0  # Huge success bonus!
+            reward += 50.0 
             done = True
 
         truncated = self.current_step >= self.max_highlevel_steps

@@ -1,0 +1,5868 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+/home/pinaka/miniconda3/envs/habitat/lib/python3.9/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 804: forward compatibility was attempted on non supported HW (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:109.)
+  return torch._C._cuda_getDeviceCount() > 0
+[22:55:24:249840]:[Warning]:[Metadata] SceneDatasetAttributes.cpp(107)::addNewSceneInstanceToDataset : Dataset : 'default' : Lighting Layout Attributes 'no_lights' specified in Scene Attributes but does not exist in dataset, so creating default.
+[22:55:24:249942]:[Warning]:[Scene] SemanticScene.h(331)::checkFileExists : ::loadSemanticSceneDescriptor: File `/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` does not exist.  Aborting load.
+[22:55:24:249950]:[Warning]:[Scene] SemanticScene.cpp(123)::loadSemanticSceneDescriptor : SSD File Naming Issue! Neither SemanticAttributes-provided name : `/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` nor constructed filename : `/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/info_semantic.json` exist on disk.
+[22:55:24:249955]:[Error]:[Scene] SemanticScene.cpp(139)::loadSemanticSceneDescriptor : SSD Load Failure! File with SemanticAttributes-provided name `/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.scn` exists but failed to load.
+[22:55:25:337123]:[Warning]:[Sim] Simulator.cpp(595)::instanceStageForSceneAttributes : The active scene does not contain semantic annotations : activeSemanticSceneID_ = 0
+======================================================================
+HRL HIGH-LEVEL EVALUATION (CORRECTED)
+======================================================================
+
+Creating environment...
+✓ Loaded low-level skill: models/lowlevel_curriculum_1M
+✓ Habitat simulator initialized.
+✓ Environment created
+
+Loading high-level policy from: models/hl_improved_2M/highlevel_improved_final_2M
+✓ High-level policy loaded
+
+Evaluating for 20 episodes...
+
+======================================================================
+
+[HL RESET]
+Agent: [-1.3731883   0.08431792  8.606928  ]
+Goal: [-4.119079    0.02749625 24.009708  ]
+Distance: 15.6m
+
+EPISODE 1/20
+----------------------------------------------------------------------
+Start Position : [-1.3731883   0.08431792  8.606928  ]
+Main Goal      : [-4.119079    0.02749625 24.009708  ]
+Start Distance : 15.65m
+
+HL Step 1:
+  Observation: dist=15.65m, angle=-2.97rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.4262204   0.20991862 14.513799  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-2.4262204   0.20991862 14.513799  ]
+Movement: 7.93m
+Distance: 15.6m → 8.9m
+Progress: 6.78m
+Reward: 72.79
+  Movement: 7.934m
+  Distance to goal: 8.86m
+  Reward: 72.789
+HL Step 2:
+  Observation: dist=8.86m, angle=0.35rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 0.34981424  0.20991862 14.096505  ] (dist=6.1m)
+
+=== HL Step 2 ===
+Action: 6
+Subgoal: [ 0.34981424  0.20991862 14.096505  ]
+Movement: 8.62m
+Distance: 8.9m → 11.6m
+Progress: -2.73m
+Reward: -27.33
+  Movement: 8.618m
+  Distance to goal: 11.59m
+  Reward: -27.330
+HL Step 3:
+  Observation: dist=11.59m, angle=-2.31rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.7105715   0.09665054 19.581123  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-0.7105715   0.09665054 19.581123  ]
+Movement: 2.82m
+Distance: 11.6m → 10.9m
+Progress: 0.69m
+Reward: 6.87
+  Movement: 2.825m
+  Distance to goal: 10.90m
+  Reward: 6.872
+HL Step 4:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=10.90m, angle=-0.98rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1599638   0.12881592 19.522594  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-2.1599638   0.12881592 19.522594  ]
+Movement: 0.00m
+Distance: 10.9m → 10.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.90m
+  Reward: -1.050
+
+✗ Episode timeout at 10.90m from goal
+
+[HL RESET]
+Agent: [-1.8932545   0.03993311  7.113349  ]
+Goal: [ 0.8544214   0.20572716 20.161594  ]
+Distance: 13.3m
+
+EPISODE 2/20
+----------------------------------------------------------------------
+Start Position : [-1.8932545   0.03993311  7.113349  ]
+Main Goal      : [ 0.8544214   0.20572716 20.161594  ]
+Start Distance : 13.34m
+
+HL Step 1:
+  Observation: dist=13.34m, angle=2.93rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.6569004   0.20991862 12.723853  ] (dist=5.7m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-0.6569004   0.20991862 12.723853  ]
+Movement: 6.54m
+Distance: 13.3m → 7.2m
+Progress: 6.18m
+Reward: 66.72
+  Movement: 6.543m
+  Distance to goal: 7.16m
+  Reward: 66.717
+HL Step 2:
+  Observation: dist=7.16m, angle=-1.03rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 5.0908375   0.13934569 17.303085  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 7
+Subgoal: [ 5.0908375   0.13934569 17.303085  ]
+Movement: 7.80m
+Distance: 7.2m → 4.8m
+Progress: 2.37m
+Reward: 28.68
+  Movement: 7.800m
+  Distance to goal: 4.79m
+  Reward: 28.682
+HL Step 3:
+  Observation: dist=4.79m, angle=-2.63rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.343915    0.09303215 20.382357  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-0.343915    0.09303215 20.382357  ]
+Movement: 8.11m
+Distance: 4.8m → 3.9m
+Progress: 0.88m
+Reward: 8.73
+  Movement: 8.113m
+  Distance to goal: 3.91m
+  Reward: 8.732
+HL Step 4:
+  Observation: dist=3.91m, angle=-1.54rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 3.3765695   0.15219283 16.733585  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [ 3.3765695   0.15219283 16.733585  ]
+Movement: 6.78m
+Distance: 3.9m → 3.0m
+Progress: 0.93m
+Reward: 9.27
+  Movement: 6.782m
+  Distance to goal: 2.98m
+  Reward: 9.269
+HL Step 5:
+  Observation: dist=2.98m, angle=-2.40rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1054978   0.12508306 19.513187  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [-2.1054978   0.12508306 19.513187  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=2.98m, angle=-2.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1054978   0.12508306 19.513187  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-2.1054978   0.12508306 19.513187  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=2.98m, angle=-2.05rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=2.98m, angle=-1.88rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=2.98m, angle=-1.70rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=2.98m, angle=-1.53rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=2.98m, angle=-1.36rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=2.98m, angle=-1.18rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=2.98m, angle=-1.01rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=2.98m, angle=-0.83rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.2967196   0.20991862 24.033607  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 7
+Subgoal: [-1.2967196   0.20991862 24.033607  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=2.98m, angle=-0.66rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 3.3908377   0.20991862 24.123852  ] (dist=3.4m)
+
+=== HL Step 15 ===
+Action: 6
+Subgoal: [ 3.3908377   0.20991862 24.123852  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=2.98m, angle=-0.48rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 3.3908377   0.20991862 24.123852  ] (dist=3.4m)
+
+=== HL Step 16 ===
+Action: 6
+Subgoal: [ 3.3908377   0.20991862 24.123852  ]
+Movement: 0.00m
+Distance: 3.0m → 3.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.98m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=2.98m, angle=-0.31rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1054978   0.12508306 19.513187  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-2.1054978   0.12508306 19.513187  ]
+Movement: 0.51m
+Distance: 3.0m → 2.5m
+Progress: 0.48m
+Reward: 4.70
+  Movement: 0.506m
+  Distance to goal: 2.50m
+  Reward: 4.702
+HL Step 18:
+  Observation: dist=2.50m, angle=-0.37rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.605608   0.1585975 19.62113  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-2.605608   0.1585975 19.62113  ]
+Movement: 0.50m
+Distance: 2.5m → 2.0m
+Progress: 0.46m
+Reward: 4.54
+  Movement: 0.500m
+  Distance to goal: 2.04m
+  Reward: 4.539
+HL Step 19:
+  Observation: dist=2.04m, angle=-0.46rad
+  Action (direction): 6
+  ✓ Valid subgoal: [8.9083767e-01 9.9186003e-03 2.4173855e+01] (dist=4.4m)
+
+=== HL Step 19 ===
+Action: 6
+Subgoal: [8.9083767e-01 9.9186003e-03 2.4173855e+01]
+Movement: 0.00m
+Distance: 2.0m → 2.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.04m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=2.04m, angle=-0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.0972457  0.1855046 19.898443 ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-3.0972457  0.1855046 19.898443 ]
+Movement: 0.50m
+Distance: 2.0m → 1.6m
+Progress: 0.47m
+Reward: 4.69
+  Movement: 0.500m
+  Distance to goal: 1.57m
+  Reward: 4.693
+
+✗ Episode timeout at 1.57m from goal
+
+[HL RESET]
+Agent: [ 6.36006     0.20991862 12.269407  ]
+Goal: [-1.4018986   0.13325876 18.15347   ]
+Distance: 9.7m
+
+EPISODE 3/20
+----------------------------------------------------------------------
+Start Position : [ 6.36006     0.20991862 12.269407  ]
+Main Goal      : [-1.4018986   0.13325876 18.15347   ]
+Start Distance : 9.74m
+
+HL Step 1:
+  Observation: dist=9.74m, angle=-2.22rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.5786314   0.19539222 15.894037  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 1.5786314   0.19539222 15.894037  ]
+Movement: 8.76m
+Distance: 9.7m → 4.1m
+Progress: 5.64m
+Reward: 61.39
+  Movement: 8.760m
+  Distance to goal: 4.10m
+  Reward: 61.390
+HL Step 2:
+  Observation: dist=4.10m, angle=-0.37rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 3.6861663   0.20991862 12.9682665 ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 6
+Subgoal: [ 3.6861663   0.20991862 12.9682665 ]
+Movement: 7.66m
+Distance: 4.1m → 6.7m
+Progress: -2.61m
+Reward: -26.15
+  Movement: 7.656m
+  Distance to goal: 6.71m
+  Reward: -26.155
+HL Step 3:
+  Observation: dist=6.71m, angle=-2.70rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.71794415  0.13940024 17.976536  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-0.71794415  0.13940024 17.976536  ]
+Movement: 5.43m
+Distance: 6.7m → 4.4m
+Progress: 2.26m
+Reward: 27.57
+  Movement: 5.434m
+  Distance to goal: 4.45m
+  Reward: 27.569
+HL Step 4:
+  Observation: dist=4.45m, angle=-1.02rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 2.6148453  0.1235538 19.534214 ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [ 2.6148453  0.1235538 19.534214 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.45m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=4.45m, angle=-0.49rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 5.0908375   0.20991862 16.473854  ] (dist=5.4m)
+
+=== HL Step 5 ===
+Action: 6
+Subgoal: [ 5.0908375   0.20991862 16.473854  ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.45m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=4.45m, angle=-0.32rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 5.0908375   0.20991862 16.473854  ] (dist=5.4m)
+
+=== HL Step 6 ===
+Action: 6
+Subgoal: [ 5.0908375   0.20991862 16.473854  ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.45m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=4.45m, angle=-0.14rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9768996   0.11246058 19.598946  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-1.9768996   0.11246058 19.598946  ]
+Movement: 0.03m
+Distance: 4.4m → 4.4m
+Progress: 0.01m
+Reward: -0.98
+  Movement: 0.032m
+  Distance to goal: 4.44m
+  Reward: -0.984
+HL Step 8:
+  Observation: dist=4.44m, angle=-0.14rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9896126   0.11333954 19.600924  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-1.9896126   0.11333954 19.600924  ]
+Movement: 0.03m
+Distance: 4.4m → 4.4m
+Progress: 0.01m
+Reward: -0.99
+  Movement: 0.032m
+  Distance to goal: 4.43m
+  Reward: -0.986
+HL Step 9:
+  Observation: dist=4.43m, angle=-0.13rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.002326    0.11422998 19.602577  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-2.002326    0.11422998 19.602577  ]
+Movement: 0.03m
+Distance: 4.4m → 4.4m
+Progress: 0.01m
+Reward: -0.99
+  Movement: 0.032m
+  Distance to goal: 4.43m
+  Reward: -0.989
+HL Step 10:
+  Observation: dist=4.43m, angle=-0.12rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0150347   0.11513171 19.6039    ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-2.0150347   0.11513171 19.6039    ]
+Movement: 0.03m
+Distance: 4.4m → 4.4m
+Progress: 0.01m
+Reward: -0.99
+  Movement: 0.032m
+  Distance to goal: 4.42m
+  Reward: -0.991
+HL Step 11:
+  Observation: dist=4.42m, angle=-0.12rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.027731    0.11604396 19.6049    ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-2.027731    0.11604396 19.6049    ]
+Movement: 0.03m
+Distance: 4.4m → 4.4m
+Progress: 0.01m
+Reward: -0.99
+  Movement: 0.032m
+  Distance to goal: 4.41m
+  Reward: -0.993
+HL Step 12:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.040409    0.11696649 19.60557   ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-2.040409    0.11696649 19.60557   ]
+Movement: 0.02m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.02
+  Movement: 0.019m
+  Distance to goal: 4.41m
+  Reward: -1.017
+HL Step 13:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=4.41m, angle=-0.11rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.0480332  0.1175268 19.605816 ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-2.0480332  0.1175268 19.605816 ]
+Movement: 0.00m
+Distance: 4.4m → 4.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.41m
+  Reward: -1.050
+
+✗ Episode timeout at 4.41m from goal
+
+[HL RESET]
+Agent: [-2.676101    0.17685933 12.073923  ]
+Goal: [ 3.082285    0.11341601 20.403723  ]
+Distance: 10.1m
+
+EPISODE 4/20
+----------------------------------------------------------------------
+Start Position : [-2.676101    0.17685933 12.073923  ]
+Main Goal      : [ 3.082285    0.11341601 20.403723  ]
+Start Distance : 10.13m
+
+HL Step 1:
+  Observation: dist=10.13m, angle=2.54rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.7357943  0.1752485 17.009403 ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 0.7357943  0.1752485 17.009403 ]
+Movement: 7.02m
+Distance: 10.1m → 3.4m
+Progress: 6.69m
+Reward: 71.87
+  Movement: 7.024m
+  Distance to goal: 3.43m
+  Reward: 71.874
+HL Step 2:
+  Observation: dist=3.43m, angle=-0.94rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 6.911393    0.20991862 20.190535  ] (dist=5.6m)
+
+=== HL Step 2 ===
+Action: 7
+Subgoal: [ 6.911393    0.20991862 20.190535  ]
+Movement: 7.62m
+Distance: 3.4m → 4.3m
+Progress: -0.91m
+Reward: -9.13
+  Movement: 7.621m
+  Distance to goal: 4.34m
+  Reward: -9.131
+HL Step 3:
+  Observation: dist=4.34m, angle=-2.22rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 2.0855708   0.14098698 19.077806  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [ 2.0855708   0.14098698 19.077806  ]
+Movement: 0.14m
+Distance: 4.3m → 4.2m
+Progress: 0.14m
+Reward: 0.35
+  Movement: 0.141m
+  Distance to goal: 4.20m
+  Reward: 0.349
+HL Step 4:
+  Observation: dist=4.20m, angle=-1.34rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-3.4574318e-01  9.9186003e-03  2.2903791e+01] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [-3.4574318e-01  9.9186003e-03  2.2903791e+01]
+Movement: 3.43m
+Distance: 4.2m → 0.8m
+Progress: 3.42m
+Reward: 39.18
+  Movement: 3.431m
+  Distance to goal: 0.78m
+  Reward: 39.178
+HL Step 5:
+  Observation: dist=0.78m, angle=0.27rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.1401782   0.19025263 16.086527  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [ 0.1401782   0.19025263 16.086527  ]
+Movement: 0.51m
+Distance: 0.8m → 0.3m
+Progress: 0.46m
+Reward: 54.51
+  Movement: 0.506m
+  Distance to goal: 0.32m
+  Reward: 54.505
+
+✓✓✓ MAIN GOAL REACHED in 5 steps! ✓✓✓
+
+[HL RESET]
+Agent: [-7.8152623   0.20702028  8.716475  ]
+Goal: [6.4497967  0.20991862 9.040085  ]
+Distance: 14.3m
+
+EPISODE 5/20
+----------------------------------------------------------------------
+Start Position : [-7.8152623   0.20702028  8.716475  ]
+Main Goal      : [6.4497967  0.20991862 9.040085  ]
+Start Distance : 14.27m
+
+HL Step 1:
+  Observation: dist=14.27m, angle=1.59rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.8168058   0.08804756  8.852552  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-1.8168058   0.08804756  8.852552  ]
+Movement: 4.72m
+Distance: 14.3m → 11.2m
+Progress: 3.09m
+Reward: 35.85
+  Movement: 4.721m
+  Distance to goal: 11.18m
+  Reward: 35.847
+HL Step 2:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 3:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=11.18m, angle=0.31rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4402056   0.15599026 10.998812  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 1
+Subgoal: [-1.4402056   0.15599026 10.998812  ]
+Movement: 0.00m
+Distance: 11.2m → 11.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 11.18m
+  Reward: -1.050
+
+✗ Episode timeout at 11.18m from goal
+
+[HL RESET]
+Agent: [-4.187245    0.24388497 19.430244  ]
+Goal: [5.042755   0.18686211 9.584223  ]
+Distance: 13.5m
+
+EPISODE 6/20
+----------------------------------------------------------------------
+Start Position : [-4.187245    0.24388497 19.430244  ]
+Main Goal      : [5.042755   0.18686211 9.584223  ]
+Start Distance : 13.50m
+
+HL Step 1:
+  Observation: dist=13.50m, angle=0.75rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.809629    0.15454888 19.236588  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 1.809629    0.15454888 19.236588  ]
+Movement: 6.95m
+Distance: 13.5m → 9.6m
+Progress: 3.94m
+Reward: 44.40
+  Movement: 6.954m
+  Distance to goal: 9.55m
+  Reward: 44.395
+HL Step 2:
+  Observation: dist=9.55m, angle=3.04rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 4.1871696   0.20991862 13.0307255 ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [ 4.1871696   0.20991862 13.0307255 ]
+Movement: 6.93m
+Distance: 9.6m → 3.1m
+Progress: 6.43m
+Reward: 69.22
+  Movement: 6.927m
+  Distance to goal: 3.12m
+  Reward: 69.225
+HL Step 3:
+  Observation: dist=3.12m, angle=-0.50rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-1.5271575   0.06507386  7.9731984 ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 6
+Subgoal: [-1.5271575   0.06507386  7.9731984 ]
+Movement: 7.31m
+Distance: 3.1m → 6.6m
+Progress: -3.48m
+Reward: -34.81
+  Movement: 7.306m
+  Distance to goal: 6.60m
+  Reward: -34.815
+HL Step 4:
+  Observation: dist=6.60m, angle=-2.42rad
+  Action (direction): 0
+  ✓ Valid subgoal: [4.593909   0.17251708 9.188995  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [4.593909   0.17251708 9.188995  ]
+Movement: 0.00m
+Distance: 6.6m → 6.6m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 6.60m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=6.60m, angle=-1.37rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.068978  0.0099186 4.8043184] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 7
+Subgoal: [6.068978  0.0099186 4.8043184]
+Movement: 0.00m
+Distance: 6.6m → 6.6m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 6.60m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=6.60m, angle=-1.20rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.068978  0.0099186 4.8043184] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 7
+Subgoal: [6.068978  0.0099186 4.8043184]
+Movement: 0.00m
+Distance: 6.6m → 6.6m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 6.60m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=6.60m, angle=-1.02rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.068978  0.0099186 4.8043184] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 7
+Subgoal: [6.068978  0.0099186 4.8043184]
+Movement: 0.00m
+Distance: 6.6m → 6.6m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 6.60m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=6.60m, angle=-0.85rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.47121117  0.16351922 11.211784  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 1
+Subgoal: [ 0.47121117  0.16351922 11.211784  ]
+Movement: 0.51m
+Distance: 6.6m → 6.2m
+Progress: 0.40m
+Reward: 3.93
+  Movement: 0.510m
+  Distance to goal: 6.20m
+  Reward: 3.926
+HL Step 9:
+  Observation: dist=6.20m, angle=-0.90rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.0643635  0.20991862 5.1157618 ] (dist=5.9m)
+
+=== HL Step 9 ===
+Action: 7
+Subgoal: [6.0643635  0.20991862 5.1157618 ]
+Movement: 0.00m
+Distance: 6.2m → 6.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 6.20m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=6.20m, angle=-0.72rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.8693192  0.1773815 11.685368 ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [ 0.8693192  0.1773815 11.685368 ]
+Movement: 0.50m
+Distance: 6.2m → 5.8m
+Progress: 0.37m
+Reward: 3.61
+  Movement: 0.500m
+  Distance to goal: 5.84m
+  Reward: 3.605
+HL Step 11:
+  Observation: dist=5.84m, angle=-0.78rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.2934849   0.19031811 12.129641  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [ 1.2934849   0.19031811 12.129641  ]
+Movement: 0.50m
+Distance: 5.8m → 5.5m
+Progress: 0.34m
+Reward: 3.39
+  Movement: 0.500m
+  Distance to goal: 5.49m
+  Reward: 3.388
+HL Step 12:
+  Observation: dist=5.49m, angle=-0.85rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.190837   0.20991862 5.2738533 ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 7
+Subgoal: [6.190837   0.20991862 5.2738533 ]
+Movement: 0.00m
+Distance: 5.5m → 5.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 5.49m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=5.49m, angle=-0.67rad
+  Action (direction): 6
+  ✓ Valid subgoal: [3.0908375  0.20991862 3.8238533 ] (dist=4.0m)
+
+=== HL Step 13 ===
+Action: 6
+Subgoal: [3.0908375  0.20991862 3.8238533 ]
+Movement: 0.00m
+Distance: 5.5m → 5.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 5.49m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=5.49m, angle=-0.50rad
+  Action (direction): 6
+  ✓ Valid subgoal: [3.0908375  0.20991862 3.8238533 ] (dist=4.0m)
+
+=== HL Step 14 ===
+Action: 6
+Subgoal: [3.0908375  0.20991862 3.8238533 ]
+Movement: 0.00m
+Distance: 5.5m → 5.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 5.49m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=5.49m, angle=-0.32rad
+  Action (direction): 6
+  ✓ Valid subgoal: [3.0908375  0.20991862 3.8238533 ] (dist=4.0m)
+
+=== HL Step 15 ===
+Action: 6
+Subgoal: [3.0908375  0.20991862 3.8238533 ]
+Movement: 0.00m
+Distance: 5.5m → 5.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 5.49m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=5.49m, angle=-0.15rad
+  Action (direction): 6
+  ✓ Valid subgoal: [3.0908375  0.20991862 3.8238533 ] (dist=4.0m)
+
+=== HL Step 16 ===
+Action: 6
+Subgoal: [3.0908375  0.20991862 3.8238533 ]
+Movement: 0.00m
+Distance: 5.5m → 5.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 5.49m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=5.49m, angle=0.03rad
+  Action (direction): 0
+  ✓ Valid subgoal: [5.47608    0.20125365 9.850572  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [5.47608    0.20125365 9.850572  ]
+Movement: 0.50m
+Distance: 5.5m → 5.0m
+Progress: 0.50m
+Reward: 4.95
+  Movement: 0.500m
+  Distance to goal: 4.99m
+  Reward: 4.950
+HL Step 18:
+  Observation: dist=4.99m, angle=0.03rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 5.900409    0.20991862 10.1146555 ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [ 5.900409    0.20991862 10.1146555 ]
+Movement: 0.50m
+Distance: 5.0m → 4.5m
+Progress: 0.50m
+Reward: 4.95
+  Movement: 0.500m
+  Distance to goal: 4.49m
+  Reward: 4.949
+HL Step 19:
+  Observation: dist=4.49m, angle=0.03rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 6.3225617   0.20991862 10.379543  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [ 6.3225617   0.20991862 10.379543  ]
+Movement: 0.50m
+Distance: 4.5m → 4.0m
+Progress: 0.50m
+Reward: 4.95
+  Movement: 0.500m
+  Distance to goal: 3.99m
+  Reward: 4.949
+HL Step 20:
+  Observation: dist=3.99m, angle=0.04rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 6.3908367   0.20991862 10.373854  ] (dist=5.6m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [ 6.3908367   0.20991862 10.373854  ]
+Movement: 0.50m
+Distance: 4.0m → 3.5m
+Progress: 0.50m
+Reward: 4.95
+  Movement: 0.500m
+  Distance to goal: 3.49m
+  Reward: 4.948
+
+✗ Episode timeout at 3.49m from goal
+
+[HL RESET]
+Agent: [-2.5100632   0.09315461 21.27406   ]
+Goal: [-1.5471613   0.07092997  8.185154  ]
+Distance: 13.1m
+
+EPISODE 7/20
+----------------------------------------------------------------------
+Start Position : [-2.5100632   0.09315461 21.27406   ]
+Main Goal      : [-1.5471613   0.07092997  8.185154  ]
+Start Distance : 13.12m
+
+HL Step 1:
+  Observation: dist=13.12m, angle=0.07rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 2.0324173   0.12382092 17.354126  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 2.0324173   0.12382092 17.354126  ]
+Movement: 6.54m
+Distance: 13.1m → 9.7m
+Progress: 3.39m
+Reward: 38.87
+  Movement: 6.539m
+  Distance to goal: 9.73m
+  Reward: 38.872
+HL Step 2:
+  Observation: dist=9.73m, angle=2.37rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.6022663e-03  1.7534760e-01  1.1583010e+01] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [-3.6022663e-03  1.7534760e-01  1.1583010e+01]
+Movement: 7.19m
+Distance: 9.7m → 2.9m
+Progress: 6.83m
+Reward: 73.29
+  Movement: 7.189m
+  Distance to goal: 2.90m
+  Reward: 73.289
+HL Step 3:
+  Observation: dist=2.90m, angle=-0.88rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-5.7949915  0.0099186  6.8559494] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 7
+Subgoal: [-5.7949915  0.0099186  6.8559494]
+Movement: 6.02m
+Distance: 2.9m → 3.2m
+Progress: -0.27m
+Reward: -2.75
+  Movement: 6.017m
+  Distance to goal: 3.17m
+  Reward: -2.745
+HL Step 4:
+  Observation: dist=3.17m, angle=-2.53rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.82087386  0.15494011 10.923307  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-0.82087386  0.15494011 10.923307  ]
+Movement: 6.22m
+Distance: 3.2m → 4.0m
+Progress: -0.84m
+Reward: -8.45
+  Movement: 6.218m
+  Distance to goal: 4.01m
+  Reward: -8.451
+HL Step 5:
+  Observation: dist=4.01m, angle=-2.00rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 5 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=4.01m, angle=-1.82rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 6 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=4.01m, angle=-1.65rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 7 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=4.01m, angle=-1.47rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 8 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=4.01m, angle=-1.30rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 9 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=4.01m, angle=-1.13rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 10 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=4.01m, angle=-0.95rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-4.389882   0.0099186  5.122219 ] (dist=5.9m)
+
+=== HL Step 11 ===
+Action: 7
+Subgoal: [-4.389882   0.0099186  5.122219 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=4.01m, angle=-0.78rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-7.759163    0.20991862  6.6738534 ] (dist=5.5m)
+
+=== HL Step 12 ===
+Action: 6
+Subgoal: [-7.759163    0.20991862  6.6738534 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=4.01m, angle=-0.60rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-7.759163    0.20991862  6.6738534 ] (dist=5.5m)
+
+=== HL Step 13 ===
+Action: 6
+Subgoal: [-7.759163    0.20991862  6.6738534 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=4.01m, angle=-0.43rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-7.759163    0.20991862  6.6738534 ] (dist=5.5m)
+
+=== HL Step 14 ===
+Action: 6
+Subgoal: [-7.759163    0.20991862  6.6738534 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=4.01m, angle=-0.25rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-7.759163    0.20991862  6.6738534 ] (dist=5.5m)
+
+=== HL Step 15 ===
+Action: 6
+Subgoal: [-7.759163    0.20991862  6.6738534 ]
+Movement: 0.00m
+Distance: 4.0m → 4.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.01m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=4.01m, angle=-0.08rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.12595463  0.02986326  6.7881074 ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-0.12595463  0.02986326  6.7881074 ]
+Movement: 0.50m
+Distance: 4.0m → 3.5m
+Progress: 0.50m
+Reward: 4.93
+  Movement: 0.500m
+  Distance to goal: 3.51m
+  Reward: 4.933
+HL Step 17:
+  Observation: dist=3.51m, angle=-0.09rad
+  Action (direction): 0
+  ✓ Valid subgoal: [0.20968246 0.02726219 6.419046  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [0.20968246 0.02726219 6.419046  ]
+Movement: 0.50m
+Distance: 3.5m → 3.0m
+Progress: 0.50m
+Reward: 4.93
+  Movement: 0.500m
+  Distance to goal: 3.01m
+  Reward: 4.927
+HL Step 18:
+  Observation: dist=3.01m, angle=-0.10rad
+  Action (direction): 0
+  ✓ Valid subgoal: [0.5288248 0.0099186 6.0350475] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [0.5288248 0.0099186 6.0350475]
+Movement: 0.50m
+Distance: 3.0m → 2.5m
+Progress: 0.50m
+Reward: 4.92
+  Movement: 0.500m
+  Distance to goal: 2.52m
+  Reward: 4.918
+HL Step 19:
+  Observation: dist=2.52m, angle=-0.13rad
+  Action (direction): 0
+  ✓ Valid subgoal: [0.8211584 0.0099186 5.627896 ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [0.8211584 0.0099186 5.627896 ]
+Movement: 0.50m
+Distance: 2.5m → 2.0m
+Progress: 0.50m
+Reward: 4.90
+  Movement: 0.500m
+  Distance to goal: 2.02m
+  Reward: 4.902
+HL Step 20:
+  Observation: dist=2.02m, angle=-0.16rad
+  Action (direction): 0
+  ✓ Valid subgoal: [0.8087587 0.0099186 5.1964374] (dist=5.8m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [0.8087587 0.0099186 5.1964374]
+Movement: 0.50m
+Distance: 2.0m → 1.5m
+Progress: 0.49m
+Reward: 4.87
+  Movement: 0.500m
+  Distance to goal: 1.53m
+  Reward: 4.870
+
+✗ Episode timeout at 1.53m from goal
+
+[HL RESET]
+Agent: [5.0691876  0.20991862 5.4848676 ]
+Goal: [-2.9657466  0.2281619 18.411102 ]
+Distance: 15.2m
+
+EPISODE 8/20
+----------------------------------------------------------------------
+Start Position : [5.0691876  0.20991862 5.4848676 ]
+Main Goal      : [-2.9657466  0.2281619 18.411102 ]
+Start Distance : 15.22m
+
+HL Step 1:
+  Observation: dist=15.22m, angle=-2.59rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.9016662   0.14242479 10.580631  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 1.9016662   0.14242479 10.580631  ]
+Movement: 0.87m
+Distance: 15.2m → 15.8m
+Progress: -0.53m
+Reward: -5.36
+  Movement: 0.875m
+  Distance to goal: 15.75m
+  Reward: -5.363
+HL Step 2:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 3:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=15.75m, angle=-1.23rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.805238   0.12206882 9.906659  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [1.805238   0.12206882 9.906659  ]
+Movement: 0.00m
+Distance: 15.8m → 15.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 15.75m
+  Reward: -1.050
+
+✗ Episode timeout at 15.75m from goal
+
+[HL RESET]
+Agent: [-3.2399151  0.2132522 19.413715 ]
+Goal: [ 3.9854956   0.20991862 14.496971  ]
+Distance: 8.7m
+
+EPISODE 9/20
+----------------------------------------------------------------------
+Start Position : [-3.2399151  0.2132522 19.413715 ]
+Main Goal      : [ 3.9854956   0.20991862 14.496971  ]
+Start Distance : 8.74m
+
+HL Step 1:
+  Observation: dist=8.74m, angle=0.97rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 2.654484  0.13314  20.534454] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 2.654484  0.13314  20.534454]
+Movement: 6.98m
+Distance: 8.7m → 5.9m
+Progress: 2.83m
+Reward: 33.30
+  Movement: 6.979m
+  Distance to goal: 5.90m
+  Reward: 33.300
+HL Step 2:
+  Observation: dist=5.90m, angle=2.85rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 3.9907079   0.20991862 14.400053  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [ 3.9907079   0.20991862 14.400053  ]
+Movement: 7.02m
+Distance: 5.9m → 2.1m
+Progress: 3.82m
+Reward: 43.20
+  Movement: 7.016m
+  Distance to goal: 2.08m
+  Reward: 43.197
+HL Step 3:
+  Observation: dist=2.08m, angle=0.82rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 3.9711318   0.06259155 19.259005  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 1
+Subgoal: [ 3.9711318   0.06259155 19.259005  ]
+Movement: 6.31m
+Distance: 2.1m → 4.9m
+Progress: -2.82m
+Reward: -28.24
+  Movement: 6.310m
+  Distance to goal: 4.90m
+  Reward: -28.236
+HL Step 4:
+  Observation: dist=4.90m, angle=2.14rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 3.847174    0.20991862 13.400946  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [ 3.847174    0.20991862 13.400946  ]
+Movement: 6.62m
+Distance: 4.9m → 2.9m
+Progress: 2.05m
+Reward: 25.41
+  Movement: 6.622m
+  Distance to goal: 2.85m
+  Reward: 25.412
+HL Step 5:
+  Observation: dist=2.85m, angle=1.53rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=2.85m, angle=1.35rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=2.85m, angle=1.18rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=2.85m, angle=1.01rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=2.85m, angle=0.83rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=2.85m, angle=0.66rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.026609    0.05686966 18.96141   ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [ 4.026609    0.05686966 18.96141   ]
+Movement: 0.00m
+Distance: 2.9m → 2.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.85m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=2.85m, angle=0.48rad
+  Action (direction): 6
+  ✓ Valid subgoal: [3.0827184  0.12395237 7.9151087 ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 6
+Subgoal: [3.0827184  0.12395237 7.9151087 ]
+Movement: 0.50m
+Distance: 2.9m → 2.4m
+Progress: 0.43m
+Reward: 3.27
+  Movement: 0.500m
+  Distance to goal: 2.42m
+  Reward: 3.269
+HL Step 12:
+  Observation: dist=2.42m, angle=0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 3.9961748   0.05989245 19.114363  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [ 3.9961748   0.05989245 19.114363  ]
+Movement: 0.00m
+Distance: 2.4m → 2.4m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.42m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=2.42m, angle=0.40rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.195469  ] (dist=3.7m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [ 5.0408373   0.20991862 15.195469  ]
+Movement: 0.50m
+Distance: 2.4m → 2.0m
+Progress: 0.45m
+Reward: 3.45
+  Movement: 0.500m
+  Distance to goal: 1.97m
+  Reward: 3.451
+HL Step 14:
+  Observation: dist=1.97m, angle=0.50rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 3.9305105   0.06489351 19.309477  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [ 3.9305105   0.06489351 19.309477  ]
+Movement: 0.00m
+Distance: 2.0m → 2.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.97m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=1.97m, angle=0.33rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.572035  ] (dist=3.4m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [ 5.0408373   0.20991862 15.572035  ]
+Movement: 0.50m
+Distance: 2.0m → 1.5m
+Progress: 0.46m
+Reward: 4.60
+  Movement: 0.500m
+  Distance to goal: 1.51m
+  Reward: 4.596
+HL Step 16:
+  Observation: dist=1.51m, angle=0.44rad
+  Action (direction): 0
+  ✓ Valid subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01] (dist=6.5m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01]
+Movement: 0.50m
+Distance: 1.5m → 1.1m
+Progress: 0.43m
+Reward: 4.27
+  Movement: 0.500m
+  Distance to goal: 1.07m
+  Reward: 4.273
+HL Step 17:
+  Observation: dist=1.07m, angle=0.63rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 3.1057088   0.10469651 19.718971  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 1
+Subgoal: [ 3.1057088   0.10469651 19.718971  ]
+Movement: 0.00m
+Distance: 1.1m → 1.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.07m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=1.07m, angle=0.46rad
+  Action (direction): 0
+  ✓ Valid subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01] (dist=6.1m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01]
+Movement: 0.50m
+Distance: 1.1m → 0.7m
+Progress: 0.41m
+Reward: 4.05
+  Movement: 0.500m
+  Distance to goal: 0.66m
+  Reward: 4.050
+HL Step 19:
+  Observation: dist=0.66m, angle=0.80rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.5791674   0.16733842 19.498951  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 1
+Subgoal: [ 1.5791674   0.16733842 19.498951  ]
+Movement: 0.00m
+Distance: 0.7m → 0.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.66m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=0.66m, angle=0.63rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.5791674   0.16733842 19.498951  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 1
+Subgoal: [ 1.5791674   0.16733842 19.498951  ]
+Movement: 0.00m
+Distance: 0.7m → 0.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.66m
+  Reward: -1.050
+
+✗ Episode timeout at 0.66m from goal
+
+[HL RESET]
+Agent: [-3.2437022   0.16081934 11.494503  ]
+Goal: [4.7439117e+00 9.9186003e-03 1.9597956e+01]
+Distance: 11.4m
+
+EPISODE 10/20
+----------------------------------------------------------------------
+Start Position : [-3.2437022   0.16081934 11.494503  ]
+Main Goal      : [4.7439117e+00 9.9186003e-03 1.9597956e+01]
+Start Distance : 11.38m
+
+HL Step 1:
+  Observation: dist=11.38m, angle=2.36rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.96828675  0.19763178 15.767576  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 0.96828675  0.19763178 15.767576  ]
+Movement: 7.02m
+Distance: 11.4m → 4.6m
+Progress: 6.75m
+Reward: 72.41
+  Movement: 7.024m
+  Distance to goal: 4.63m
+  Reward: 72.406
+HL Step 2:
+  Observation: dist=4.63m, angle=-1.21rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01] (dist=5.3m)
+
+=== HL Step 2 ===
+Action: 7
+Subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01]
+Movement: 6.20m
+Distance: 4.6m → 2.2m
+Progress: 2.44m
+Reward: 29.39
+  Movement: 6.203m
+  Distance to goal: 2.19m
+  Reward: 29.386
+HL Step 3:
+  Observation: dist=2.19m, angle=-2.12rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.96489096  0.18844831 19.047024  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [ 0.96489096  0.18844831 19.047024  ]
+Movement: 7.15m
+Distance: 2.2m → 5.1m
+Progress: -2.91m
+Reward: -29.16
+  Movement: 7.154m
+  Distance to goal: 5.10m
+  Reward: -29.164
+HL Step 4:
+  Observation: dist=5.10m, angle=-1.72rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.534471  ] (dist=4.8m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [ 5.0408373   0.20991862 15.534471  ]
+Movement: 4.80m
+Distance: 5.1m → 1.7m
+Progress: 3.39m
+Reward: 38.88
+  Movement: 4.798m
+  Distance to goal: 1.71m
+  Reward: 38.877
+HL Step 5:
+  Observation: dist=1.71m, angle=2.30rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=1.71m, angle=2.12rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=1.71m, angle=1.95rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=1.71m, angle=1.78rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=1.71m, angle=1.60rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=1.71m, angle=1.43rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=1.71m, angle=1.25rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=1.71m, angle=1.08rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=1.71m, angle=0.90rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=1.71m, angle=0.73rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=1.71m, angle=0.55rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.07452154  0.11295902 21.218372  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 1
+Subgoal: [ 0.07452154  0.11295902 21.218372  ]
+Movement: 0.00m
+Distance: 1.7m → 1.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.71m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=1.71m, angle=0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.871488e+00 9.918600e-03 2.380127e+01] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [3.871488e+00 9.918600e-03 2.380127e+01]
+Movement: 0.49m
+Distance: 1.7m → 1.2m
+Progress: 0.48m
+Reward: 3.74
+  Movement: 0.494m
+  Distance to goal: 1.23m
+  Reward: 3.743
+HL Step 17:
+  Observation: dist=1.23m, angle=0.46rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 3.397213   0.2092294 24.123852 ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [ 3.397213   0.2092294 24.123852 ]
+Movement: 0.50m
+Distance: 1.2m → 0.8m
+Progress: 0.42m
+Reward: 4.12
+  Movement: 0.501m
+  Distance to goal: 0.81m
+  Reward: 4.123
+HL Step 18:
+  Observation: dist=0.81m, angle=0.74rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-0.67507315  0.07947089 20.23246   ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 1
+Subgoal: [-0.67507315  0.07947089 20.23246   ]
+Movement: 0.00m
+Distance: 0.8m → 0.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.81m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=0.81m, angle=0.56rad
+  Action (direction): 2
+  ✓ Valid subgoal: [ 0.1049428   0.19152853 15.706989  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 2
+Subgoal: [ 0.1049428   0.19152853 15.706989  ]
+Movement: 0.00m
+Distance: 0.8m → 0.8m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.81m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=0.81m, angle=0.39rad
+  Action (direction): 0
+  ✓ Valid subgoal: [1.2908373e+00 9.9186003e-03 2.3223854e+01] (dist=5.8m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [1.2908373e+00 9.9186003e-03 2.3223854e+01]
+Movement: 0.50m
+Distance: 0.8m → 0.4m
+Progress: 0.41m
+Reward: 53.10
+  Movement: 0.500m
+  Distance to goal: 0.40m
+  Reward: 53.096
+
+✓✓✓ MAIN GOAL REACHED in 20 steps! ✓✓✓
+
+[HL RESET]
+Agent: [-4.0615287  0.0283583 23.908962 ]
+Goal: [3.3717144  0.13324429 8.157757  ]
+Distance: 17.4m
+
+EPISODE 11/20
+----------------------------------------------------------------------
+Start Position : [-4.0615287  0.0283583 23.908962 ]
+Main Goal      : [3.3717144  0.13324429 8.157757  ]
+Start Distance : 17.42m
+
+HL Step 1:
+  Observation: dist=17.42m, angle=0.44rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.586       0.19392335 21.882778  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 1.586       0.19392335 21.882778  ]
+Movement: 6.98m
+Distance: 17.4m → 13.2m
+Progress: 4.24m
+Reward: 47.34
+  Movement: 6.978m
+  Distance to goal: 13.18m
+  Reward: 47.335
+HL Step 2:
+  Observation: dist=13.18m, angle=2.87rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 2.8479428   0.20991862 15.317438  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [ 2.8479428   0.20991862 15.317438  ]
+Movement: 6.91m
+Distance: 13.2m → 6.6m
+Progress: 6.55m
+Reward: 70.49
+  Movement: 6.908m
+  Distance to goal: 6.62m
+  Reward: 70.489
+HL Step 3:
+  Observation: dist=6.62m, angle=-0.91rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.3924929   0.10060432  9.145485  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 7
+Subgoal: [-1.3924929   0.10060432  9.145485  ]
+Movement: 8.44m
+Distance: 6.6m → 4.8m
+Progress: 1.87m
+Reward: 20.60
+  Movement: 8.437m
+  Distance to goal: 4.76m
+  Reward: 20.603
+HL Step 4:
+  Observation: dist=4.76m, angle=-2.59rad
+  Action (direction): 0
+  ✓ Valid subgoal: [4.5246854  0.17270231 8.618948  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [4.5246854  0.17270231 8.618948  ]
+Movement: 6.81m
+Distance: 4.8m → 4.1m
+Progress: 0.62m
+Reward: 6.13
+  Movement: 6.809m
+  Distance to goal: 4.14m
+  Reward: 6.132
+HL Step 5:
+  Observation: dist=4.14m, angle=-1.71rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-0.75279784  0.04023427  7.1583953 ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 7
+Subgoal: [-0.75279784  0.04023427  7.1583953 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=4.14m, angle=-1.53rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-0.75279784  0.04023427  7.1583953 ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 7
+Subgoal: [-0.75279784  0.04023427  7.1583953 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=4.14m, angle=-1.36rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-0.75279784  0.04023427  7.1583953 ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 7
+Subgoal: [-0.75279784  0.04023427  7.1583953 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=4.14m, angle=-1.18rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-0.75279784  0.04023427  7.1583953 ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 7
+Subgoal: [-0.75279784  0.04023427  7.1583953 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=4.14m, angle=-1.01rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-0.75279784  0.04023427  7.1583953 ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 7
+Subgoal: [-0.75279784  0.04023427  7.1583953 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=4.14m, angle=-0.83rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.3702226   0.14536995 10.9316435 ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 6
+Subgoal: [-3.3702226   0.14536995 10.9316435 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=4.14m, angle=-0.66rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.3702226   0.14536995 10.9316435 ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 6
+Subgoal: [-3.3702226   0.14536995 10.9316435 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=4.14m, angle=-0.48rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.3702226   0.14536995 10.9316435 ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 6
+Subgoal: [-3.3702226   0.14536995 10.9316435 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=4.14m, angle=-0.31rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.3702226   0.14536995 10.9316435 ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 6
+Subgoal: [-3.3702226   0.14536995 10.9316435 ]
+Movement: 0.00m
+Distance: 4.1m → 4.1m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 4.14m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=4.14m, angle=-0.14rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.7660902  0.10270465 6.3411055 ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [3.7660902  0.10270465 6.3411055 ]
+Movement: 0.50m
+Distance: 4.1m → 3.6m
+Progress: 0.49m
+Reward: 4.90
+  Movement: 0.500m
+  Distance to goal: 3.65m
+  Reward: 4.900
+HL Step 15:
+  Observation: dist=3.65m, angle=-0.15rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.8284328  0.11097949 5.848718  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [3.8284328  0.11097949 5.848718  ]
+Movement: 0.50m
+Distance: 3.6m → 3.2m
+Progress: 0.49m
+Reward: 4.88
+  Movement: 0.500m
+  Distance to goal: 3.15m
+  Reward: 4.883
+HL Step 16:
+  Observation: dist=3.15m, angle=-0.18rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.8561203  0.05413243 5.623853  ] (dist=5.7m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [3.8561203  0.05413243 5.623853  ]
+Movement: 0.50m
+Distance: 3.2m → 2.7m
+Progress: 0.49m
+Reward: 4.86
+  Movement: 0.500m
+  Distance to goal: 2.66m
+  Reward: 4.857
+HL Step 17:
+  Observation: dist=2.66m, angle=-0.21rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.6408377 0.0099186 4.8238535] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [3.6408377 0.0099186 4.8238535]
+Movement: 0.50m
+Distance: 2.7m → 2.2m
+Progress: 0.49m
+Reward: 4.81
+  Movement: 0.500m
+  Distance to goal: 2.18m
+  Reward: 4.814
+HL Step 18:
+  Observation: dist=2.18m, angle=-0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.7134466  0.01467854 4.3238535 ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [3.7134466  0.01467854 4.3238535 ]
+Movement: 0.50m
+Distance: 2.2m → 1.7m
+Progress: 0.48m
+Reward: 4.73
+  Movement: 0.500m
+  Distance to goal: 1.70m
+  Reward: 4.734
+HL Step 19:
+  Observation: dist=1.70m, angle=-0.34rad
+  Action (direction): 0
+  ✓ Valid subgoal: [3.4311702 0.1757603 3.8558702] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [3.4311702 0.1757603 3.8558702]
+Movement: 0.50m
+Distance: 1.7m → 1.2m
+Progress: 0.46m
+Reward: 4.56
+  Movement: 0.500m
+  Distance to goal: 1.24m
+  Reward: 4.562
+HL Step 20:
+  Observation: dist=1.24m, angle=-0.47rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-2.437869    0.12292951 10.101398  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 6
+Subgoal: [-2.437869    0.12292951 10.101398  ]
+Movement: 0.00m
+Distance: 1.2m → 1.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.24m
+  Reward: -1.050
+
+✗ Episode timeout at 1.24m from goal
+
+[HL RESET]
+Agent: [ 4.9533186  0.2030575 11.704188 ]
+Goal: [-2.377306    0.21140826 17.641201  ]
+Distance: 9.4m
+
+EPISODE 12/20
+----------------------------------------------------------------------
+Start Position : [ 4.9533186  0.2030575 11.704188 ]
+Main Goal      : [-2.377306    0.21140826 17.641201  ]
+Start Distance : 9.43m
+
+HL Step 1:
+  Observation: dist=9.43m, angle=-2.25rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.290689    0.20991862 15.480414  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 0.290689    0.20991862 15.480414  ]
+Movement: 8.18m
+Distance: 9.4m → 2.7m
+Progress: 6.71m
+Reward: 72.10
+  Movement: 8.184m
+  Distance to goal: 2.72m
+  Reward: 72.097
+HL Step 2:
+  Observation: dist=2.72m, angle=0.10rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.1472871   0.07876453 20.914536  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [-2.1472871   0.07876453 20.914536  ]
+Movement: 5.97m
+Distance: 2.7m → 3.3m
+Progress: -0.55m
+Reward: -5.58
+  Movement: 5.974m
+  Distance to goal: 3.27m
+  Reward: -5.580
+HL Step 3:
+  Observation: dist=3.27m, angle=2.76rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.943842    0.20991862 14.968555  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-2.943842    0.20991862 14.968555  ]
+Movement: 7.10m
+Distance: 3.3m → 3.9m
+Progress: -0.67m
+Reward: -6.72
+  Movement: 7.104m
+  Distance to goal: 3.94m
+  Reward: -6.724
+HL Step 4:
+  Observation: dist=3.94m, angle=1.72rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.297885    0.09842737 19.39703   ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-1.297885    0.09842737 19.39703   ]
+Movement: 6.82m
+Distance: 3.9m → 2.9m
+Progress: 1.00m
+Reward: 11.96
+  Movement: 6.816m
+  Distance to goal: 2.94m
+  Reward: 11.959
+HL Step 5:
+  Observation: dist=2.94m, angle=1.10rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 0.2408371   0.20991862 14.023853  ] (dist=5.6m)
+
+=== HL Step 5 ===
+Action: 1
+Subgoal: [ 0.2408371   0.20991862 14.023853  ]
+Movement: 3.42m
+Distance: 2.9m → 0.6m
+Progress: 2.37m
+Reward: 78.63
+  Movement: 3.420m
+  Distance to goal: 0.57m
+  Reward: 78.628
+
+✓✓✓ MAIN GOAL REACHED in 5 steps! ✓✓✓
+
+[HL RESET]
+Agent: [-0.5902309  0.0099186  4.3802986]
+Goal: [-4.7086086  0.3846305 17.66273  ]
+Distance: 13.9m
+
+EPISODE 13/20
+----------------------------------------------------------------------
+Start Position : [-0.5902309  0.0099186  4.3802986]
+Main Goal      : [-4.7086086  0.3846305 17.66273  ]
+Start Distance : 13.91m
+
+HL Step 1:
+  Observation: dist=13.91m, angle=-2.84rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.3671474   0.12321827 10.111142  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-2.3671474   0.12321827 10.111142  ]
+Movement: 1.47m
+Distance: 13.9m → 13.5m
+Progress: 0.40m
+Reward: 4.00
+  Movement: 1.470m
+  Distance to goal: 13.51m
+  Reward: 3.997
+HL Step 2:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 3:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=13.51m, angle=-1.20rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-3.236573   0.1283153 10.307194 ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-3.236573   0.1283153 10.307194 ]
+Movement: 0.00m
+Distance: 13.5m → 13.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 13.51m
+  Reward: -1.050
+
+✗ Episode timeout at 13.51m from goal
+
+[HL RESET]
+Agent: [5.4796124  0.20781529 8.484399  ]
+Goal: [-6.2749043   0.20991862 15.676916  ]
+Distance: 13.8m
+
+EPISODE 14/20
+----------------------------------------------------------------------
+Start Position : [5.4796124  0.20781529 8.484399  ]
+Main Goal      : [-6.2749043   0.20991862 15.676916  ]
+Start Distance : 13.78m
+
+HL Step 1:
+  Observation: dist=13.78m, angle=-2.12rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 0.36170483  0.17595178 11.616015  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 0.36170483  0.17595178 11.616015  ]
+Movement: 8.22m
+Distance: 13.8m → 6.4m
+Progress: 7.41m
+Reward: 79.09
+  Movement: 8.218m
+  Distance to goal: 6.37m
+  Reward: 79.088
+HL Step 2:
+  Observation: dist=6.37m, angle=0.82rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-7.514282    0.20991862 11.410034  ] (dist=5.1m)
+
+=== HL Step 2 ===
+Action: 1
+Subgoal: [-7.514282    0.20991862 11.410034  ]
+Movement: 5.75m
+Distance: 6.4m → 2.5m
+Progress: 3.82m
+Reward: 43.16
+  Movement: 5.748m
+  Distance to goal: 2.55m
+  Reward: 43.163
+HL Step 3:
+  Observation: dist=2.55m, angle=-2.75rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.667572    0.29568985 18.73488   ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-4.667572    0.29568985 18.73488   ]
+Movement: 0.35m
+Distance: 2.5m → 2.2m
+Progress: 0.30m
+Reward: 1.99
+  Movement: 0.350m
+  Distance to goal: 2.24m
+  Reward: 1.989
+HL Step 4:
+  Observation: dist=2.24m, angle=-1.25rad
+  Action (direction): 7
+  ✓ Valid subgoal: [-1.615458    0.20991862 15.134411  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [-1.615458    0.20991862 15.134411  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=2.24m, angle=-0.56rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-2.3649797   0.13670671 10.60379   ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 6
+Subgoal: [-2.3649797   0.13670671 10.60379   ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=2.24m, angle=-0.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-4.289099    0.29588896 18.868036  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-4.289099    0.29588896 18.868036  ]
+Movement: 0.00m
+Distance: 2.2m → 2.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.24m
+  Reward: -1.050
+
+✗ Episode timeout at 2.24m from goal
+
+[HL RESET]
+Agent: [-1.2841496   0.08313899 19.973091  ]
+Goal: [ 3.2135441   0.19593884 12.398968  ]
+Distance: 8.8m
+
+EPISODE 15/20
+----------------------------------------------------------------------
+Start Position : [-1.2841496   0.08313899 19.973091  ]
+Main Goal      : [ 3.2135441   0.19593884 12.398968  ]
+Start Distance : 8.81m
+
+HL Step 1:
+  Observation: dist=8.81m, angle=0.54rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.5300183   0.03009486 18.491386  ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 4.5300183   0.03009486 18.491386  ]
+Movement: 6.67m
+Distance: 8.8m → 5.9m
+Progress: 2.90m
+Reward: 33.92
+  Movement: 6.672m
+  Distance to goal: 5.91m
+  Reward: 33.922
+HL Step 2:
+  Observation: dist=5.91m, angle=2.47rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 3.185358    0.19341858 12.314809  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [ 3.185358    0.19341858 12.314809  ]
+Movement: 6.97m
+Distance: 5.9m → 1.5m
+Progress: 4.44m
+Reward: 49.33
+  Movement: 6.971m
+  Distance to goal: 1.47m
+  Reward: 49.331
+HL Step 3:
+  Observation: dist=1.47m, angle=0.92rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.133715   0.1109964 17.380657 ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 1
+Subgoal: [ 4.133715   0.1109964 17.380657 ]
+Movement: 3.20m
+Distance: 1.5m → 1.7m
+Progress: -0.26m
+Reward: -2.61
+  Movement: 3.196m
+  Distance to goal: 1.73m
+  Reward: -2.610
+HL Step 4:
+  Observation: dist=1.73m, angle=2.69rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.9254508   0.16796428 11.350493  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-0.9254508   0.16796428 11.350493  ]
+Movement: 5.10m
+Distance: 1.7m → 3.9m
+Progress: -2.20m
+Reward: -22.03
+  Movement: 5.099m
+  Distance to goal: 3.93m
+  Reward: -22.031
+HL Step 5:
+  Observation: dist=3.93m, angle=2.24rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 4.754815    0.19049853 11.014751  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [ 4.754815    0.19049853 11.014751  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=3.93m, angle=2.06rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 4.754815    0.19049853 11.014751  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [ 4.754815    0.19049853 11.014751  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=3.93m, angle=1.89rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 4.754815    0.19049853 11.014751  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [ 4.754815    0.19049853 11.014751  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=3.93m, angle=1.71rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 4.754815    0.19049853 11.014751  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [ 4.754815    0.19049853 11.014751  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=3.93m, angle=1.54rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 9 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=3.93m, angle=1.36rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=3.93m, angle=1.19rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=3.93m, angle=1.01rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=3.93m, angle=0.84rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 13 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=3.93m, angle=0.66rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 15.345499  ] (dist=4.8m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 15.345499  ]
+Movement: 0.00m
+Distance: 3.9m → 3.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.93m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=3.93m, angle=0.49rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.718265    0.13508338 10.5598755 ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 6
+Subgoal: [-3.718265    0.13508338 10.5598755 ]
+Movement: 0.22m
+Distance: 3.9m → 3.8m
+Progress: 0.18m
+Reward: 0.73
+  Movement: 0.222m
+  Distance to goal: 3.75m
+  Reward: 0.732
+HL Step 16:
+  Observation: dist=3.75m, angle=0.46rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.6490707   0.13828522 10.676038  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 6
+Subgoal: [-3.6490707   0.13828522 10.676038  ]
+Movement: 0.22m
+Distance: 3.8m → 3.6m
+Progress: 0.17m
+Reward: 0.68
+  Movement: 0.222m
+  Distance to goal: 3.58m
+  Reward: 0.683
+HL Step 17:
+  Observation: dist=3.58m, angle=0.42rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.5890605   0.14202425 10.811927  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 6
+Subgoal: [-3.5890605   0.14202425 10.811927  ]
+Movement: 0.50m
+Distance: 3.6m → 3.1m
+Progress: 0.45m
+Reward: 4.45
+  Movement: 0.500m
+  Distance to goal: 3.13m
+  Reward: 4.454
+HL Step 18:
+  Observation: dist=3.13m, angle=0.48rad
+  Action (direction): 6
+  ✓ Valid subgoal: [-3.1388676   0.12186608 10.070522  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 6
+Subgoal: [-3.1388676   0.12186608 10.070522  ]
+Movement: 0.50m
+Distance: 3.1m → 2.7m
+Progress: 0.43m
+Reward: 4.28
+  Movement: 0.500m
+  Distance to goal: 2.69m
+  Reward: 4.279
+HL Step 19:
+  Observation: dist=2.69m, angle=0.57rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 5.0408373   0.20991862 14.828231  ] (dist=4.0m)
+
+=== HL Step 19 ===
+Action: 1
+Subgoal: [ 5.0408373   0.20991862 14.828231  ]
+Movement: 0.00m
+Distance: 2.7m → 2.7m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 2.69m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=2.69m, angle=0.39rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 5.840042    0.20991862 10.390531  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [ 5.840042    0.20991862 10.390531  ]
+Movement: 0.50m
+Distance: 2.7m → 2.2m
+Progress: 0.45m
+Reward: 3.48
+  Movement: 0.500m
+  Distance to goal: 2.24m
+  Reward: 3.484
+
+✗ Episode timeout at 2.24m from goal
+
+[HL RESET]
+Agent: [-4.1057158   0.20991862 13.976309  ]
+Goal: [ 3.8349702   0.05735138 18.279018  ]
+Distance: 9.0m
+
+EPISODE 16/20
+----------------------------------------------------------------------
+Start Position : [-4.1057158   0.20991862 13.976309  ]
+Main Goal      : [ 3.8349702   0.05735138 18.279018  ]
+Start Distance : 9.03m
+
+HL Step 1:
+  Observation: dist=9.03m, angle=2.07rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1696177   0.15477273 16.83478   ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [ 1.1696177   0.15477273 16.83478   ]
+Movement: 7.16m
+Distance: 9.0m → 2.2m
+Progress: 6.80m
+Reward: 72.97
+  Movement: 7.157m
+  Distance to goal: 2.23m
+  Reward: 72.973
+HL Step 2:
+  Observation: dist=2.23m, angle=-0.92rad
+  Action (direction): 7
+  ✓ Valid subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01] (dist=4.7m)
+
+=== HL Step 2 ===
+Action: 7
+Subgoal: [6.5908375e+00 9.9186003e-03 1.8873852e+01]
+Movement: 5.31m
+Distance: 2.2m → 3.3m
+Progress: -1.09m
+Reward: -10.97
+  Movement: 5.312m
+  Distance to goal: 3.32m
+  Reward: -10.969
+HL Step 3:
+  Observation: dist=3.32m, angle=-1.52rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 1.3291712   0.20422882 21.825047  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 7
+Subgoal: [ 1.3291712   0.20422882 21.825047  ]
+Movement: 7.76m
+Distance: 3.3m → 5.2m
+Progress: -1.84m
+Reward: -18.42
+  Movement: 7.759m
+  Distance to goal: 5.16m
+  Reward: -18.425
+HL Step 4:
+  Observation: dist=5.16m, angle=-2.02rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 1.1575866   0.20991862 14.862457  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 7
+Subgoal: [ 1.1575866   0.20991862 14.862457  ]
+Movement: 6.48m
+Distance: 5.2m → 1.5m
+Progress: 3.70m
+Reward: 41.96
+  Movement: 6.476m
+  Distance to goal: 1.46m
+  Reward: 41.959
+HL Step 5:
+  Observation: dist=1.46m, angle=-2.87rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=1.46m, angle=-2.70rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=1.46m, angle=-2.52rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=1.46m, angle=-2.35rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=1.46m, angle=-2.17rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=1.46m, angle=-2.00rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=1.46m, angle=-1.82rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=1.46m, angle=-1.65rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=1.46m, angle=-1.48rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=1.46m, angle=-1.30rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=1.46m, angle=-1.13rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=1.46m, angle=-0.95rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=1.46m, angle=-0.78rad
+  Action (direction): 7
+  ✓ Valid subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 7
+Subgoal: [5.6908369e+00 9.9186003e-03 2.3009796e+01]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=1.46m, angle=-0.60rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 6.8908367   0.20991862 19.573853  ] (dist=3.3m)
+
+=== HL Step 18 ===
+Action: 6
+Subgoal: [ 6.8908367   0.20991862 19.573853  ]
+Movement: 0.00m
+Distance: 1.5m → 1.5m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.46m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=1.46m, angle=-0.43rad
+  Action (direction): 0
+  ✓ Valid subgoal: [ 1.1987801   0.20610397 21.979387  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [ 1.1987801   0.20610397 21.979387  ]
+Movement: 0.50m
+Distance: 1.5m → 1.0m
+Progress: 0.43m
+Reward: 4.29
+  Movement: 0.501m
+  Distance to goal: 1.02m
+  Reward: 4.293
+HL Step 20:
+  Observation: dist=1.02m, angle=-0.63rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 6.8908367   0.20991862 19.573853  ] (dist=3.5m)
+
+=== HL Step 20 ===
+Action: 6
+Subgoal: [ 6.8908367   0.20991862 19.573853  ]
+Movement: 0.00m
+Distance: 1.0m → 1.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 1.02m
+  Reward: -1.050
+
+✗ Episode timeout at 1.02m from goal
+
+[HL RESET]
+Agent: [-4.720066   0.2099186 16.615532 ]
+Goal: [6.9824276  0.20991862 8.6025505 ]
+Distance: 14.2m
+
+EPISODE 17/20
+----------------------------------------------------------------------
+Start Position : [-4.720066   0.2099186 16.615532 ]
+Main Goal      : [6.9824276  0.20991862 8.6025505 ]
+Start Distance : 14.18m
+
+HL Step 1:
+  Observation: dist=14.18m, angle=0.97rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 1.1775537   0.16440557 17.7192    ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [ 1.1775537   0.16440557 17.7192    ]
+Movement: 4.17m
+Distance: 14.2m → 10.0m
+Progress: 4.17m
+Reward: 46.60
+  Movement: 4.174m
+  Distance to goal: 10.02m
+  Reward: 46.603
+HL Step 2:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 3:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=10.02m, angle=-0.58rad
+  Action (direction): 1
+  ✓ Valid subgoal: [ 4.461984    0.20991862 15.310639  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 1
+Subgoal: [ 4.461984    0.20991862 15.310639  ]
+Movement: 0.00m
+Distance: 10.0m → 10.0m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 10.02m
+  Reward: -1.050
+
+✗ Episode timeout at 10.02m from goal
+
+[HL RESET]
+Agent: [ 3.6034086   0.20991862 15.499431  ]
+Goal: [-3.308503   0.0824665 21.376244 ]
+Distance: 9.1m
+
+EPISODE 18/20
+----------------------------------------------------------------------
+Start Position : [ 3.6034086   0.20991862 15.499431  ]
+Main Goal      : [-3.308503   0.0824665 21.376244 ]
+Start Distance : 9.07m
+
+HL Step 1:
+  Observation: dist=9.07m, angle=-2.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.9676764   0.10048343 19.38597   ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-0.9676764   0.10048343 19.38597   ]
+Movement: 3.67m
+Distance: 9.1m → 8.2m
+Progress: 0.91m
+Reward: 9.03
+  Movement: 3.672m
+  Distance to goal: 8.17m
+  Reward: 9.032
+HL Step 2:
+  Observation: dist=8.17m, angle=-1.12rad
+  Action (direction): 7
+  ✓ Valid subgoal: [ 2.2171266   0.14226605 19.689034  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 7
+Subgoal: [ 2.2171266   0.14226605 19.689034  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 3:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 5 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 6 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 7 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 8 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 9 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 10 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 11 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 12 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 13 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 14 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 15 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 16 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 17 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 18 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 19 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=8.17m, angle=-0.42rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-5.424344    0.20991862 16.000143  ] (dist=6.0m)
+
+=== HL Step 20 ===
+Action: 1
+Subgoal: [-5.424344    0.20991862 16.000143  ]
+Movement: 0.00m
+Distance: 8.2m → 8.2m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 8.17m
+  Reward: -1.050
+
+✗ Episode timeout at 8.17m from goal
+
+[HL RESET]
+Agent: [ 2.5735364   0.10095222 17.373243  ]
+Goal: [-6.379057    0.02969594 23.09909   ]
+Distance: 10.6m
+
+EPISODE 19/20
+----------------------------------------------------------------------
+Start Position : [ 2.5735364   0.10095222 17.373243  ]
+Main Goal      : [-6.379057    0.02969594 23.09909   ]
+Start Distance : 10.63m
+
+HL Step 1:
+  Observation: dist=10.63m, angle=-2.14rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-2.4810686   0.11455739 20.60604   ] (dist=6.0m)
+
+=== HL Step 1 ===
+Action: 0
+Subgoal: [-2.4810686   0.11455739 20.60604   ]
+Movement: 8.23m
+Distance: 10.6m → 3.6m
+Progress: 7.00m
+Reward: 74.99
+  Movement: 8.234m
+  Distance to goal: 3.62m
+  Reward: 74.985
+HL Step 2:
+  Observation: dist=3.62m, angle=0.46rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 0.4051566   0.14300993 21.342514  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 6
+Subgoal: [ 0.4051566   0.14300993 21.342514  ]
+Movement: 4.24m
+Distance: 3.6m → 2.8m
+Progress: 0.78m
+Reward: 7.74
+  Movement: 4.243m
+  Distance to goal: 2.84m
+  Reward: 7.740
+HL Step 3:
+  Observation: dist=2.84m, angle=2.58rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.109163    0.33315265 22.92054   ] (dist=3.6m)
+
+=== HL Step 3 ===
+Action: 0
+Subgoal: [-7.109163    0.33315265 22.92054   ]
+Movement: 2.73m
+Distance: 2.8m → 1.0m
+Progress: 1.81m
+Reward: 20.01
+  Movement: 2.729m
+  Distance to goal: 1.04m
+  Reward: 20.008
+HL Step 4:
+  Observation: dist=1.04m, angle=1.23rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-2.717565    0.18024205 19.24443   ] (dist=6.0m)
+
+=== HL Step 4 ===
+Action: 1
+Subgoal: [-2.717565    0.18024205 19.24443   ]
+Movement: 0.16m
+Distance: 1.0m → 0.9m
+Progress: 0.14m
+Reward: 0.32
+  Movement: 0.158m
+  Distance to goal: 0.90m
+  Reward: 0.317
+HL Step 5:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=0.90m, angle=0.28rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-7.2883263   0.07721853 18.139551  ] (dist=5.9m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-7.2883263   0.07721853 18.139551  ]
+Movement: 0.00m
+Distance: 0.9m → 0.9m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 0.90m
+  Reward: -1.050
+
+✗ Episode timeout at 0.90m from goal
+
+[HL RESET]
+Agent: [-7.0963554   0.20788021 15.76164   ]
+Goal: [-0.5739765  0.0099186  4.455639 ]
+Distance: 13.1m
+
+EPISODE 20/20
+----------------------------------------------------------------------
+Start Position : [-7.0963554   0.20788021 15.76164   ]
+Main Goal      : [-0.5739765  0.0099186  4.455639 ]
+Start Distance : 13.05m
+
+HL Step 1:
+  Observation: dist=13.05m, angle=0.52rad
+  Action (direction): 1
+  ✓ Valid subgoal: [-1.4091625   0.20991862 14.173853  ] (dist=5.9m)
+
+=== HL Step 1 ===
+Action: 1
+Subgoal: [-1.4091625   0.20991862 14.173853  ]
+Movement: 6.70m
+Distance: 13.1m → 8.3m
+Progress: 4.76m
+Reward: 52.50
+  Movement: 6.703m
+  Distance to goal: 8.30m
+  Reward: 52.504
+HL Step 2:
+  Observation: dist=8.30m, angle=-2.38rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-0.7238617   0.02783248  6.746911  ] (dist=6.0m)
+
+=== HL Step 2 ===
+Action: 0
+Subgoal: [-0.7238617   0.02783248  6.746911  ]
+Movement: 8.32m
+Distance: 8.3m → 3.3m
+Progress: 4.97m
+Reward: 54.68
+  Movement: 8.324m
+  Distance to goal: 3.33m
+  Reward: 54.677
+HL Step 3:
+  Observation: dist=3.33m, angle=-0.61rad
+  Action (direction): 6
+  ✓ Valid subgoal: [ 1.1031567   0.15950878 11.1076145 ] (dist=6.0m)
+
+=== HL Step 3 ===
+Action: 6
+Subgoal: [ 1.1031567   0.15950878 11.1076145 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 4:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 4 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 5:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 5 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 6:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 6 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 7:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 7 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 8:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 8 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 9:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 9 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 10:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 10 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 11:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 11 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 12:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 12 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 13:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 13 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 14:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 14 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 15:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 15 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 16:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 16 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 17:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 17 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 18:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 18 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 19:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 19 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+HL Step 20:
+  Observation: dist=3.33m, angle=0.26rad
+  Action (direction): 0
+  ✓ Valid subgoal: [-1.9757756  0.0099186  4.006918 ] (dist=4.8m)
+
+=== HL Step 20 ===
+Action: 0
+Subgoal: [-1.9757756  0.0099186  4.006918 ]
+Movement: 0.00m
+Distance: 3.3m → 3.3m
+Progress: 0.00m
+Reward: -1.05
+  Movement: 0.000m
+  Distance to goal: 3.33m
+  Reward: -1.050
+
+✗ Episode timeout at 3.33m from goal
+
+Subgoal generation stats: 100% valid (20/20)
+
+======================================================================
+EVALUATION RESULTS
+======================================================================
+
+Success Rate    : 15.0% (3/20)
+Average Steps   : 10.0
+Avg Final Dist  : 4.67m
+
+✓ System is working! 3/20 episodes successful
+======================================================================

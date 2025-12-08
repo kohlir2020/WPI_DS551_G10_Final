@@ -19,7 +19,7 @@ for step in range(100):
     actions_taken.append(action_names[action])
     
     if done:
-        print(f"✓ Reached goal in {step} steps!")
+        print(f"Reached goal in {step} steps!")
         break
 
 env.close()
