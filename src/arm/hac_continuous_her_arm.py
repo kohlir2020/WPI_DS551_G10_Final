@@ -237,7 +237,7 @@ class TD3Agent:
         for t_param, s_param in zip(target.parameters(), source.parameters()):
             t_param.data.copy_(self.tau * s_param.data + (1.0 - self.tau) * t_param.data)
 
-    def update(self, updates_per_step: int = 1):
+    def update(self, updates_per_step: int = 2):
         if len(self.buffer) < self.batch_size:
             return 0.0
 
@@ -255,7 +255,7 @@ class TD3Agent:
                 target_q = r + (1.0 - d) * self.gamma * torch.min(q21, q22)
 
             q1 = self.critic_1(s, a)
-            q2 = self.critic_1(s, a)
+            q2 = self.critic_2(s, a)
 
             critic_1_loss = nn.functional.mse_loss(q1, target_q)
             critic_2_loss = nn.functional.mse_loss(q2, target_q)
@@ -288,10 +288,6 @@ class TD3Agent:
             self.total_updates += 1
 
         return total_loss / float(updates_per_step)
-
-
-
-
 
 
 # ============================================================
@@ -500,31 +496,41 @@ class HighLevelTD3HERTrainer:
                 if done_h:
                     break
 
-            # HER: use final achieved position as pseudo-goal
+            # HER: Future Strategy (k=4)
+            # For each transition, sample k goals from the future of the trajectory
+            k_future = 4
             if len(her_steps) > 0:
-                final_pos = her_steps[-1]["pos_after"]
-                pseudo_goal = final_pos.copy()
+                for t, step in enumerate(her_steps):
+                    # Sample future indices (including current step to end)
+                    future_indices = np.random.randint(t, len(her_steps), size=k_future)
+                    
+                    for f_idx in future_indices:
+                        future_pos = her_steps[f_idx]["pos_after"]
+                        pseudo_goal = future_pos.copy()
 
-                for step in her_steps:
-                    pb = step["pos_before"]
-                    pa = step["pos_after"]
-                    act = step["action"]
+                        pb = step["pos_before"]
+                        pa = step["pos_after"]
+                        act = step["action"]
 
-                    s_her = self._get_hl_state_for_goal(pb, pseudo_goal)
-                    s_next_her = self._get_hl_state_for_goal(pa, pseudo_goal)
+                        s_her = self._get_hl_state_for_goal(pb, pseudo_goal)
+                        s_next_her = self._get_hl_state_for_goal(pa, pseudo_goal)
 
-                    dist_next = np.linalg.norm(pa - pseudo_goal)
-                    if dist_next < self.args.main_goal_success_radius:
-                        r_her = self.args.hl_success_bonus
-                        d_her = True
-                    else:
-                        r_her = -self.args.hl_time_penalty
-                        d_her = False
+                        dist_next = np.linalg.norm(pa - pseudo_goal)
+                        if dist_next < self.args.main_goal_success_radius:
+                            r_her = self.args.hl_success_bonus
+                            d_her = True
+                        else:
+                            r_her = -self.args.hl_time_penalty
+                            d_her = False
 
-                    self.agent.store(s_her, act, r_her, s_next_her, d_her)
-                    loss = self.agent.update(self.args.hl_updates_per_step)
-                    if loss is not None:
-                        ep_losses.append(loss)
+                        self.agent.store(s_her, act, r_her, s_next_her, d_her)
+                        
+                        # Optional: Update on HER data immediately (can be computationally expensive)
+                        # To save time, we can update less frequently or just rely on the main loop updates
+                        # But for sample efficiency, we update here.
+                        loss = self.agent.update(self.args.hl_updates_per_step)
+                        if loss is not None:
+                            ep_losses.append(loss)
 
             if final_main_dist is None:
                 pos = self.get_ee_pos(self.env.arm_angles)
@@ -789,7 +795,7 @@ def parse_args():
     p.add_argument("--hl_init_noise_std", type=float, default=0.3)
     p.add_argument("--hl_min_noise_std", type=float, default=0.05)
     p.add_argument("--hl_noise_decay_episodes", type=int, default=5000)
-    p.add_argument("--hl_updates_per_step", type=int, default=1)
+    p.add_argument("--hl_updates_per_step", type=int, default=2)
 
     # HL reward shaping
     p.add_argument("--hl_progress_scale", type=float, default=10.0)
@@ -836,7 +842,7 @@ def main():
         buffer_capacity=args.hl_buffer,
         batch_size=args.hl_batch,
         device=device,
-        max_action=1.0,
+        max_action=args.subgoal_offset_scale,
         init_noise_std=args.hl_init_noise_std,
         min_noise_std=args.hl_min_noise_std,
         noise_decay_episodes=args.hl_noise_decay_episodes,
