@@ -26,7 +26,7 @@ import torch.nn as nn
 import torch.optim as optim
 import gymnasium as gym
 
-from simple_arm_reaching_env import SimpleArmReachingEnv
+from habitat_arm_reaching_env import HabitatArmReachingEnv
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
@@ -35,18 +35,25 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+import sys
+# Map the new 'numpy._core' to the old 'numpy.core' so the model loads
+if 'numpy._core' not in sys.modules:
+    sys.modules['numpy._core'] = np.core
+if 'numpy._core.numeric' not in sys.modules:
+    sys.modules['numpy._core.numeric'] = np.core.numeric
+
 
 # ============================================================
 # 1. General utils
 # ============================================================
 
-def get_ee_pos(angles):
-    """
-    Compute End-Effector position from joint angles.
-    Must match SimpleArmReachingEnv._get_observation logic.
-    """
-    # ee_pos = np.sum(np.sin(self.arm_angles[:3])) * np.array([1, 1, 1])
-    return np.sum(np.sin(angles[:3])) * np.array([1, 1, 1], dtype=np.float32)
+# def get_ee_pos(angles):
+#     """
+#     Compute End-Effector position from joint angles.
+#     Must match SimpleArmReachingEnv._get_observation logic.
+#     """
+#     # ee_pos = np.sum(np.sin(self.arm_angles[:3])) * np.array([1, 1, 1])
+#     return np.sum(np.sin(angles[:3])) * np.array([1, 1, 1], dtype=np.float32)
 
 def set_seed(seed: int):
     random.seed(seed)
@@ -119,7 +126,7 @@ class Actor(nn.Module):
         )
 
     def forward(self, x):
-        return self.net(x) * 0.3
+        return self.net(x) * 1.0
 
 
 class Critic(nn.Module):
@@ -164,7 +171,8 @@ class TD3Agent:
         self.gamma = gamma
         self.tau = tau
         self.batch_size = batch_size
-        self.policy_delay = 2  
+        self.policy_delay = 2
+        self.subgoal_stepsize = 1.0
 
         self.actor = Actor(state_dim, action_dim).to(device)
         self.critic_1 = Critic(state_dim, action_dim).to(device)
@@ -198,24 +206,22 @@ class TD3Agent:
         return self.min_noise_std + (self.init_noise_std - self.min_noise_std) * frac
 
     def select_action(self, state: np.ndarray, greedy: bool = False) -> np.ndarray:
-        s = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
+        state_t = torch.as_tensor(state, dtype=torch.float32, device=self.device).unsqueeze(0)
         with torch.no_grad():
-            a = self.actor(s).cpu().numpy()[0]
-        if not greedy:
-            noise = np.random.normal(0.0, self._noise_std(), size=self.action_dim)
-            a = a + np.clip(noise, -0.1, 0.1)
-        a = np.clip(a, -0.3, 0.3)
-        return a.astype(np.float32)
-    
-    def select_target_action(self, state: np.ndarray, greedy: bool = False) -> np.ndarray:
-        s = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
+            a = self.actor(state_t)
+            if not greedy:
+                noise = torch.randn_like(a) * self._noise_std()
+                a = a + torch.clamp(noise, -0.1, 0.1)
+            a = torch.clamp(a, -self.subgoal_stepsize, self.subgoal_stepsize)
+        return a.cpu().numpy()[0]
+
+    def select_target_action(self, state: torch.Tensor) -> torch.Tensor:
         with torch.no_grad():
-            a = self.target_actor(s).cpu().numpy()[0]
-        if not greedy:
-            noise = np.random.normal(0.0, self._noise_std(), size=self.action_dim)
-            a = a + np.clip(noise, -0.1, 0.1)
-        a = np.clip(a, -0.3, 0.3)
-        return a.astype(np.float32)
+            a = self.target_actor(state)
+            noise = torch.randn_like(a) * self._noise_std()
+            a = a + torch.clamp(noise, -0.1, 0.1)
+            a = torch.clamp(a, -self.subgoal_stepsize, self.subgoal_stepsize)
+        return a
 
     def store(self, state, action, reward, next_state, done):
         self.buffer.push(state, action, reward, next_state, done)
@@ -292,8 +298,8 @@ def train_low_level_ppo(args):
     print("\n=== LOW-LEVEL PPO TRAINING ===")
     os.makedirs(os.path.dirname(args.low_model_path), exist_ok=True)
 
-    env = SimpleArmReachingEnv(max_steps=200)
-    eval_env = SimpleArmReachingEnv(max_steps=200)
+    env = HabitatArmReachingEnv(max_steps=200)
+    eval_env = HabitatArmReachingEnv(max_steps=200)
 
     model = PPO(
         "MlpPolicy",
@@ -348,13 +354,13 @@ class HighLevelTD3HERTrainer:
 
     def __init__(
         self,
-        env: SimpleArmReachingEnv,
-        low_model_path: str,
+        env: HabitatArmReachingEnv,
+        ll_agent,
         hl_agent: TD3Agent,
         args,
     ):
         self.env = env
-        self.low = PPO.load(low_model_path)
+        self.low = ll_agent
         self.low.policy.eval()  # freeze weights
         self.agent = hl_agent
         self.args = args
@@ -380,7 +386,7 @@ class HighLevelTD3HERTrainer:
         return hl_state
 
     def _get_current_hl_state(self):
-        agent_pos = get_ee_pos(self.env.arm_angles)
+        agent_pos = self.get_ee_pos(self.env.arm_angles)
         return self._get_hl_state_for_goal(agent_pos, self.main_goal)
 
     def _sample_main_goal(self, agent_pos):
@@ -392,6 +398,9 @@ class HighLevelTD3HERTrainer:
         action, _ = self.low.predict(obs, deterministic=True)
         return action
 
+    def get_ee_pos(self, angles):
+        return self.env._forward_kinematics(angles)
+
     # ---- Training loop ----
 
     def train(self):
@@ -402,7 +411,7 @@ class HighLevelTD3HERTrainer:
             self.agent.set_episode(ep)
 
             obs_ll, _ = self.env.reset()
-            a_pos = get_ee_pos(self.env.arm_angles)
+            a_pos = self.get_ee_pos(self.env.arm_angles)
 
             self.main_goal = self._sample_main_goal(a_pos)
             self.env.goal_position = np.array(self.main_goal, dtype=np.float32)
@@ -417,7 +426,7 @@ class HighLevelTD3HERTrainer:
 
             for hl_step in range(self.args.max_high_steps):
                 # state before HL action
-                pos_before = get_ee_pos(self.env.arm_angles)
+                pos_before = self.get_ee_pos(self.env.arm_angles)
 
                 s_h = self._get_hl_state_for_goal(pos_before, self.main_goal)
 
@@ -438,7 +447,7 @@ class HighLevelTD3HERTrainer:
                     
                     obs_l, _, done_l, trunc_l, _ = self.env.step(ll_action)
 
-                    cur_pos = get_ee_pos(self.env.arm_angles)
+                    cur_pos = obs_l[1]
                     d_sub = np.linalg.norm(cur_pos - subgoal)
                     if d_sub < self.args.subgoal_success_radius:
                         break
@@ -446,7 +455,7 @@ class HighLevelTD3HERTrainer:
                         break
 
                 # state after rollout
-                pos_after = get_ee_pos(self.env.arm_angles)
+                pos_after = self.get_ee_pos(self.env.arm_angles)
 
                 # progress & reward w.r.t main goal
                 dist_before = np.linalg.norm(pos_before - self.main_goal)
@@ -511,7 +520,7 @@ class HighLevelTD3HERTrainer:
                         ep_losses.append(loss)
 
             if final_main_dist is None:
-                pos = get_ee_pos(self.env.arm_angles)
+                pos = self.get_ee_pos(self.env.arm_angles)
                 final_main_dist = float(np.linalg.norm(pos - self.main_goal))
 
             self.episode_rewards.append(ep_reward)
@@ -586,7 +595,7 @@ class HighLevelTD3HERTrainer:
           - distance-to-goal vs HL step
         """
         obs_ll, _ = self.env.reset()
-        a_pos = get_ee_pos(self.env.arm_angles)
+        a_pos = self.get_ee_pos(self.env.arm_angles)
 
         self.main_goal = self._sample_main_goal(a_pos)
         self.env.goal_position = np.array(self.main_goal, dtype=np.float32)
@@ -596,7 +605,7 @@ class HighLevelTD3HERTrainer:
         main_dists = []
 
         for hl_step in range(self.args.max_high_steps_eval):
-            pos = get_ee_pos(self.env.arm_angles)
+            pos = self.get_ee_pos(self.env.arm_angles)
 
             agent_traj.append(pos.copy())
             main_dists.append(np.linalg.norm(pos - self.main_goal))
@@ -614,7 +623,7 @@ class HighLevelTD3HERTrainer:
                 ll_action = self._low_level_policy(obs_l, subgoal)
                 _, _, done_l, trunc_l, _ = self.env.step(ll_action)
 
-                pos = get_ee_pos(self.env.arm_angles)
+                pos = self.get_ee_pos(self.env.arm_angles)
                 if np.linalg.norm(pos - subgoal) < self.args.subgoal_success_radius:
                     break
                 if done_l or trunc_l:
@@ -671,7 +680,7 @@ class HighLevelTD3HERTrainer:
 
         for ep in range(1, episodes + 1):
             obs_ll, _ = self.env.reset()
-            a_pos = get_ee_pos(self.env.arm_angles)
+            a_pos = self.get_ee_pos(self.env.arm_angles)
 
             self.main_goal = self._sample_main_goal(a_pos)
             self.env.goal_position = np.array(self.main_goal, dtype=np.float32)
@@ -679,7 +688,7 @@ class HighLevelTD3HERTrainer:
             ep_success = False
 
             for hl_step in range(self.args.max_high_steps_eval):
-                pos = get_ee_pos(self.env.arm_angles)
+                pos = self.get_ee_pos(self.env.arm_angles)
 
                 s_h = self._get_hl_state_for_goal(pos, self.main_goal)
                 action = self.agent.select_action(s_h, greedy=True)
@@ -693,7 +702,7 @@ class HighLevelTD3HERTrainer:
                     ll_action = self._low_level_policy(obs_l, subgoal)
                     _, _, done_l, trunc_l, _ = self.env.step(ll_action)
 
-                    pos = get_ee_pos(self.env.arm_angles)
+                    pos = self.get_ee_pos(self.env.arm_angles)
                     if np.linalg.norm(pos - subgoal) < self.args.subgoal_success_radius:
                         break
                     if done_l or trunc_l:
@@ -720,7 +729,7 @@ class HighLevelTD3HERTrainer:
 
 def parse_args():
     p = argparse.ArgumentParser(
-        description="Continuous HAC-style navigation with geodesic affordances + HER"
+        description="Continuous HAC-style Manipulation + HER"
     )
 
     # general
@@ -729,11 +738,12 @@ def parse_args():
     p.add_argument("--episodes", type=int, default=500,
                    help="HL training episodes")
     p.add_argument("--log_interval", type=int, default=10)
-    p.add_argument("--save_dir", type=str, default="hac_continuous_her_models")
+    p.add_argument("--save_dir", type=str, default="hac_continuous_her_arm_models")
 
     # low-level PPO
     p.add_argument("--low_model_path", type=str,
                    default="models/lowlevel_ppo")
+    # p.add_argument("--low_model_type", type=str, default="PPO")
     p.add_argument("--low_total_timesteps", type=int, default=250_000)
     p.add_argument("--skip_low_train", action="store_true",
                    help="Skip low-level PPO training if model exists")
@@ -747,12 +757,12 @@ def parse_args():
     # main goal
     p.add_argument("--main_goal_min_dist", type=float, default=8.0)
     p.add_argument("--main_goal_max_dist", type=float, default=20.0)
-    p.add_argument("--main_goal_success_radius", type=float, default=0.6)
+    p.add_argument("--main_goal_success_radius", type=float, default=0.15)
 
     # subgoals
     p.add_argument("--subgoal_base_step", type=float, default=3.0)
     p.add_argument("--subgoal_offset_scale", type=float, default=1.0)
-    p.add_argument("--subgoal_success_radius", type=float, default=0.8)
+    p.add_argument("--subgoal_success_radius", type=float, default=0.15)
     p.add_argument("--min_subgoal_movement", type=float, default=1.0)
 
     # horizons
@@ -802,7 +812,7 @@ def main():
     #     train_low_level_ppo(args)
 
     # ---- Stage 2: high-level TD3 + HER ----
-    env = SimpleArmReachingEnv(max_steps=200)
+    env = HabitatArmReachingEnv(max_steps=200)
 
     # HL state = [agent_x, agent_y, agent_z, goal_x, goal_y, goal_z, delta_x, delta_y, delta_z] -> dim=9
     state_dim = 9
@@ -823,9 +833,11 @@ def main():
         noise_decay_episodes=args.hl_noise_decay_episodes,
     )
 
+    ll_agent = PPO.load(args.low_model_path, device=device)
+
     trainer = HighLevelTD3HERTrainer(
         env=env,
-        low_model_path=args.low_model_path,
+        ll_agent=ll_agent,
         hl_agent=hl_agent,
         args=args,
     )
@@ -837,8 +849,8 @@ def main():
     hl_critic_1_path = os.path.join(args.save_dir, "hl_critic_1.pth")
     hl_critic_2_path = os.path.join(args.save_dir, "hl_critic_2.pth")
     torch.save(hl_agent.actor.state_dict(), hl_actor_path)
-    torch.save(hl_agent.critic.state_dict(), hl_critic_1_path)
-    torch.save(hl_agent.critic.state_dict(), hl_critic_2_path)
+    torch.save(hl_agent.critic_1.state_dict(), hl_critic_1_path)
+    torch.save(hl_agent.critic_2.state_dict(), hl_critic_2_path)
     print(f"Saved HL actor to  {hl_actor_path}")
     print(f"Saved HL critic_1 to {hl_critic_1_path}")
     print(f"Saved HL critic_2 to {hl_critic_2_path}")
