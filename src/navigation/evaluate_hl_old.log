@@ -13,12 +13,12 @@ HRL HIGH-LEVEL EVALUATION (CORRECTED)
 ======================================================================
 
 Creating environment...
-✓ Loaded low-level skill: models/lowlevel_curriculum_250k
-✓ Habitat simulator initialized.
-✓ Environment created
+oaded low-level skill: models/lowlevel_curriculum_250k
+Habitat simulator initialized.
+Environment created
 
 Loading high-level policy from: models/hl_improved/highlevel_improved_final
-✓ High-level policy loaded
+High-level policy loaded
 
 Evaluating for 20 episodes...
 
@@ -4727,7 +4727,7 @@ Reward: 51.55
   Distance to goal: 0.35m
   Reward: 51.550
 
-✓✓✓ MAIN GOAL REACHED in 13 steps! ✓✓✓
+MAIN GOAL REACHED in 13 steps! 
 
 Subgoal generation stats: 100% valid (13/13)
 
@@ -4739,5 +4739,5 @@ Success Rate    : 45.0% (9/20)
 Average Steps   : 8.3
 Avg Final Dist  : 2.29m
 
-✓ System is working! 9/20 episodes successful
+System is working! 9/20 episodes successful
 ======================================================================

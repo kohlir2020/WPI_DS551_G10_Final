@@ -33,8 +33,7 @@ class QNetwork(nn.Module):
 
 # DQN Agent
 class DQNAgent:
-    """DQN agent for high-level or low-level control"""
-    
+    #DQN agent for high-level or low-level control
     def __init__(self, state_dim, action_dim, lr=3e-4, gamma=0.99, device="cpu"):
         self.device = torch.device(device)
         self.action_dim = action_dim
@@ -47,6 +46,7 @@ class DQNAgent:
         self.optimizer = optim.Adam(self.q_net.parameters(), lr=lr)
         self.eps = 0.1  # Fixed epsilon for simplicity
     
+    # Select action using epsilon-greedy policy
     def select_action(self, state, greedy=False):
         if not greedy and random.random() < self.eps:
             return random.randint(0, self.action_dim - 1)
@@ -55,9 +55,9 @@ class DQNAgent:
             state_t = torch.FloatTensor(state).unsqueeze(0).to(self.device)
             q_values = self.q_net(state_t)
             return int(q_values.argmax(1).item())
-    
+        
+    #Update from batch of (s, a, r, s', done)
     def update(self, batch):
-        """Update from batch of (s, a, r, s', done)"""
         states, actions, rewards, next_states, dones = batch
         
         states = torch.FloatTensor(states).to(self.device)
@@ -91,13 +91,10 @@ class HRLHACEnv(gym.Env):
     HAC-style hierarchical navigation using DQN agents with affordance subgoals
     Compatible interface with HRLHighLevelEnvImproved for easy switching
     """
-    
     metadata = {"render_modes": []}
-    
-    def __init__(self, low_level_model_path=None, subgoal_distance=5.0, 
-                 option_horizon=50, debug=False):
+    # Initialize environment
+    def __init__(self, low_level_model_path=None, subgoal_distance=5.0, option_horizon=50, debug=False):
         super().__init__()
-        
         # Create low-level environment
         self.ll_env = SimpleNavigationEnv()
         self.sim = self.ll_env.sim
@@ -125,9 +122,7 @@ class HRLHACEnv(gym.Env):
         if low_level_model_path and os.path.exists(low_level_model_path):
             # Load low-level if available
             try:
-                self.low_level.q_net.load_state_dict(
-                    torch.load(low_level_model_path, map_location='cpu')
-                )
+                self.low_level.q_net.load_state_dict(torch.load(low_level_model_path, map_location='cpu'))
                 self.low_level.target_net.load_state_dict(self.low_level.q_net.state_dict())
                 if self.debug:
                     print(f"Loaded low-level DQN from {low_level_model_path}")
@@ -138,9 +133,9 @@ class HRLHACEnv(gym.Env):
         self.main_goal = None
         self.current_step = 0
         self.max_highlevel_steps = 20
-    
+
+    # Get high-level observation
     def _get_hl_obs(self):
-        """Get high-level observation"""
         state = self.ll_env.agent.get_state()
         agent_pos = np.array(state.position, dtype=np.float32)
         
@@ -152,18 +147,17 @@ class HRLHACEnv(gym.Env):
         
         # Compute angle to goal
         to_goal[1] = 0.0
-        to_goal_norm = to_goal / (np.linalg.norm(to_goal) + 1e-8)
+        to_goal_norm = to_goal/(np.linalg.norm(to_goal) + 1e-8)
         
         # Agent forward direction
         forward = np.array([0.0, 0.0, -1.0], dtype=np.float32)
         import quaternion
-        q = quaternion.quaternion(state.rotation.w, state.rotation.x, 
-                                   state.rotation.y, state.rotation.z)
+        q = quaternion.quaternion(state.rotation.w, state.rotation.x, state.rotation.y, state.rotation.z)
         vq = quaternion.quaternion(0.0, *forward)
         rq = q * vq * q.inverse()
         forward = np.array([rq.x, rq.y, rq.z], dtype=np.float32)
         forward[1] = 0.0
-        forward = forward / (np.linalg.norm(forward) + 1e-8)
+        forward = forward/(np.linalg.norm(forward) + 1e-8)
         
         # Signed angle
         cross = forward[0] * to_goal_norm[2] - forward[2] * to_goal_norm[0]
@@ -173,7 +167,7 @@ class HRLHACEnv(gym.Env):
         return np.array([dist, angle], dtype=np.float32)
     
     def _sample_subgoal_affordance(self, action):
-        """Sample subgoal using affordance-based approach"""
+        #Sample subgoal using affordance-based approach
         agent_pos = np.array(self.ll_env.agent.get_state().position, dtype=np.float32)
         
         # 8 directions (N, NE, E, SE, S, SW, W, NW)
@@ -213,8 +207,9 @@ class HRLHACEnv(gym.Env):
         self.current_step = 0
         return self._get_hl_obs(), {}
     
+    # Execute high-level action (runs low-level for up to option_horizon steps
     def step(self, action):
-        """Execute high-level action (runs low-level for up to option_horizon steps)"""
+        
         # Sample subgoal based on action
         subgoal = self._sample_subgoal_affordance(action)
         self.ll_env.goal_position = subgoal
@@ -228,7 +223,6 @@ class HRLHACEnv(gym.Env):
             ll_obs = self.ll_env._get_obs()
             ll_action = self.low_level.select_action(ll_obs, greedy=True)
             _, ll_reward, ll_done, ll_truncated, ll_info = self.ll_env.step(ll_action)
-            
             ll_steps += 1
             ll_total_reward += ll_reward
             
@@ -245,17 +239,11 @@ class HRLHACEnv(gym.Env):
         done = hl_obs[0] < 0.6
         truncated = self.current_step >= self.max_highlevel_steps
         
-        info = {
-            "main_distance": hl_obs[0],
-            "ll_steps": ll_steps,
-            "subgoal_reached": subgoal_reached
-        }
-        
+        info = {"main_distance": hl_obs[0],"ll_steps": ll_steps,"subgoal_reached": subgoal_reached}
         return hl_obs, reward, done, truncated, info
     
     def close(self):
         self.ll_env.close()
-
 
 # TO USE: Comment/uncomment in skill_executor.py:
 # from hrl_highlevel_env import HRLHighLevelEnvImproved  # PPO-based (current)

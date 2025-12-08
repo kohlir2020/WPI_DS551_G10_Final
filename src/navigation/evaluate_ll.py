@@ -23,7 +23,7 @@ model = PPO.load(model_path)
 EPISODES = 20
 successes = 0
 steps_list = []
-distance_logs = []  # for graphs if needed
+distance_logs = []
 
 log_lines = []  # for saving readable TXT
 

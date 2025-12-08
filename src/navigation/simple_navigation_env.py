@@ -3,9 +3,9 @@ import numpy as np
 import habitat_sim
 import os
 import sys
-import quaternion  # numpy-quaternion
+import quaternion
 
-# Add parent directory to path for shared imports
+# add parent directory to path for shared imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from shared.scene_manager import create_fetch_scene
 
@@ -14,12 +14,13 @@ class SimpleNavigationEnv(gym.Env):
     """
     Habitat-Sim low-level navigation environment for PPO.
     Observation:
-        [ distance_to_goal , relative_angle_to_goal ]
+        [distance_to_goal,relative_angle_to_goal]
     Actions:
         0 = NO-OP (do nothing)
         1 = MOVE FORWARD
         2 = TURN LEFT
-        3 = TURN RIGHT"""
+        3 = TURN RIGHT
+        """
 
     metadata = {"render_modes": []}
 
@@ -75,7 +76,7 @@ class SimpleNavigationEnv(gym.Env):
         # self.agent = self.sim.get_agent(0)
         # self.pathfinder = self.sim.pathfinder
 
-        print("✓ Habitat simulator initialized.")
+        print("Habitat simulator initialized.")
 
         # Gym spaces
         self.action_space = gym.spaces.Discrete(4)
@@ -85,22 +86,21 @@ class SimpleNavigationEnv(gym.Env):
             dtype=np.float32,
         )
 
-        self.max_steps = 150 # with 0.5m forward, 150 steps is plenty
+        self.max_steps = 150 # with 0.5m forward per step, this allows up to 75m travel
         self.current_step = 0
         self.goal_position = None
         self.prev_distance = None
 
     # Helper: rotate vector by numpy-quaternion
     def _quat_rotate(self, q_hab, v):
-        """
-        q_hab: habitat quaternion (with .w, .x, .y, .z)
-        v: np.array([x,y,z])
-        """
+        # q_hab: habitat quaternion (with .w, .x, .y, .z) v: np.array([x,y,z])
+        
         q = np.quaternion(q_hab.w, q_hab.x, q_hab.y, q_hab.z)
         vq = np.quaternion(0.0, v[0], v[1], v[2])
         rq = q * vq * q.inverse()
         return np.array([rq.x, rq.y, rq.z], dtype=np.float32)
-
+    
+    # start a new episode
     def reset(self, seed=None, options=None):
         if seed is not None:
             super().reset(seed=seed)
@@ -119,14 +119,11 @@ class SimpleNavigationEnv(gym.Env):
         else:
             # Fallback: just take whatever
             self.goal_position = goal
-
         # Set initial agent state (facing roughly -Z, but orientation doesn't matter
         # too much since we compute relative angle correctly)
         state = habitat_sim.AgentState()
         state.position = agent_pos
-        state.rotation = habitat_sim.utils.quat_from_angle_axis(
-            0.0, np.array([0.0, 1.0, 0.0])
-        )
+        state.rotation = habitat_sim.utils.quat_from_angle_axis(0.0, np.array([0.0, 1.0, 0.0]))
         self.agent.set_state(state)
 
         self.current_step = 0
@@ -173,7 +170,7 @@ class SimpleNavigationEnv(gym.Env):
         agent_pos = state.position
         quat = state.rotation
 
-        # Distance to goal
+        # Distance to goal ,norm(): Length of vector (Pythagorean theorem)
         distance = np.linalg.norm(agent_pos - self.goal_position)
 
         # Safe check

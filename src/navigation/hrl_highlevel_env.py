@@ -12,17 +12,11 @@ import quaternion
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from simple_navigation_env import SimpleNavigationEnv
 
-
 class HRLHighLevelEnvImproved(gym.Env):
-    """
-    IMPROVED High-level environment with better subgoal generation
-    """
-
     metadata = {"render_modes": []}
-
     def __init__(
         self,
-        low_level_model_path="models/lowlevel_curriculum_250k",
+        low_level_model_path="models/lowlevel_curriculum_1M",
         subgoal_distance=5.0,
         option_horizon=50,
         debug=False,
@@ -41,7 +35,7 @@ class HRLHighLevelEnvImproved(gym.Env):
         # Parameters
         self.subgoal_radius = float(subgoal_distance)
         self.option_horizon = int(option_horizon)
-        self.max_highlevel_steps = 20
+        self.max_highlevel_steps = 30
 
         # Observation: [distance_to_main_goal, angle_to_main_goal]
         self.observation_space = gym.spaces.Box(
@@ -63,14 +57,12 @@ class HRLHighLevelEnvImproved(gym.Env):
         self.successful_subgoal_count = 0
 
     def _quat_rotate(self, q_hab, v):
-        """Rotate vector by quaternion"""
         q = np.quaternion(q_hab.w, q_hab.x, q_hab.y, q_hab.z)
         vq = np.quaternion(0.0, *v)
         rq = q * vq * q.inverse()
         return np.array([rq.x, rq.y, rq.z], dtype=np.float32)
 
     def _get_hl_obs(self):
-        """Get high-level observation"""
         state = self.ll_env.agent.get_state()
         agent_pos = np.array(state.position, dtype=np.float32)
 
@@ -111,13 +103,7 @@ class HRLHighLevelEnvImproved(gym.Env):
         return np.array([dist, angle], dtype=np.float32)
 
     def _sample_subgoal(self, action):
-        """
-        IMPROVED subgoal sampling with multiple fallbacks
-        """
-        agent_pos = np.array(
-            self.ll_env.agent.get_state().position, dtype=np.float32
-        )
-        
+        agent_pos = np.array(self.ll_env.agent.get_state().position, dtype=np.float32)
         # Get direction toward main goal
         to_main_goal = self.main_goal - agent_pos
         to_main_goal[1] = 0.0
@@ -134,11 +120,11 @@ class HRLHighLevelEnvImproved(gym.Env):
         # Add bias: rotate actions to align roughly with goal direction
         action_angle = angles[int(action)] + main_goal_angle
         
-        # Try multiple distances
+        # Try multiple distances so if first fails, we can try shorter ones and so on
         distances_to_try = [
             self.subgoal_radius,
-            self.subgoal_radius * 0.7,  # Shorter
-            self.subgoal_radius * 0.5,  # Even shorter
+            self.subgoal_radius * 0.7,# Shorter
+            self.subgoal_radius * 0.5,# Even shorter
         ]
         
         for dist in distances_to_try:
@@ -154,13 +140,13 @@ class HRLHighLevelEnvImproved(gym.Env):
             if not np.isnan(nav_target).any():
                 movement_dist = np.linalg.norm(nav_target - agent_pos)
                 if movement_dist > 1.5:  # At least 1.5m movement
-                    # Check if pathfinder can find a path
+                    # Check if pathfinder can find an actual path what is there is a wall so we check
                     path = habitat_sim.ShortestPath()
                     path.requested_start = agent_pos
                     path.requested_end = nav_target
                     
                     if self.pathfinder.find_path(path):
-                        if path.geodesic_distance < 999.0:  # Valid path
+                        if path.geodesic_distance < 999.0:# Valid path
                             if self.debug:
                                 print(f"Valid subgoal: {nav_target} (dist={movement_dist:.1f}m)")
                             self.successful_subgoal_count += 1
@@ -184,7 +170,7 @@ class HRLHighLevelEnvImproved(gym.Env):
             snapped = self.pathfinder.snap_point(target)
             if not np.isnan(snapped).any():
                 if self.debug:
-                    print(f"  → Fallback: toward main goal")
+                    print(f"Fallback: toward main goal")
                 self.failed_subgoal_count += 1
                 return np.array(snapped, dtype=np.float32)
         
@@ -213,7 +199,7 @@ class HRLHighLevelEnvImproved(gym.Env):
                 dtype=np.float32,
             )
             dist = np.linalg.norm(g - agent_pos)
-            if 8.0 <= dist <= 20.0:  # Reduced from 10m minimum
+            if 8.0 <= dist <= 20.0:
                 goal = g
                 break
         if goal is None:
@@ -232,13 +218,9 @@ class HRLHighLevelEnvImproved(gym.Env):
             print(f"Distance: {self.prev_main_distance:.1f}m")
 
         return self._get_hl_obs(), {}
-
+    # here low-level will execute multiple steps to reach subgoal
     def step(self, action):
-        """Execute high-level action"""
-        agent_pos_before = np.array(
-            self.ll_env.agent.get_state().position, dtype=np.float32
-        )
-        
+        agent_pos_before = np.array(self.ll_env.agent.get_state().position, dtype=np.float32)
         # Get subgoal
         subgoal = self._sample_subgoal(action)
         
@@ -247,12 +229,9 @@ class HRLHighLevelEnvImproved(gym.Env):
             print(f"Action: {action}")
             print(f"Subgoal: {subgoal}")
 
-        # Execute low-level skill
+        # here we actually execute low-level skill 
         self.ll_env.goal_position = subgoal
-        self.ll_env.prev_distance = float(
-            np.linalg.norm(agent_pos_before - subgoal)
-        )
-
+        self.ll_env.prev_distance = float(np.linalg.norm(agent_pos_before - subgoal))
         ll_steps_taken = 0
         for i in range(self.option_horizon):
             obs_ll = self.ll_env._get_obs()
@@ -264,10 +243,7 @@ class HRLHighLevelEnvImproved(gym.Env):
             if done_ll or trunc_ll:
                 break
 
-        agent_pos_after = np.array(
-            self.ll_env.agent.get_state().position, dtype=np.float32
-        )
-        
+        agent_pos_after = np.array(self.ll_env.agent.get_state().position, dtype=np.float32)
         movement = np.linalg.norm(agent_pos_after - agent_pos_before)
         
         # Calculate reward
@@ -309,11 +285,7 @@ class HRLHighLevelEnvImproved(gym.Env):
         self.prev_main_distance = new_dist
         self.current_step += 1
 
-        return self._get_hl_obs(), reward, done, truncated, {
-            "main_distance": new_dist,
-            "movement": movement,
-            "progress": progress,
-        }
+        return self._get_hl_obs(), reward, done, truncated, {"main_distance": new_dist,"movement": movement,"progress": progress,}
 
     def close(self):
         if self.debug:
