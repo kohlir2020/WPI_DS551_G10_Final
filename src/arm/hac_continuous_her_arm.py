@@ -826,7 +826,7 @@ def main():
     #     train_low_level_ppo(args)
 
     # ---- Stage 2: high-level TD3 + HER ----
-    env = HabitatArmReachingEnv(max_steps=200)
+    env = HabitatArmReachingEnv(max_steps=1000)
 
     # HL state = [agent_x, agent_y, agent_z, goal_x, goal_y, goal_z, delta_x, delta_y, delta_z] -> dim=9
     state_dim = 9
