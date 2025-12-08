@@ -239,9 +239,11 @@ class TD3Agent:
 
     def update(self, updates_per_step: int = 2):
         if len(self.buffer) < self.batch_size:
-            return 0.0
+            return 0.0, 0.0
 
-        total_loss = 0.0
+        total_critic_loss = 0.0
+        total_actor_loss = 0.0
+        actor_updates = 0
 
         for j in range(updates_per_step):
             s, a, r, s2, d = self.buffer.sample(self.batch_size)
@@ -283,11 +285,15 @@ class TD3Agent:
                 self.soft_update(self.target_critic_1, self.critic_1)
                 self.soft_update(self.target_critic_2, self.critic_2)
 
-                total_loss += critic_1_loss.item() + critic_2_loss.item()
+                total_critic_loss += critic_1_loss.item() + critic_2_loss.item()
+                total_actor_loss += actor_loss.item()
+                actor_updates += 1
             
             self.total_updates += 1
 
-        return total_loss / float(updates_per_step)
+        avg_critic_loss = total_critic_loss / float(updates_per_step)
+        avg_actor_loss = total_actor_loss / float(max(actor_updates, 1))
+        return avg_critic_loss, avg_actor_loss
 
 
 # ============================================================
@@ -370,10 +376,16 @@ class HighLevelTD3HERTrainer:
 
         self.main_goal = None
 
-        # logging
+        # logging - episode level
         self.episode_rewards = []
         self.episode_successes = []
         self.episode_final_dists = []
+        
+        # logging - enhanced metrics
+        self.episode_actor_losses = []
+        self.episode_critic_losses = []
+        self.episode_subgoal_successes = []  # How many subgoals reached
+        self.episode_exploration_noise = []  # Noise level per episode
 
     # ---- HL state construction ----
 
@@ -446,6 +458,7 @@ class HighLevelTD3HERTrainer:
             ep_success = False
             final_main_dist = None
             ep_losses = []
+            ep_subgoal_successes = 0  # Track subgoal achievement
 
             # for HER
             her_steps = []
@@ -467,6 +480,7 @@ class HighLevelTD3HERTrainer:
                 
                 # Get observation relative to new subgoal
                 obs_l = self.env._get_observation()
+                subgoal_reached = False
                 
                 for _ in range(self.args.low_horizon):
                     ll_action = self._low_level_policy(obs_l, subgoal)
@@ -476,9 +490,13 @@ class HighLevelTD3HERTrainer:
                     cur_pos = obs_l[1]
                     d_sub = np.linalg.norm(cur_pos - subgoal)
                     if d_sub < self.args.subgoal_success_radius:
+                        subgoal_reached = True
                         break
                     if done_l or trunc_l:
                         break
+
+                if subgoal_reached:
+                    ep_subgoal_successes += 1
 
                 # state after rollout
                 pos_after = self.get_ee_pos(self.env.arm_angles)
@@ -500,9 +518,11 @@ class HighLevelTD3HERTrainer:
                     ep_success = True
 
                 self.agent.store(s_h, action, reward, s_h_next, done_h)
-                loss = self.agent.update(self.args.hl_updates_per_step)
-                if loss is not None:
-                    ep_losses.append(loss)
+                critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                if critic_loss is not None and critic_loss > 0:
+                    ep_losses.append(critic_loss)
+                    self.episode_actor_losses.append(actor_loss)
+                    self.episode_critic_losses.append(critic_loss)
 
                 ep_reward += float(reward)
                 final_main_dist = float(dist_after)
@@ -551,9 +571,11 @@ class HighLevelTD3HERTrainer:
                         # Optional: Update on HER data immediately (can be computationally expensive)
                         # To save time, we can update less frequently or just rely on the main loop updates
                         # But for sample efficiency, we update here.
-                        loss = self.agent.update(self.args.hl_updates_per_step)
-                        if loss is not None:
-                            ep_losses.append(loss)
+                        critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                        if critic_loss is not None and critic_loss > 0:
+                            ep_losses.append(critic_loss)
+                            self.episode_actor_losses.append(actor_loss)
+                            self.episode_critic_losses.append(critic_loss)
 
             if final_main_dist is None:
                 pos = self.get_ee_pos(self.env.arm_angles)
@@ -562,6 +584,8 @@ class HighLevelTD3HERTrainer:
             self.episode_rewards.append(ep_reward)
             self.episode_successes.append(1 if ep_success else 0)
             self.episode_final_dists.append(final_main_dist)
+            self.episode_subgoal_successes.append(ep_subgoal_successes)
+            self.episode_exploration_noise.append(self.agent._noise_std())
             success_window.append(1 if ep_success else 0)
 
             avg_succ = np.mean(success_window) if len(success_window) > 0 else 0.0
@@ -574,6 +598,7 @@ class HighLevelTD3HERTrainer:
                     f"Success: {ep_success} | "
                     f"AvgSucc(100): {avg_succ*100:5.1f}% | "
                     f"AvgCriticLoss: {avg_loss:.4f} | "
+                    f"Subgoals: {ep_subgoal_successes:2d} | "
                     f"FinalDist: {final_main_dist:5.2f}m"
                 )
 
@@ -826,7 +851,8 @@ def parse_args():
     p.add_argument("--hl_batch", type=int, default=256)
     p.add_argument("--hl_init_noise_std", type=float, default=0.3)
     p.add_argument("--hl_min_noise_std", type=float, default=0.05)
-    p.add_argument("--hl_noise_decay_episodes", type=int, default=5000)
+    p.add_argument("--hl_noise_decay_episodes", type=int, default=500,
+                   help="Episodes over which to decay exploration noise (500 for 500+ episode runs)")
     p.add_argument("--hl_updates_per_step", type=int, default=2)
 
     # HL reward shaping
