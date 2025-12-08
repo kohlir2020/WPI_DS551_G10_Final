@@ -301,8 +301,8 @@ def train_low_level_ppo(args):
     print("\n=== LOW-LEVEL PPO TRAINING ===")
     os.makedirs(os.path.dirname(args.low_model_path), exist_ok=True)
 
-    env = HabitatArmReachingEnv(max_steps=200)
-    eval_env = HabitatArmReachingEnv(max_steps=200)
+    env = HabitatArmReachingEnv(max_steps=1000)
+    eval_env = HabitatArmReachingEnv(max_steps=1000)
 
     model = PPO(
         "MlpPolicy",
