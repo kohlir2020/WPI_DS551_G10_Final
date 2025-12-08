@@ -301,8 +301,8 @@ def train_low_level_ppo(args):
     print("\n=== LOW-LEVEL PPO TRAINING ===")
     os.makedirs(os.path.dirname(args.low_model_path), exist_ok=True)
 
-    env = HabitatArmReachingEnv(max_steps=1000)
-    eval_env = HabitatArmReachingEnv(max_steps=1000)
+    env = HabitatArmReachingEnv(max_steps=200)
+    eval_env = HabitatArmReachingEnv(max_steps=200)
 
     model = PPO(
         "MlpPolicy",
@@ -854,7 +854,7 @@ def main():
     #     train_low_level_ppo(args)
 
     # ---- Stage 2: high-level TD3 + HER ----
-    env = HabitatArmReachingEnv(max_steps=1000)
+    env = HabitatArmReachingEnv(max_steps=200)
 
     # HL state = [agent_x, agent_y, agent_z, goal_x, goal_y, goal_z, delta_x, delta_y, delta_z] -> dim=9
     state_dim = 9
