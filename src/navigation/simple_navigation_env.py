@@ -23,7 +23,15 @@ class SimpleNavigationEnv(gym.Env):
 
     metadata = {"render_modes": []}
 
+<<<<<<< HEAD
     def __init__(self,scene_path=None,min_goal_dist=2.0,max_goal_dist=8.0):
+=======
+    def __init__(self,
+                 scene_path="/Users/bluitel/Documents/WPI_DS551_G10_Final/habitat-lab/data/versioned_data/habitat_test_scenes/skokloster-castle.glb",
+                 min_goal_dist=2.0,
+                 max_goal_dist=8.0):
+
+>>>>>>> 096a69f (hac with affordances)
         super().__init__()
         if scene_path is None:
             scene_path ="/home/pinaka/habitat-sim/data/scene_datasets/habitat-test-scenes/skokloster-castle.glb"
