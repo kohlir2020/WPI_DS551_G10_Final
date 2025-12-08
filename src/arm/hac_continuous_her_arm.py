@@ -397,8 +397,31 @@ class HighLevelTD3HERTrainer:
         return np.random.randn(3).astype(np.float32) * 0.5
     
     def _low_level_policy(self, obs, goal):
-        # Predict action using low-level PPO
-        action, _ = self.low.predict(obs, deterministic=True)
+        # Use SAC to generate actions toward the subgoal
+        # obs[0] = distance to goal, obs[1:4] = EE position, obs[4:7] = goal position
+        current_pos = obs[1:4]
+        goal_pos = obs[4:7]
+        
+        # Direction toward goal (normalized)
+        direction = goal_pos - current_pos
+        dist = np.linalg.norm(direction)
+        
+        if dist > 1e-6:
+            direction = direction / dist
+        else:
+            direction = np.zeros(3)
+        
+        # SAC also suggests a direction
+        sac_action, _ = self.low.predict(obs, deterministic=True)
+        
+        # Blend: 70% toward goal, 30% SAC suggestion
+        # This helps the policy learn while still making progress
+        blended = 0.7 * direction + 0.3 * sac_action
+        
+        # Scale for meaningful movement (0.3m steps)
+        action = blended * self.args.low_action_scale
+        action = np.clip(action, -self.args.low_action_scale, self.args.low_action_scale)
+        
         return action
 
     def get_ee_pos(self, angles):
@@ -755,8 +778,7 @@ def parse_args():
 
     # low-level PPO
     p.add_argument("--low_model_path", type=str,
-                   default="models/lowlevel_ppo")
-    # p.add_argument("--low_model_type", type=str, default="PPO")
+                   default="logs/simple_arm/realistic_sac_20251207_062739/final_sac")
     p.add_argument("--low_total_timesteps", type=int, default=250_000)
     p.add_argument("--skip_low_train", action="store_true",
                    help="Skip low-level PPO training if model exists")
@@ -766,15 +788,21 @@ def parse_args():
                    default="./models/lowlevel_checkpoints/")
     p.add_argument("--low_best_dir", type=str,
                    default="./models/lowlevel_best/")
-    p.add_argument("--low_model_type", type=str, default="PPO")
+    p.add_argument("--low_model_type", type=str, default="SAC")
+    p.add_argument("--low_action_scale", type=float, default=0.3,
+                   help="Scale for low-level actions (0.3m per action step)")
 
     # main goal
-    p.add_argument("--main_goal_min_dist", type=float, default=8.0)
-    p.add_argument("--main_goal_max_dist", type=float, default=20.0)
-    p.add_argument("--main_goal_success_radius", type=float, default=0.15) # used
+    p.add_argument("--main_goal_min_dist", type=float, default=0.3,
+                   help="Min distance for arm reaching (0.3m reachable)")
+    p.add_argument("--main_goal_max_dist", type=float, default=2.0,
+                   help="Max distance for arm reaching (2m workspace)")
+    p.add_argument("--main_goal_success_radius", type=float, default=0.3,
+                   help="Success threshold (arm EE precision)")
 
     # subgoals
-    p.add_argument("--subgoal_base_step", type=float, default=3.0)
+    p.add_argument("--subgoal_base_step", type=float, default=0.5,
+                   help="Base subgoal step (0.5m for arm)")
     p.add_argument("--subgoal_offset_scale", type=float, default=2.0)
     p.add_argument("--subgoal_success_radius", type=float, default=0.15) # used
     p.add_argument("--min_subgoal_movement", type=float, default=1.0)
