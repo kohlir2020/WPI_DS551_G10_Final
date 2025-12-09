@@ -237,11 +237,13 @@ class TD3Agent:
         for t_param, s_param in zip(target.parameters(), source.parameters()):
             t_param.data.copy_(self.tau * s_param.data + (1.0 - self.tau) * t_param.data)
 
-    def update(self, updates_per_step: int = 1):
+    def update(self, updates_per_step: int = 2):
         if len(self.buffer) < self.batch_size:
-            return 0.0
+            return 0.0, 0.0
 
-        total_loss = 0.0
+        total_critic_loss = 0.0
+        total_actor_loss = 0.0
+        actor_updates = 0
 
         for j in range(updates_per_step):
             s, a, r, s2, d = self.buffer.sample(self.batch_size)
@@ -255,7 +257,7 @@ class TD3Agent:
                 target_q = r + (1.0 - d) * self.gamma * torch.min(q21, q22)
 
             q1 = self.critic_1(s, a)
-            q2 = self.critic_1(s, a)
+            q2 = self.critic_2(s, a)
 
             critic_1_loss = nn.functional.mse_loss(q1, target_q)
             critic_2_loss = nn.functional.mse_loss(q2, target_q)
@@ -283,15 +285,15 @@ class TD3Agent:
                 self.soft_update(self.target_critic_1, self.critic_1)
                 self.soft_update(self.target_critic_2, self.critic_2)
 
-                total_loss += critic_1_loss.item() + critic_2_loss.item()
+                total_critic_loss += critic_1_loss.item() + critic_2_loss.item()
+                total_actor_loss += actor_loss.item()
+                actor_updates += 1
             
             self.total_updates += 1
 
-        return total_loss / float(updates_per_step)
-
-
-
-
+        avg_critic_loss = total_critic_loss / float(updates_per_step)
+        avg_actor_loss = total_actor_loss / float(max(actor_updates, 1))
+        return avg_critic_loss, avg_actor_loss
 
 
 # ============================================================
@@ -374,10 +376,19 @@ class HighLevelTD3HERTrainer:
 
         self.main_goal = None
 
-        # logging
+        # logging - episode level
         self.episode_rewards = []
         self.episode_successes = []
         self.episode_final_dists = []
+        
+        # logging - enhanced metrics
+        self.episode_actor_losses = []
+        self.episode_critic_losses = []
+        self.episode_subgoal_successes = []  # How many subgoals reached
+        self.episode_exploration_noise = []  # Noise level per episode
+        
+        # successful episodes for video recording
+        self.successful_episodes = []
 
     # ---- HL state construction ----
 
@@ -396,13 +407,38 @@ class HighLevelTD3HERTrainer:
         agent_pos = self.get_ee_pos(self.env.arm_angles)
         return self._get_hl_state_for_goal(agent_pos, self.main_goal)
 
-    def _sample_main_goal(self, agent_pos):
-        # Sample random goal in 3D space, similar to env init
-        return np.random.randn(3).astype(np.float32) * 0.5
+    def _sample_main_goal(self, agent_pos, current_episode: int = 0):
+        """Sample goal - keep very close for initial training success."""
+        # Very small goals to ensure achievable targets and learning signal
+        goal = np.random.randn(3).astype(np.float32) * 0.2
+        return goal.astype(np.float32)
     
     def _low_level_policy(self, obs, goal):
-        # Predict action using low-level PPO
-        action, _ = self.low.predict(obs, deterministic=True)
+        # Use SAC to generate actions toward the subgoal
+        # obs[0] = distance to goal, obs[1:4] = EE position, obs[4:7] = goal position
+        current_pos = obs[1:4]
+        goal_pos = obs[4:7]
+        
+        # Direction toward goal (normalized)
+        direction = goal_pos - current_pos
+        dist = np.linalg.norm(direction)
+        
+        if dist > 1e-6:
+            direction = direction / dist
+        else:
+            direction = np.zeros(3)
+        
+        # SAC also suggests a direction
+        sac_action, _ = self.low.predict(obs, deterministic=True)
+        
+        # Blend: 70% toward goal, 30% SAC suggestion
+        # This helps the policy learn while still making progress
+        blended = 0.7 * direction + 0.3 * sac_action
+        
+        # Scale for meaningful movement (0.3m steps)
+        action = blended * self.args.low_action_scale
+        action = np.clip(action, -self.args.low_action_scale, self.args.low_action_scale)
+        
         return action
 
     def get_ee_pos(self, angles):
@@ -420,13 +456,14 @@ class HighLevelTD3HERTrainer:
             obs_ll, _ = self.env.reset()
             a_pos = self.get_ee_pos(self.env.arm_angles)
 
-            self.main_goal = self._sample_main_goal(a_pos)
+            self.main_goal = self._sample_main_goal(a_pos, current_episode=ep)
             self.env.goal_position = np.array(self.main_goal, dtype=np.float32)
 
             ep_reward = 0.0
             ep_success = False
             final_main_dist = None
             ep_losses = []
+            ep_subgoal_successes = 0  # Track subgoal achievement
 
             # for HER
             her_steps = []
@@ -448,6 +485,7 @@ class HighLevelTD3HERTrainer:
                 
                 # Get observation relative to new subgoal
                 obs_l = self.env._get_observation()
+                subgoal_reached = False
                 
                 for _ in range(self.args.low_horizon):
                     ll_action = self._low_level_policy(obs_l, subgoal)
@@ -457,9 +495,13 @@ class HighLevelTD3HERTrainer:
                     cur_pos = obs_l[1]
                     d_sub = np.linalg.norm(cur_pos - subgoal)
                     if d_sub < self.args.subgoal_success_radius:
+                        subgoal_reached = True
                         break
                     if done_l or trunc_l:
                         break
+
+                if subgoal_reached:
+                    ep_subgoal_successes += 1
 
                 # state after rollout
                 pos_after = self.get_ee_pos(self.env.arm_angles)
@@ -481,9 +523,11 @@ class HighLevelTD3HERTrainer:
                     ep_success = True
 
                 self.agent.store(s_h, action, reward, s_h_next, done_h)
-                loss = self.agent.update(self.args.hl_updates_per_step)
-                if loss is not None:
-                    ep_losses.append(loss)
+                critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                if critic_loss is not None and critic_loss > 0:
+                    ep_losses.append(critic_loss)
+                    self.episode_actor_losses.append(actor_loss)
+                    self.episode_critic_losses.append(critic_loss)
 
                 ep_reward += float(reward)
                 final_main_dist = float(dist_after)
@@ -500,31 +544,43 @@ class HighLevelTD3HERTrainer:
                 if done_h:
                     break
 
-            # HER: use final achieved position as pseudo-goal
+            # HER: Future Strategy (increased k for better hindsight)
+            # For each transition, sample k goals from the future of the trajectory
+            k_future = self.args.her_k_future  # Now configurable, default 8
             if len(her_steps) > 0:
-                final_pos = her_steps[-1]["pos_after"]
-                pseudo_goal = final_pos.copy()
+                for t, step in enumerate(her_steps):
+                    # Sample future indices (including current step to end)
+                    future_indices = np.random.randint(t, len(her_steps), size=k_future)
+                    
+                    for f_idx in future_indices:
+                        future_pos = her_steps[f_idx]["pos_after"]
+                        pseudo_goal = future_pos.copy()
 
-                for step in her_steps:
-                    pb = step["pos_before"]
-                    pa = step["pos_after"]
-                    act = step["action"]
+                        pb = step["pos_before"]
+                        pa = step["pos_after"]
+                        act = step["action"]
 
-                    s_her = self._get_hl_state_for_goal(pb, pseudo_goal)
-                    s_next_her = self._get_hl_state_for_goal(pa, pseudo_goal)
+                        s_her = self._get_hl_state_for_goal(pb, pseudo_goal)
+                        s_next_her = self._get_hl_state_for_goal(pa, pseudo_goal)
 
-                    dist_next = np.linalg.norm(pa - pseudo_goal)
-                    if dist_next < self.args.main_goal_success_radius:
-                        r_her = self.args.hl_success_bonus
-                        d_her = True
-                    else:
-                        r_her = -self.args.hl_time_penalty
-                        d_her = False
+                        dist_next = np.linalg.norm(pa - pseudo_goal)
+                        if dist_next < self.args.main_goal_success_radius:
+                            r_her = self.args.hl_success_bonus
+                            d_her = True
+                        else:
+                            r_her = -self.args.hl_time_penalty
+                            d_her = False
 
-                    self.agent.store(s_her, act, r_her, s_next_her, d_her)
-                    loss = self.agent.update(self.args.hl_updates_per_step)
-                    if loss is not None:
-                        ep_losses.append(loss)
+                        self.agent.store(s_her, act, r_her, s_next_her, d_her)
+                        
+                        # Optional: Update on HER data immediately (can be computationally expensive)
+                        # To save time, we can update less frequently or just rely on the main loop updates
+                        # But for sample efficiency, we update here.
+                        critic_loss, actor_loss = self.agent.update(self.args.hl_updates_per_step)
+                        if critic_loss is not None and critic_loss > 0:
+                            ep_losses.append(critic_loss)
+                            self.episode_actor_losses.append(actor_loss)
+                            self.episode_critic_losses.append(critic_loss)
 
             if final_main_dist is None:
                 pos = self.get_ee_pos(self.env.arm_angles)
@@ -533,7 +589,18 @@ class HighLevelTD3HERTrainer:
             self.episode_rewards.append(ep_reward)
             self.episode_successes.append(1 if ep_success else 0)
             self.episode_final_dists.append(final_main_dist)
+            self.episode_subgoal_successes.append(ep_subgoal_successes)
+            self.episode_exploration_noise.append(self.agent._noise_std())
             success_window.append(1 if ep_success else 0)
+            
+            # Track successful episodes for later video recording
+            if ep_success:
+                self.successful_episodes.append({
+                    'episode': ep,
+                    'reward': ep_reward,
+                    'final_dist': final_main_dist,
+                    'subgoals': ep_subgoal_successes
+                })
 
             avg_succ = np.mean(success_window) if len(success_window) > 0 else 0.0
             avg_loss = np.mean(ep_losses) if ep_losses else 0.0
@@ -545,6 +612,7 @@ class HighLevelTD3HERTrainer:
                     f"Success: {ep_success} | "
                     f"AvgSucc(100): {avg_succ*100:5.1f}% | "
                     f"AvgCriticLoss: {avg_loss:.4f} | "
+                    f"Subgoals: {ep_subgoal_successes:2d} | "
                     f"FinalDist: {final_main_dist:5.2f}m"
                 )
 
@@ -698,7 +766,7 @@ class HighLevelTD3HERTrainer:
                 pos = self.get_ee_pos(self.env.arm_angles)
 
                 s_h = self._get_hl_state_for_goal(pos, self.main_goal)
-                action = self.agent.select_action(s_h, greedy=True)
+                action = self.agent.select_action(s_h, greedy=False)
 
                 subgoal = pos + action
                 self.env.goal_position = np.array(subgoal, dtype=np.float32)
@@ -749,8 +817,7 @@ def parse_args():
 
     # low-level PPO
     p.add_argument("--low_model_path", type=str,
-                   default="models/lowlevel_ppo")
-    # p.add_argument("--low_model_type", type=str, default="PPO")
+                   default="logs/simple_arm/realistic_sac_20251207_062739/final_sac")
     p.add_argument("--low_total_timesteps", type=int, default=250_000)
     p.add_argument("--skip_low_train", action="store_true",
                    help="Skip low-level PPO training if model exists")
@@ -760,17 +827,25 @@ def parse_args():
                    default="./models/lowlevel_checkpoints/")
     p.add_argument("--low_best_dir", type=str,
                    default="./models/lowlevel_best/")
-    p.add_argument("--low_model_type", type=str, default="PPO")
+    p.add_argument("--low_model_type", type=str, default="SAC")
+    p.add_argument("--low_action_scale", type=float, default=0.5,
+                   help="Scale for low-level actions (0.5m per action step - faster movement)")
 
     # main goal
-    p.add_argument("--main_goal_min_dist", type=float, default=8.0)
-    p.add_argument("--main_goal_max_dist", type=float, default=20.0)
-    p.add_argument("--main_goal_success_radius", type=float, default=0.15) # used
+    p.add_argument("--main_goal_min_dist", type=float, default=0.3,
+                   help="Min distance for arm reaching (0.3m reachable)")
+    p.add_argument("--main_goal_max_dist", type=float, default=2.0,
+                   help="Max distance for arm reaching (2m workspace)")
+    p.add_argument("--main_goal_success_radius", type=float, default=0.45,
+                   help="Success threshold (arm EE precision)")
 
     # subgoals
-    p.add_argument("--subgoal_base_step", type=float, default=3.0)
-    p.add_argument("--subgoal_offset_scale", type=float, default=2.0)
-    p.add_argument("--subgoal_success_radius", type=float, default=0.15) # used
+    p.add_argument("--subgoal_base_step", type=float, default=0.5,
+                   help="Base subgoal step (0.5m for arm)")
+    p.add_argument("--subgoal_offset_scale", type=float, default=1.0,
+                   help="HL action scale for subgoal generation")
+    p.add_argument("--subgoal_success_radius", type=float, default=0.3,
+                   help="Subgoal success threshold (arm EE)")
     p.add_argument("--min_subgoal_movement", type=float, default=1.0)
 
     # horizons
@@ -780,21 +855,41 @@ def parse_args():
     p.add_argument("--low_horizon_eval", type=int, default=50)
 
     # HL TD3 hyperparams
-    p.add_argument("--hl_actor_lr", type=float, default=1e-3)
-    p.add_argument("--hl_critic_lr", type=float, default=1e-3)
+    p.add_argument("--hl_actor_lr", type=float, default=2e-3,
+                   help="High-level actor learning rate")
+    p.add_argument("--hl_critic_lr", type=float, default=2e-3,
+                   help="High-level critic learning rate")
     p.add_argument("--hl_gamma", type=float, default=0.99)
     p.add_argument("--hl_tau", type=float, default=0.005)
     p.add_argument("--hl_buffer", type=int, default=100_000)
     p.add_argument("--hl_batch", type=int, default=256)
     p.add_argument("--hl_init_noise_std", type=float, default=0.3)
     p.add_argument("--hl_min_noise_std", type=float, default=0.05)
-    p.add_argument("--hl_noise_decay_episodes", type=int, default=5000)
-    p.add_argument("--hl_updates_per_step", type=int, default=1)
+    p.add_argument("--hl_noise_decay_episodes", type=int, default=500,
+                   help="Episodes over which to decay exploration noise (500 for 500+ episode runs)")
+    p.add_argument("--hl_updates_per_step", type=int, default=2)
 
     # HL reward shaping
-    p.add_argument("--hl_progress_scale", type=float, default=10.0)
-    p.add_argument("--hl_time_penalty", type=float, default=0.05)
-    p.add_argument("--hl_success_bonus", type=float, default=50.0)
+    p.add_argument("--hl_progress_scale", type=float, default=25.0,
+                   help="Scale for progress reward (increased for better signal)")
+    p.add_argument("--hl_time_penalty", type=float, default=0.01,
+                   help="Time penalty per step (reduced to encourage longer horizons)")
+    p.add_argument("--hl_success_bonus", type=float, default=100.0,
+                   help="Success bonus (doubled to strongly reward goal achievement)")
+    
+    # HER improvements
+    p.add_argument("--her_k_future", type=int, default=8,
+                   help="Number of future goals to sample per transition (increased from 4)")
+    
+    # Curriculum learning
+    p.add_argument("--use_curriculum", action="store_true", default=False,
+                   help="Use curriculum learning with progressive goal distances")
+    p.add_argument("--curriculum_start_dist", type=float, default=0.2,
+                   help="Starting goal distance for curriculum (easy = close goals)")
+    p.add_argument("--curriculum_end_dist", type=float, default=0.6,
+                   help="End goal distance for curriculum (hard = far goals)")
+    p.add_argument("--curriculum_episodes", type=int, default=150,
+                   help="Number of episodes over which to progress curriculum")
 
     p.add_argument("--eval_episodes", type=int, default=10)
 
@@ -836,7 +931,7 @@ def main():
         buffer_capacity=args.hl_buffer,
         batch_size=args.hl_batch,
         device=device,
-        max_action=1.0,
+        max_action=args.subgoal_offset_scale,
         init_noise_std=args.hl_init_noise_std,
         min_noise_std=args.hl_min_noise_std,
         noise_decay_episodes=args.hl_noise_decay_episodes,

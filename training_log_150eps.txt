@@ -1,0 +1,56 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+PluginManager::Manager: duplicate static plugin StbImageImporter, ignoring
+PluginManager::Manager: duplicate static plugin GltfImporter, ignoring
+PluginManager::Manager: duplicate static plugin BasisImporter, ignoring
+PluginManager::Manager: duplicate static plugin AssimpImporter, ignoring
+PluginManager::Manager: duplicate static plugin AnySceneImporter, ignoring
+PluginManager::Manager: duplicate static plugin AnyImageImporter, ignoring
+⚠️  Habitat not available - using fallback realistic simulation
+Using device: cuda
+   Environment: Realistic Simulation
+   Scene: apartment_1
+   Max steps: 200
+
+=== HIGH-LEVEL CONTINUOUS TD3 + HER TRAINING ===
+
+[HL Episode    1] Reward:    3.10 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.0000 | FinalDist:  1.13m
+[HL Episode   10] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 1.9410 | FinalDist:  1.60m
+[HL Episode   20] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.8788 | FinalDist:  1.16m
+[HL Episode   30] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.4980 | FinalDist:  1.09m
+[HL Episode   40] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.6309 | FinalDist:  1.18m
+[HL Episode   50] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.8329 | FinalDist:  1.07m
+[HL Episode   60] Reward:   -1.00 | Success: False | AvgSucc(100):   0.0% | AvgCriticLoss: 0.6134 | FinalDist:  1.38m
+[HL Episode   70] Reward:   -1.00 | Success: False | AvgSucc(100):   1.4% | AvgCriticLoss: 0.5646 | FinalDist:  1.31m
+[HL Episode   80] Reward:   -0.12 | Success: False | AvgSucc(100):   1.2% | AvgCriticLoss: 0.4855 | FinalDist:  1.19m
+[HL Episode   90] Reward:    6.90 | Success: False | AvgSucc(100):   1.1% | AvgCriticLoss: 0.5316 | FinalDist:  0.43m
+[HL Episode  100] Reward:   56.43 | Success: True | AvgSucc(100):   4.0% | AvgCriticLoss: 0.3505 | FinalDist:  0.26m
+[HL Episode  110] Reward:   -0.65 | Success: False | AvgSucc(100):   4.0% | AvgCriticLoss: 0.3812 | FinalDist:  0.72m
+[HL Episode  120] Reward:   -1.00 | Success: False | AvgSucc(100):   4.0% | AvgCriticLoss: 0.2995 | FinalDist:  0.77m
+[HL Episode  130] Reward:    5.56 | Success: False | AvgSucc(100):   5.0% | AvgCriticLoss: 0.3561 | FinalDist:  0.43m
+[HL Episode  140] Reward:   -1.00 | Success: False | AvgSucc(100):   6.0% | AvgCriticLoss: 0.2789 | FinalDist:  1.41m
+[HL Episode  150] Reward:   -1.00 | Success: False | AvgSucc(100):   6.0% | AvgCriticLoss: 0.2396 | FinalDist:  0.80m
+
+=== HIGH-LEVEL TRAINING DONE ===
+
+Saved HL actor to  hac_continuous_her_arm_models/20251208_131134_SAC/hl_actor.pth
+Saved HL critic_1 to hac_continuous_her_arm_models/20251208_131134_SAC/hl_critic_1.pth
+Saved HL critic_2 to hac_continuous_her_arm_models/20251208_131134_SAC/hl_critic_2.pth
+[debug] Saved hac_continuous_her_arm_models/20251208_131134_SAC/hl_debug_topdown.png and hac_continuous_her_arm_models/20251208_131134_SAC/hl_debug_distance.png
+=== HL GREEDY EVALUATION (10 episodes) ===
+Episode   1: success=False, final_dist=1.19m
+Episode   2: success=False, final_dist=1.46m
+Episode   3: success=False, final_dist=1.65m
+Episode   4: success=False, final_dist=2.19m
+Episode   5: success=False, final_dist=1.54m
+Episode   6: success=False, final_dist=1.71m
+Episode   7: success=False, final_dist=1.01m
+Episode   8: success=False, final_dist=0.99m
+Episode   9: success=False, final_dist=1.26m
+Episode  10: success=False, final_dist=0.80m
+
+Eval success rate: 0.0% (0/10)
+Avg final distance: 1.38m
+
+Done. Outputs saved in: hac_continuous_her_arm_models/20251208_131134_SAC
