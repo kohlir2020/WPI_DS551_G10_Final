@@ -1,3 +1,0 @@
-Success Rate: 75.0%
-Average Steps: 44.0
-Improvement over Random: 65.0%

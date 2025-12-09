@@ -1,11 +1,41 @@
-# HOW TO RUN - & WHAT TO CLEAN UP
-    - The main entry-point is src/main.py - read through it to understand how this code is supposed to work and stuff!
-    - TODO: Please fix the prompt for the LLM in src/planner/llm_planner.py
-    - Please add in the HRL for arm models and 
+# LLM-Planned Multi-Task Robot Control
 
-### Set up
-We will likely want to move src into the habitat directory from github.
+Implementation of hierarchical reinforcement learning with LLM-based task planning for robotic manipulation in Habitat simulator (Skokloster Castle environment with Fetch robot).
 
+See `Final_DS551_Paper.pdf` for full methodology and results.
 
-### Proposal
-The project learning objective is to be both an evaluation of a VLM (vs an LLM or STRIPS) as a planning agent for an HRL system, AND as an exploration of different RL architectures for different low-level robotic control skills (mainly: navigation, fridge opening/closing, picking). Essentially, using the Fetch robot in a single room Kitchen environment from the Habitat library as my environment, I will have different Task Classes for each of the 4 skills mentioned. Each Task class takes as input an Environment (Gym) that it can step, and has functions like take_action, get_reward, get_next_action, and train - it is able to take actions which step the environment and calculates rewards using a custom reward function for that task. We will implement Tasks with different RL architectures (likely DDQN, PPO, SAC) and evaluate how well each task does based on its architecture (we will have a script for each task which will allow us to simulate just that 1 task and test the tasks independent of each other). Each Task is NOT an HRL, it's just a regular RL architecture - and it will have a wrapper around the passed Environment so its applicable to its specific task specs. Tasks will be trained such that they are able to take a custom goal if applicable (ex: navigation task will be given a goal position, pick task will be given position of thing to pick up). I will also have a planner agent (LLM vs VLM vs STRIPS) which has a goal and is able to compute a sequence of skill calls with corresponding arguments. We might also try to make the planner able to recalculate its sequence or give a mid-sequence summary after each skill call returns. We will have a script that compares the plans that each planning agent makes for the same task to evaluate it. Then we will have our main script, which takes a goal and robot complete that goal using the planning agent and the low-level skills. The main script will create a global instance of the simulated Environment (Kitchen with Fetch robot in pre-set location). We also instantiate all of the low-level Tasks (which after training will have loaded a pre-trained model). We then enter a loop where the Environment is passed to the planning agent which calculates the current status of the goal's execution then calls one of the skills (and passes the current Environment object and any args). The skill then continuously steps the environment (essentially having the robot take actions) until that specific skill is complete, then returns back to the planning loop (which in the next iteration will again calc current status and choose next skill call).
+## Quick Start
+
+```bash
+# Run with hardcoded plan
+python src/main.py
+
+# Run with LLM planning (requires OPENAI_API_KEY)
+export OPENAI_API_KEY='your-key'
+python src/main.py --goal "navigate to kitchen" --use-llm
+
+# Save execution video
+python src/main.py --save-video
+```
+
+## Implementation Map
+
+**Navigation (HRL):**
+- Environment: `src/navigation/simple_navigation_env.py` (low-level)
+- HRL Wrapper: `src/navigation/hrl_highlevel_env.py` (high-level manager)
+- Models: `src/navigation/models/lowlevel_curriculum_250k.zip`, `highlevel_improved_final.zip`
+
+**Arm Reaching:**
+- Environment: `src/arm/habitat_arm_reaching_env.py`
+- Models: `logs/simple_arm/cartesian_ppo_*/final_ppo.zip`
+
+**Planning & Execution:**
+- LLM Planner: `src/planner/llm_planner.py` (GPT-4o with structured output)
+- Skill Executor: `src/skill_executor.py` (manages skill sequencing)
+- Scene Manager: `src/shared/scene_manager.py` (Habitat simulator setup)
+- Main Entry: `src/main.py`
+
+## Requirements
+
+- Habitat-Sim & Habitat-Lab (included in `habitat-sim/`, `habitat-lab/`)
+- Python 3.9+, PyTorch, Stable-Baselines3, OpenAI API (optional)
