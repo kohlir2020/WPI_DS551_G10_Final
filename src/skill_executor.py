@@ -99,7 +99,7 @@ class ArmReachingSkill:
         
         # Setup arm environment
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'arm'))
-        from habitat_arm_reaching_env import HabitatArmReachingEnv
+        from arm.habitat_arm_reaching_env import HabitatArmReachingEnv
         self.env = HabitatArmReachingEnv(
             max_steps=200,
             use_habitat=False  # Use realistic simulation fallback
@@ -430,71 +430,3 @@ def execute_skill(skill, goal_params, max_steps=500, visualizer=None, demo_mode=
 #         print(f"Successful: {successful} ({success_rate:.1f}%)")
 #         print(f"Total Steps: {total_steps}")
 #         print(f"{'='*70}\n")
-
-
-def demo_skill_executor():
-    """Demo: Execute navigation then fetch in sequence"""
-
-    from navigation.simple_navigation_env import SimpleNavigationEnv
-    from navigation.hrl_highlevel_env import HRLHighLevelEnvImproved
-    from arm.fetch_navigation_env import FetchNavigationEnv
-    
-    print("\n" + "="*70)
-    print("SKILL COMBINATION DEMO")
-    print("="*70)
-    
-    try:
-        # Initialize environments (they use the same scene)
-        print("\nInitializing environments...")
-        nav_env = SimpleNavigationEnv()
-        print("✓ Navigation environment loaded")
-        
-        fetch_env = FetchNavigationEnv()
-        print("✓ Fetch environment loaded")
-        
-        # Create executor
-        executor = SkillExecutor()
-        
-        # Add skills
-        nav_skill = NavigationSkill(model_path="models/lowlevel_curriculum_250k")
-        executor.add_skill(nav_skill)
-        
-        fetch_skill = FetchSkill(model_path="models/fetch/fetch_nav_250k_final")
-        executor.add_skill(fetch_skill)
-        
-        # Execute navigation first
-        print("\n" + "="*70)
-        print("PHASE 1: NAVIGATION")
-        print("="*70)
-        obs, success_nav = executor.execute_skill(nav_skill, None, nav_env, max_steps=500)
-        
-        # Execute fetch navigation next
-        print("\n" + "="*70)
-        print("PHASE 2: FETCH NAVIGATION")
-        print("="*70)
-        obs, success_fetch = executor.execute_skill(fetch_skill, None, fetch_env, max_steps=500)
-        
-        # Summary
-        executor.print_summary()
-        
-        if success_nav and success_fetch:
-            print("\n✓✓✓ MULTI-SKILL EXECUTION SUCCESS ✓✓✓")
-        else:
-            print("\n✗ Some skills failed")
-        
-        nav_env.close()
-        fetch_env.close()
-        
-    except FileNotFoundError as e:
-        print(f"\n✗ Model not found: {e}")
-        print("Make sure trained models exist:")
-        print("  - models/lowlevel_curriculum_250k.zip")
-        print("  - models/fetch/fetch_nav_250k_final.zip")
-    except Exception as e:
-        print(f"\n✗ Error: {e}")
-        import traceback
-        traceback.print_exc()
-
-
-if __name__ == "__main__":
-    demo_skill_executor()
