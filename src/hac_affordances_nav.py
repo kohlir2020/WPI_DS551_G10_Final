@@ -25,11 +25,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import gymnasium as gym
-<<<<<<< HEAD
 from navigation.simple_navigation_env import SimpleNavigationEnv
-=======
-from simple_navigation_env import SimpleNavigationEnv
->>>>>>> 096a69f (hac with affordances)
 
 import matplotlib
 matplotlib.use("Agg") 
@@ -900,11 +896,7 @@ def parse_args():
     # Logging / save
     parser.add_argument("--log_interval", type=int, default=10,
                         help="Log every N episodes")
-<<<<<<< HEAD
     parser.add_argument("--save_dir", type=str, default="models/hac_models",
-=======
-    parser.add_argument("--save_dir", type=str, default="hac_models",
->>>>>>> 096a69f (hac with affordances)
                         help="Directory to save models")
     parser.add_argument("--eval_episodes", type=int, default=10,
                         help="Episodes for post-training evaluation")
