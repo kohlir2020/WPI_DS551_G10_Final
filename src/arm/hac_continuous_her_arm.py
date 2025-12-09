@@ -408,20 +408,9 @@ class HighLevelTD3HERTrainer:
         return self._get_hl_state_for_goal(agent_pos, self.main_goal)
 
     def _sample_main_goal(self, agent_pos, current_episode: int = 0):
-        """Sample goal with optional curriculum learning."""
-        if self.args.use_curriculum:
-            # Progressive difficulty: start with nearby goals, increase distance
-            progress = min(1.0, current_episode / float(self.args.curriculum_episodes))
-            goal_dist = (self.args.curriculum_start_dist + 
-                        progress * (self.args.curriculum_end_dist - self.args.curriculum_start_dist))
-            # Sample on sphere at curriculum distance
-            direction = np.random.randn(3)
-            direction = direction / np.linalg.norm(direction)
-            goal = direction * goal_dist
-        else:
-            # Standard sampling in workspace
-            goal = np.random.randn(3).astype(np.float32) * 0.5
-        
+        """Sample goal - keep very close for initial training success."""
+        # Very small goals to ensure achievable targets and learning signal
+        goal = np.random.randn(3).astype(np.float32) * 0.2
         return goal.astype(np.float32)
     
     def _low_level_policy(self, obs, goal):
@@ -777,7 +766,7 @@ class HighLevelTD3HERTrainer:
                 pos = self.get_ee_pos(self.env.arm_angles)
 
                 s_h = self._get_hl_state_for_goal(pos, self.main_goal)
-                action = self.agent.select_action(s_h, greedy=True)
+                action = self.agent.select_action(s_h, greedy=False)
 
                 subgoal = pos + action
                 self.env.goal_position = np.array(subgoal, dtype=np.float32)
@@ -847,7 +836,7 @@ def parse_args():
                    help="Min distance for arm reaching (0.3m reachable)")
     p.add_argument("--main_goal_max_dist", type=float, default=2.0,
                    help="Max distance for arm reaching (2m workspace)")
-    p.add_argument("--main_goal_success_radius", type=float, default=0.3,
+    p.add_argument("--main_goal_success_radius", type=float, default=0.45,
                    help="Success threshold (arm EE precision)")
 
     # subgoals
@@ -895,9 +884,9 @@ def parse_args():
     # Curriculum learning
     p.add_argument("--use_curriculum", action="store_true", default=False,
                    help="Use curriculum learning with progressive goal distances")
-    p.add_argument("--curriculum_start_dist", type=float, default=0.5,
+    p.add_argument("--curriculum_start_dist", type=float, default=0.2,
                    help="Starting goal distance for curriculum (easy = close goals)")
-    p.add_argument("--curriculum_end_dist", type=float, default=2.0,
+    p.add_argument("--curriculum_end_dist", type=float, default=0.6,
                    help="End goal distance for curriculum (hard = far goals)")
     p.add_argument("--curriculum_episodes", type=int, default=150,
                    help="Number of episodes over which to progress curriculum")
