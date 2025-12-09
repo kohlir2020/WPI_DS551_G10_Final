@@ -1,8 +1,7 @@
 import numpy as np
 
 class SubgoalMapper:
-    """
-    Convert high-level action (0–7) into local subgoal coordinates.
+    """here we convert high-level action (0–7) into local subgoal coordinates.
     Ensures:
         - direction is correct
         - distance is fixed
@@ -22,8 +21,7 @@ class SubgoalMapper:
     }
 
     def __init__(self, pathfinder, step_size=5.0):
-        """
-        Args:
+        """Args:
             pathfinder: Habitat pathfinder object to validate navigable points.
             step_size: distance of each subgoal.
         """
@@ -31,33 +29,26 @@ class SubgoalMapper:
         self.step_size = step_size
 
     def get_subgoal(self, agent_pos, action):
-        """
-        Convert high-level action → subgoal coordinate.
-
+        """Convert high-level action → subgoal coordinate.
         Params:
             agent_pos: np.array([x, y, z])
             action: int 0–7
-
         Returns:
             subgoal_pos: np.array([x, y, z])
         """
 
         # get direction vector (X, Z)
         vec = self.DIRECTIONS[action].astype(np.float32)
-        vec = vec / np.linalg.norm(vec)  # normalize
-
+        vec = vec / np.linalg.norm(vec)  # normalize,Without normalization, diagonal directions would be farther
         # target (X+dx, Z+dz)
         dx, dz = vec[0] * self.step_size, vec[1] * self.step_size
-
         raw_goal = np.array([
             agent_pos[0] + dx,
             agent_pos[1],     # keep same Y height
             agent_pos[2] + dz,
         ], dtype=np.float32)
-
         # if point is not navigable, project onto navmesh
         if not self.pathfinder.is_navigable(raw_goal):
             corrected = self.pathfinder.snap_point(raw_goal)
             return corrected
-
         return raw_goal

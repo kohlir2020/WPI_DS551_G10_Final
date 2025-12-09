@@ -45,7 +45,7 @@ hyperparams = {
     "learning_rate": 3e-4,
     "n_steps": 512,
     "batch_size": 64,
-    "gamma": 0.98, # Higher discount (long-term planning)
+    "gamma": 0.90,
     "gae_lambda": 0.95,
     "n_epochs": 10,
     "ent_coef": 0.08,

@@ -5,15 +5,15 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
 from simple_navigation_env import SimpleNavigationEnv
 
-# 1. Setup folders
+# 1 Setup folders
 os.makedirs("models", exist_ok=True)
 os.makedirs("logs_lowlevel", exist_ok=True)
 
-# 2. Create env
+# 2 Create env
 env = SimpleNavigationEnv()
 eval_env = SimpleNavigationEnv()
 
-# 3. PPO hyperparameters (tuned for local nav)
+# 3 PPO hyperparameters (tuned for local nav)
 model = PPO(
     "MlpPolicy",
     env,
@@ -28,7 +28,7 @@ model = PPO(
     verbose=1,
     device="cpu",
 )
-# 4. Callbacks
+# 4 Callbacks
 checkpoint_callback = CheckpointCallback(
     save_freq=50_000,
     save_path="./models/lowlevel_checkpoints/",
@@ -44,7 +44,7 @@ eval_callback = EvalCallback(
     verbose=1,
 )
 
-# 5. Train
+# 5 Train
 print("\nStarting LOW-LEVEL PPO training (curriculum goals)...\n")
 
 model.learn(

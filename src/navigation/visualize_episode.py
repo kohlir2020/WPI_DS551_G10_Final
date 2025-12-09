@@ -7,6 +7,7 @@ obs, _ = env.reset()
 
 distances = [obs[0]]
 actions_taken = []
+action_colors = {0: 'gray', 1: 'green', 2: 'blue', 3: 'orange'}
 
 print(f"Starting distance: {obs[0]:.2f}m\n")
 
@@ -21,8 +22,13 @@ for step in range(100):
     if done:
         print(f"Reached goal in {step} steps!")
         break
+# colors = [action_colors[a] for a in actions_taken]
 
-env.close()
+# for episode in range(5):
+#     distances = run_episode(model)
+#     plt.plot(distances, alpha=0.5, label=f'Episode {episode}')
+# plt.legend()
+# env.close()
 
 # Plot
 plt.figure(figsize=(10, 5))
@@ -33,5 +39,7 @@ plt.ylabel('Distance to Goal (m)')
 plt.title('Navigation Episode')
 plt.legend()
 plt.grid(True)
+# plt.scatter(range(len(distances)), distances, c=colors, s=50)
+# plt.legend(['STOP', 'FWD', 'LEFT', 'RIGHT'])
 plt.savefig('episode_visualization.png')
 print("\nSaved plot to episode_visualization.png")

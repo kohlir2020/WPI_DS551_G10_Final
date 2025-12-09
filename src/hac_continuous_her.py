@@ -26,7 +26,11 @@ import torch.nn as nn
 import torch.optim as optim
 import gymnasium as gym
 
+<<<<<<< HEAD
 from navigation.simple_navigation_env import SimpleNavigationEnv
+=======
+from simple_navigation_env import SimpleNavigationEnv
+>>>>>>> 096a69f (hac with affordances)
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
@@ -814,7 +818,11 @@ def parse_args():
     p.add_argument("--episodes", type=int, default=500,
                    help="HL training episodes")
     p.add_argument("--log_interval", type=int, default=10)
+<<<<<<< HEAD
     p.add_argument("--save_dir", type=str, default="models/hac_continuous_her_models")
+=======
+    p.add_argument("--save_dir", type=str, default="hac_continuous_her_models")
+>>>>>>> 096a69f (hac with affordances)
 
     # low-level PPO
     p.add_argument("--low_model_path", type=str,
