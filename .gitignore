@@ -20,3 +20,11 @@ dist/
 build/
 .env
 habitat-sim
+# render scratch
+videos_turing/
+videos/v3/
+videos/final/
+videos/rl_skills/
+videos/rl_pretty*/
+.vizjob/
+*.checks.json
